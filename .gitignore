@@ -1,0 +1,16 @@
+# IDE / Editor
+.vscode/
+
+# Internal documentation
+docs/
+
+# Old/unused files
+unused-old-files/
+
+# Backend scripts
+FireStore/
+
+# Test & debug files
+test.html
+test-blog-debug.html
+logo-test.html

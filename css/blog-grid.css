@@ -1,0 +1,400 @@
+/* =====================================================
+   BLOG GRID - Card layout and pagination styling
+
+   These styles keep the grid-based blog listing consistent across desktop,
+   tablet, and mobile viewports. The layout uses flexbox so cards stay aligned
+   and the pagination remains visible beneath the grid.
+   Card HTML structure (from app.js renderBlogCardGrid):
+   .blog-grid-item  (col-md-4 col-sm-6 col-xs-12)
+     a.blog-grid-card
+       .blog-grid-image > img
+       .blog-grid-content
+         h4.blog-grid-title
+         p.blog-grid-category
+         p.blog-grid-description
+         .blog-grid-footer > span.blog-grid-author
+   ===================================================== */
+
+/* --------------------------------------------------
+   1. GRID CONTAINER
+   Override Bootstrap .row which uses negative margins
+   and doesn't flex-wrap properly for equal-height cards
+-------------------------------------------------- */
+.blogs-grid {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: stretch !important;
+    margin-left: -12px !important;
+    margin-right: -12px !important;
+    padding-bottom: 30px;
+    /* Must NOT be overflow:hidden — pagination buttons need to show */
+    overflow: visible;
+}
+
+/* --------------------------------------------------
+   2. SIDEBAR LAYOUT
+-------------------------------------------------- */
+.sidebar-section {
+    margin-bottom: 16px;
+    text-align: left;
+}
+
+.sidebar-section h3 {
+    font-size: 16px;
+    font-weight: Normal;
+    color: white;
+    margin: 0 0 10px 0;
+}
+
+#category-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#category-list li {
+    margin: 7px 0;
+}
+
+#category-list li a {
+    color: #000000;
+    font-size: 17px;
+    font-weight: 500;
+    position: relative;
+    display: block;
+    padding-left: 36px;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+}
+
+#category-list li a:before {
+    content: '➮';
+    position: absolute;
+    top: -7px;
+    left: 0;
+    background-repeat: no-repeat;
+    width: 22px;
+    height: 20px;
+    font-size: 26px;
+    color: #000;
+    border-radius: 50%;
+    display: block;
+}
+
+#category-list li a:hover {
+    text-decoration: underline;
+}
+
+/* --------------------------------------------------
+   2. GRID ITEM (the column cell)
+   Bootstrap col-md-4 sets width:33.33% but also floats.
+   We override float and enforce flex child behaviour.
+-------------------------------------------------- */
+.blogs-grid .blog-grid-item {
+    float: none !important;           /* kill Bootstrap float */
+    display: flex !important;         /* become a flex child that stretches */
+    flex-direction: column !important;
+    padding: 12px !important;
+    box-sizing: border-box !important;
+    position: relative;
+    z-index: 0;
+}
+
+/* Desktop: exactly 3 per row */
+@media (min-width: 992px) {
+    .blogs-grid .blog-grid-item {
+        width: 33.333% !important;
+    }
+}
+
+/* Tablet: 2 per row */
+@media (max-width: 991px) and (min-width: 768px) {
+    .blogs-grid .blog-grid-item {
+        width: 50% !important;
+    }
+}
+
+/* Mobile: 1 per row */
+@media (max-width: 767px) {
+    .blogs-grid .blog-grid-item {
+        width: 100% !important;
+    }
+}
+
+/* --------------------------------------------------
+   3. CARD  (<a> tag is the card itself now)
+   Must fill 100% of its grid-item cell height.
+-------------------------------------------------- */
+a.blog-grid-card,
+.blog-grid-card {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    height: 100% !important;          /* stretch to match tallest sibling in row */
+    background: #f1f1f1;
+    border-radius: 6px;
+    border: 1px solid #3b3b3b;
+    overflow: hidden;                 /* clip image overflow — does NOT block clicks */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.10);
+    text-decoration: none !important;
+    color: inherit !important;
+    position: relative;
+    z-index: 0;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+a.blog-grid-card:hover,
+.blog-grid-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    z-index: 1;
+    text-decoration: none !important;
+    color: inherit !important;
+}
+
+/* --------------------------------------------------
+   4. IMAGE ZONE
+   Fixed height so cards without a real photo don't
+   collapse or become giant. Content images (tables,
+   code screenshots) are cropped to fit neatly.
+-------------------------------------------------- */
+.blog-grid-card .blog-grid-image {
+    width: 100%;
+    height: 185px;                    /* fixed — same on every card */
+    flex-shrink: 0;                   /* never let flex squash the image zone */
+    overflow: hidden;
+    background: #f4f4f4;             /* placeholder colour when image missing */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.blog-grid-card .blog-grid-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;               /* crop-to-fill: no stretching, no gaps */
+    object-position: top center;     /* show top of image (titles/headers visible) */
+    display: block;
+    flex-shrink: 0;
+}
+
+/* --------------------------------------------------
+   5. CONTENT AREA
+   Grows to fill remaining card height so the footer
+   is always pinned to the bottom of the card.
+-------------------------------------------------- */
+.blog-grid-card .blog-grid-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;                  /* grow to fill leftover card height */
+    padding: 14px 16px 12px;
+    overflow: hidden;                /* prevent runaway content breaking layout */
+}
+
+/* --------------------------------------------------
+   6. TITLE
+   Clamp to 2 lines max — prevents one long title
+   from making an entire row taller than the others.
+-------------------------------------------------- */
+.blog-grid-card .blog-grid-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #222;
+    margin: 0 0 8px 0;
+    line-height: 1.4;
+    /* 2-line clamp */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* --------------------------------------------------
+   7. CATEGORY BADGE
+-------------------------------------------------- */
+.blog-grid-card .blog-grid-category {
+    font-size: 12px;
+    color: #3c8dbc;
+    margin: 0 0 6px 0;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* --------------------------------------------------
+   8. DESCRIPTION
+   Clamp to 3 lines — equal-height rows need this.
+-------------------------------------------------- */
+.blog-grid-card .blog-grid-description {
+    font-size: 13px;
+    color: #555;
+    margin: 0 0 10px 0;
+    line-height: 1.5;
+    flex: 1 1 auto;                  /* push footer down */
+    /* 3-line clamp */
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* --------------------------------------------------
+   9. FOOTER (author row) — pinned to card bottom
+-------------------------------------------------- */
+.blog-grid-card .blog-grid-footer {
+    margin-top: auto;
+    padding-top: 10px;
+    border-top: 1px solid #f0f0f0;
+}
+
+.blog-grid-card .blog-grid-author {
+    font-size: 12px;
+    color: #888;
+}
+
+/* --------------------------------------------------
+   10. PAGINATION
+-------------------------------------------------- */
+.blogs-pagination {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 12px 10px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.blogs-pagination .pagination-info {
+    font-size: 14px;
+    color: #666;
+}
+
+.blogs-pagination .pagination-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.blogs-pagination .pagination-btn {
+    min-width: 100px;
+}
+
+
+/* =====================================================
+   BLOG LIST LAYOUT (reference: eg1.in/Blogs.aspx)
+   Used for categories with content/diagram images.
+   Each card is full-width, stacked vertically.
+   ===================================================== */
+
+.blogs-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding-bottom: 30px;
+}
+
+/* Card = full-width clickable row */
+a.blog-list-card {
+    display: flex;
+    flex-direction: row;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.09);
+    text-decoration: none !important;
+    color: inherit !important;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    min-height: 160px;
+}
+
+a.blog-list-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.14);
+    text-decoration: none !important;
+    color: inherit !important;
+}
+
+/* Image: fixed width on left, scales to content height */
+.blog-list-card .blog-list-image {
+    flex: 0 0 280px;          /* fixed width */
+    width: 280px;
+    overflow: hidden;
+    background: #f4f4f4;
+}
+
+.blog-list-card .blog-list-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+}
+
+/* Body: takes remaining space */
+.blog-list-card .blog-list-body {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    padding: 18px 22px;
+    overflow: hidden;
+}
+
+.blog-list-card .blog-list-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #222;
+    margin: 0 0 8px 0;
+    line-height: 1.4;
+}
+
+.blog-list-card .blog-list-category {
+    font-size: 12px;
+    color: #3c8dbc;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    margin: 0 0 10px 0;
+}
+
+.blog-list-card .blog-list-description {
+    font-size: 13px;
+    color: #555;
+    line-height: 1.6;
+    margin: 0 0 12px 0;
+    flex: 1 1 auto;
+    /* 4-line clamp */
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.blog-list-card .blog-list-footer {
+    margin-top: auto;
+    padding-top: 10px;
+    border-top: 1px solid #f0f0f0;
+}
+
+.blog-list-card .blog-list-author {
+    font-size: 12px;
+    color: #888;
+}
+
+/* Mobile: stack image on top of body */
+@media (max-width: 600px) {
+    a.blog-list-card {
+        flex-direction: column;
+    }
+    .blog-list-card .blog-list-image {
+        flex: none;
+        width: 100%;
+        height: 180px;
+    }
+}

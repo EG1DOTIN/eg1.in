@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - EG1 Admin</title>
+    <link rel="stylesheet" href="css/admin-style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div id="loginContainer" class="container">
+        <div class="login-box">
+            <h1>Admin Panel Login</h1>
+            <div id="googleLoginSection">
+                <p style="margin-bottom: 15px; font-size: 14px; text-align: center; color: #666;">
+                    Sign in with your authorized Google account to continue.
+                </p>
+                <button id="googleSignInBtn" class="btn-google" type="button">
+                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+                         alt="Google" width="20" height="20">
+                    Sign in with Google
+                </button>
+                <p id="loginError" class="error-message"></p>
+            </div>
+
+            <!-- Step 2: 16-digit grouped PIN (hidden initially) -->
+            <form id="firestorePinForm" style="display: none;">
+                <p style="margin-bottom: 8px; font-size: 14px; text-align: center;">Enter your 16-Digit Admin Security PIN.</p>
+                <p style="margin-bottom: 15px; font-size: 12px; text-align: center; color: #888;">Enter 4 digits in each group.</p>
+                <label style="display: block; margin-bottom: 10px; font-size: 13px; font-weight: 600;">16-Digit PIN:</label>
+                <div class="pin-group">
+                    <input type="password" class="pin-segment" id="pinSeg1" maxlength="4" placeholder="••••" inputmode="numeric" pattern="[0-9]*" autocomplete="off" required>
+                    <span class="pin-separator">—</span>
+                    <input type="password" class="pin-segment" id="pinSeg2" maxlength="4" placeholder="••••" inputmode="numeric" pattern="[0-9]*" autocomplete="off" required>
+                    <span class="pin-separator">—</span>
+                    <input type="password" class="pin-segment" id="pinSeg3" maxlength="4" placeholder="••••" inputmode="numeric" pattern="[0-9]*" autocomplete="off" required>
+                    <span class="pin-separator">—</span>
+                    <input type="password" class="pin-segment" id="pinSeg4" maxlength="4" placeholder="••••" inputmode="numeric" pattern="[0-9]*" autocomplete="off" required>
+                </div>
+                <button type="submit" class="btn-primary" style="margin-top: 18px;">Unlock Panel</button>
+                <button type="button" class="btn-secondary" onclick="logout()"
+                    style="margin-top: 10px; width: 100%;">Cancel & Logout</button>
+                <p id="pinError" class="error-message"></p>
+            </form>
+
+        </div>
+    </div>
+
+    <div id="adminDashboard" class="admin-dashboard" style="display: none;">
+        <!-- Navigation Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <h2>EG1 Admin</h2>
+            </div>
+            <nav class="nav-menu">
+                <ul>
+                    <li><a href="#" onclick="showSection('dashboard')" class="nav-link active">
+                            <i class="fas fa-chart-line"></i> Dashboard
+                        </a></li>
+                    <li><a href="#" onclick="showSection('analytics')" class="nav-link">
+                            <i class="fas fa-users"></i> Analytics
+                        </a></li>
+                    <li><a href="#" onclick="showSection('blogs')" class="nav-link">
+                            <i class="fas fa-blog"></i> Blogs
+                        </a></li>
+                    <li><a href="#" onclick="showSection('products')" class="nav-link">
+                            <i class="fas fa-box"></i> Products
+                        </a></li>
+                    <li><a href="#" onclick="showSection('contents')" class="nav-link">
+                            <i class="fas fa-file-alt"></i> Website Content
+                        </a></li>
+                    <li><a href="#" onclick="showSection('messages')" class="nav-link">
+                            <i class="fas fa-envelope"></i> Messages
+                        </a></li>
+                    <li><a href="#" onclick="logout()" class="nav-link logout">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <header class="admin-header">
+                <div class="header-content">
+                    <h1>Welcome to Admin Panel</h1>
+                    <div class="user-info">
+                        <span id="userName">User</span>
+                        <button onclick="logout()" class="btn-logout">Logout</button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dashboard Section -->
+            <section id="dashboard" class="content-section active">
+                <div class="section-header">
+                    <h2>Dashboard</h2>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-users"></i></div>
+                        <div class="stat-content">
+                            <h3>Total Visitors</h3>
+                            <p class="stat-value" id="totalVisitors">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-calendar-today"></i></div>
+                        <div class="stat-content">
+                            <h3>Today's Visitors</h3>
+                            <p class="stat-value" id="todayVisitors">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-blog"></i></div>
+                        <div class="stat-content">
+                            <h3>Total Blogs</h3>
+                            <p class="stat-value" id="totalBlogs">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-box"></i></div>
+                        <div class="stat-content">
+                            <h3>Total Products</h3>
+                            <p class="stat-value" id="totalProducts">0</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Analytics Section -->
+            <section id="analytics" class="content-section">
+                <div class="section-header">
+                    <h2>Visitor Analytics</h2>
+                </div>
+                <div class="analytics-container">
+                    <div class="filter-section">
+                        <label>Date Range:</label>
+                        <input type="date" id="startDate">
+                        <input type="date" id="endDate">
+                        <button class="btn-primary" onclick="filterAnalytics()">Filter</button>
+                    </div>
+                    <div class="analytics-table-container">
+                        <table class="analytics-table">
+                            <thead>
+                                <tr>
+                                    <th>Timestamp</th>
+                                    <th>Country/Region</th>
+                                    <th>IP Address</th>
+                                    <th>Device/OS</th>
+                                    <th>Browser</th>
+                                    <th>Page Visited</th>
+                                </tr>
+                            </thead>
+                            <tbody id="analyticsTableBody">
+                                <tr>
+                                    <td colspan="6" class="no-data">Loading analytics data...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div id="analyticsPagination" class="pagination-controls"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Blogs Section -->
+            <section id="blogs" class="content-section">
+                <div class="section-header">
+                    <h2>Blog Management</h2>
+                    <button class="btn-primary" onclick="showBlogForm()">+ Add New Blog</button>
+                </div>
+                <div id="blogForm" class="form-container" style="display: none;">
+                    <h3>Add/Edit Blog</h3>
+                    <form id="blogFormElement">
+                        <div class="form-group">
+                            <label>Heading:</label>
+                            <input type="text" id="blogHeading" placeholder="Blog heading" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Category:</label>
+                            <input type="text" id="blogCategory" placeholder="Blog category" list="blogCategoryList">
+                            <datalist id="blogCategoryList"></datalist>
+                        </div>
+                        <div class="form-group">
+                            <label>Short Description:</label>
+                            <textarea id="blogShortDescription" placeholder="Short description" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Full Description (Content):</label>
+                            <textarea id="blogContent" placeholder="Blog content (use the editor below)"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>End Description:</label>
+                            <textarea id="blogEndDescription" placeholder="End description" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Featured Image:</label>
+                            <input type="file" id="blogImage" accept="image/*">
+                            <small>Upload a featured image for the blog</small>
+                        </div>
+                        <div class="form-group">
+                            <label>Featured Image URL:</label>
+                            <input type="text" id="blogImageUrl" placeholder="Or paste image URL">
+                        </div>
+                        <div class="form-group">
+                            <label>Author:</label>
+                            <input type="text" id="blogAuthor" placeholder="Author name">
+                        </div>
+                        <div class="button-group">
+                            <button type="submit" class="btn-primary">Save Blog</button>
+                            <button type="button" class="btn-secondary" onclick="hideBlogForm()">Cancel</button>
+                        </div>
+                        <p id="blogFormMessage"></p>
+                    </form>
+                </div>
+
+                <div id="blogsList" class="items-list">
+                    <div class="filter-section" style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                        <label for="blogCategoryFilter">Filter by Category:</label>
+                        <select id="blogCategoryFilter" onchange="setBlogCategoryFilter(this.value)">
+                            <option value="all">All Categories</option>
+                        </select>
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Author</th>
+                                <th>Created</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="blogsTableBody">
+                            <tr>
+                                <td colspan="4" class="no-data">No blogs found</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div id="blogsPagination" class="pagination-controls"></div>
+                </div>
+            </section>
+
+            <!-- Products Section -->
+            <section id="products" class="content-section">
+                <div class="section-header">
+                    <h2>Product Management</h2>
+                    <button class="btn-primary" onclick="showProductForm()">+ Add New Product</button>
+                </div>
+                <div id="productForm" class="form-container" style="display: none;">
+                    <h3>Add/Edit Product</h3>
+                    <form id="productFormElement">
+                        <div class="form-group">
+                            <label>Product Name:</label>
+                            <input type="text" id="productName" placeholder="Product name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Version:</label>
+                            <input type="text" id="productVersion" placeholder="Version (e.g. 1.0)">
+                        </div>
+                        <div class="form-group">
+                            <label>Category:</label>
+                            <input type="text" id="productCategory" placeholder="Product category">
+                        </div>
+                        <div class="form-group">
+                            <label>Product Type:</label>
+                            <select id="productType"
+                                onchange="document.getElementById('webappLinkGroup').style.display = this.value === 'WebApp' ? 'block' : 'none'">
+                                <option value="Desktop App">Desktop App</option>
+                                <option value="WebApp">WebApp</option>
+                                <option value="Mobile App">Mobile App</option>
+                            </select>
+                        </div>
+                        <div class="form-group" id="webappLinkGroup" style="display: none;">
+                            <label>WebApp Link:</label>
+                            <input type="url" id="webappLink" placeholder="Enter URL for WebApp (e.g. https://...)"
+                                style="width: 100%; 
+                            padding:10px 12px; 
+                            border:1px solid; 
+                            border-radius: 5px;font-size: 14px; transition: border-color 0.3s; margin-top: 5px;"
+                                onfocus="this.style.borderColor='#007BFF';" onblur="this.style.borderColor='#ccc';">
+                        </div>
+                        <div class="form-group">
+                            <label>Short Description:</label>
+                            <textarea id="productShortDescription" placeholder="Short description" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Full Description:</label>
+                            <textarea id="productFullDescription" placeholder="Full description"></textarea>
+                        </div>
+                        <div class="form-group" style="display: flex; gap: 20px; align-items: center;">
+                            <div>
+                                <input type="checkbox" id="productPaidVersion">
+                                <label for="productPaidVersion" style="display:inline; margin-bottom:0;">Paid
+                                    Version</label>
+                            </div>
+                            <div>
+                                <input type="checkbox" id="productShowDownload" checked>
+                                <label for="productShowDownload" style="display:inline; margin-bottom:0;">Show Download
+                                    Button</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Downloaded Count:</label>
+                            <input type="number" id="productDownloaded" placeholder="0" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label>Product Image/Icon:</label>
+                            <input type="file" id="productImage" accept="image/*">
+                        </div>
+                        <div class="form-group">
+                            <label>Product Image URL:</label>
+                            <input type="text" id="productImageUrl" placeholder="Or paste image URL">
+                        </div>
+                        <div class="form-group">
+                            <label>Attach Upload File 1:</label>
+                            <input type="file" id="productAttachFile1">
+                            <small>Upload file 1 or provide URL below</small>
+                            <input type="text" id="productAttachUrl1" placeholder="File 1 URL (optional)"
+                                style="margin-top: 5px;">
+                        </div>
+                        <div class="form-group">
+                            <label>Attach Upload File 2:</label>
+                            <input type="file" id="productAttachFile2">
+                            <small>Upload file 2 or provide URL below</small>
+                            <input type="text" id="productAttachUrl2" placeholder="File 2 URL (optional)"
+                                style="margin-top: 5px;">
+                        </div>
+                        <div class="button-group">
+                            <button type="submit" class="btn-primary">Save Product</button>
+                            <button type="button" class="btn-secondary" onclick="hideProductForm()">Cancel</button>
+                        </div>
+                        <p id="productFormMessage"></p>
+                    </form>
+                </div>
+
+                <div id="productsList" class="items-list">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Product Name</th>
+                                <th>Category</th>
+                                <th>Created</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="productsTableBody">
+                            <tr>
+                                <td colspan="4" class="no-data">No results found</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div id="productsPagination" class="pagination-controls"></div>
+                </div>
+            </section>
+
+            <!-- Website Content Section -->
+            <section id="contents" class="content-section">
+                <div class="section-header">
+                    <h2>Website Content Management</h2>
+                </div>
+                <div class="content-tabs">
+                    <button class="tab-btn active" onclick="showContentTab('homepage', this)">Home Page</button>
+                    <button class="tab-btn" onclick="showContentTab('about', this)">About Page</button>
+                    <button class="tab-btn" onclick="showContentTab('apps', this)">Apps Page</button>
+                    <button class="tab-btn" onclick="showContentTab('blog', this)">Blog Page</button>
+                    <button class="tab-btn" onclick="showContentTab('contact', this)">Contact Page</button>
+                </div>
+
+                <form id="contentFormElement" class="form-container">
+                    <div class="form-group">
+                        <label>Page Title:</label>
+                        <input type="text" id="contentTitle" placeholder="Page title" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Page Content:</label>
+                        <textarea id="contentEditor" placeholder="Page content"></textarea>
+                    </div>
+                    <div class="button-group">
+                        <button type="submit" class="btn-primary">Save Content</button>
+                    </div>
+                    <p id="contentFormMessage"></p>
+                </form>
+            </section>
+
+            <!-- Messages Section -->
+            <section id="messages" class="content-section">
+                <div class="section-header">
+                    <h2>Contact Messages</h2>
+                </div>
+                <div id="messagesList" class="items-list">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Contact</th>
+                                <th>Date</th>
+                                <th>Message</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="messagesTableBody">
+                            <tr>
+                                <td colspan="6" class="no-data">Loading messages...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div id="messagesPagination" class="pagination-controls"></div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-storage-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-analytics-compat.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.8.3/tinymce.min.js"></script>
+    <script src="firebase-config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/analytics.js"></script>
+    <script src="js/blogs.js"></script>
+    <script src="js/products.js"></script>
+    <script src="js/contents.js"></script>
+    <script src="js/messages.js"></script>
+    <script src="js/admin.js"></script>
+
+</body>
+
+</html>
