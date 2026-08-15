@@ -358,7 +358,7 @@ var DataCache = {
  */
 var RenderHelpers = {
   renderProductCard: function (product, isHomepage) {
-    const iconUrl = product.icon || product.imageUrl || "img/eg1logo_small.webp";
+    const iconUrl = product.icon || product.imageUrl || "img/eg1logo.webp";
     const productName = product.product_name || product.name || "Unknown Product";
     const version = product.version || "1.0";
     const shortDesc = product.short_description || product.description || "";

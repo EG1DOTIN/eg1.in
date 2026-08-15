@@ -52,7 +52,7 @@ async function initializeApps() {
                         '</div>',
                         '<div class="row">',
                         '<div class="col-md-2">',
-                        '<img src="' + (selectedProduct.icon || selectedProduct.imageUrl || 'img/eg1logo_small.webp') + '" style="width:100%; max-width:140px;" />',
+                        '<img src="' + (selectedProduct.icon || selectedProduct.imageUrl || 'img/eg1logo.webp') + '" style="width:100%; max-width:140px;" />',
                         '</div>',
                         '<div class="col-md-10 left">',
                         '<h2 class="color-lightblack">' + (selectedProduct.product_name || selectedProduct.name || 'Unknown Product') + '</h2>',
