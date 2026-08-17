@@ -1,153 +1,190 @@
-// Analytics Module
+// Analytics Module (Firestore Batched Bucket Pattern)
 
-// ── Server-side pagination state ──────────────────────────────────────────────
-const ANALYTICS_PAGE_SIZE = 15;
-let analyticsCursors  = [null];
-let analyticsPage     = 1;
-let analyticsHasMore  = false;
-let analyticsStartDate = null;
-let analyticsEndDate   = null;
-// ─────────────────────────────────────────────────────────────────────────────
+let analyticsPage = 1;
+let analyticsTotalPages = 1;
 
-// Load analytics data – server-side paginated
+/**
+ * Get ISO Date String (YYYY-MM-DD) for comparing today's date.
+ * @returns {string}
+ */
+function getTodayDateString() {
+    const now = new Date();
+    const y = now.getFullYear();
+    const m = String(now.getMonth() + 1).padStart(2, '0');
+    const d = String(now.getDate()).padStart(2, '0');
+    return y + '-' + m + '-' + d;
+}
+
+/**
+ * Load analytics data from the batched page documents.
+ * 1 UI page = 1 Document read (containing up to 25–50 logs).
+ */
 async function loadAnalyticsData() {
     const tableBody = document.getElementById('analyticsTableBody');
-    tableBody.innerHTML = '<tr><td colspan="6" class="no-data">Loading...</td></tr>';
+    if (!tableBody) return;
+
+    tableBody.innerHTML = '<tr><td colspan="7" class="no-data">Loading analytics data...</td></tr>';
 
     try {
-        const startOfDay = new Date(analyticsStartDate);
-        startOfDay.setHours(0, 0, 0, 0);
+        const metaSnap = await db.collection('visitor_analytics').doc('meta').get();
 
-        const endOfDay = new Date(analyticsEndDate);
-        endOfDay.setHours(23, 59, 59, 999);
-
-        let query = db.collection('analytics')
-            .where('timestamp', '>=', startOfDay)
-            .where('timestamp', '<=', endOfDay)
-            .orderBy('timestamp', 'desc')
-            .limit(ANALYTICS_PAGE_SIZE + 1);
-
-        const cursorDoc = analyticsCursors[analyticsPage - 1];
-        if (cursorDoc) {
-            query = query.startAfter(cursorDoc);
-        }
-
-        const snapshot = await query.get();
-
-        if (snapshot.empty) {
-            tableBody.innerHTML = '<tr><td colspan="6" class="no-data">No analytics data found</td></tr>';
-            analyticsHasMore = false;
-            renderAnalyticsPagination();
+        if (!metaSnap.exists) {
+            tableBody.innerHTML = '<tr><td colspan="7" class="no-data">No visitor analytics data found yet.</td></tr>';
+            renderAnalyticsPagination(0, 0, 1);
             return;
         }
 
-        const docs = snapshot.docs;
-        analyticsHasMore = docs.length > ANALYTICS_PAGE_SIZE;
-        const pageDocs   = analyticsHasMore ? docs.slice(0, ANALYTICS_PAGE_SIZE) : docs;
+        const metaData = metaSnap.data() || {};
+        const maxPage = metaData.currentPage || 1;
+        const totalCount = metaData.totalVisitors || 0;
 
-        if (analyticsHasMore) {
-            analyticsCursors[analyticsPage] = pageDocs[pageDocs.length - 1];
+        if (totalCount === 0) {
+            tableBody.innerHTML = '<tr><td colspan="7" class="no-data">No visitor analytics data recorded yet.</td></tr>';
+            renderAnalyticsPagination(0, 0, 1);
+            return;
         }
 
-        const from = (analyticsPage - 1) * ANALYTICS_PAGE_SIZE + 1;
-        const to   = from + pageDocs.length - 1;
+        analyticsTotalPages = maxPage;
+        if (analyticsPage > maxPage) analyticsPage = maxPage;
+        if (analyticsPage < 1) analyticsPage = 1;
+
+        // Page 1 in UI corresponds to the latest page bucket in Firestore
+        const targetBucketNum = maxPage - analyticsPage + 1;
+        const pageDoc = await db.collection('visitor_analytics').doc('page_' + targetBucketNum).get();
+
+        if (!pageDoc.exists) {
+            tableBody.innerHTML = '<tr><td colspan="7" class="no-data">No records on this page.</td></tr>';
+            renderAnalyticsPagination(0, 0, maxPage);
+            return;
+        }
+
+        const pageData = pageDoc.data() || {};
+        const logs = pageData.logs || [];
+
+        if (logs.length === 0) {
+            tableBody.innerHTML = '<tr><td colspan="7" class="no-data">No records found.</td></tr>';
+            renderAnalyticsPagination(0, 0, maxPage);
+            return;
+        }
+
+        // Show newest first within the page
+        const reversedLogs = [...logs].reverse();
 
         let html = '';
-        pageDocs.forEach(doc => {
-            const data      = doc.data();
-            const timestamp = data.timestamp
-                ? new Date(data.timestamp.toDate()).toLocaleString()
+        reversedLogs.forEach(entry => {
+            const timeFormatted = entry.timestamp
+                ? new Date(entry.timestamp).toLocaleString()
                 : 'N/A';
 
+            const locParts = [];
+            if (entry.city && entry.city !== 'Unknown' && entry.city !== 'N/A') locParts.push(entry.city);
+            if (entry.country && entry.country !== 'Unknown' && entry.country !== 'N/A') locParts.push(entry.country);
+            const locationStr = locParts.length > 0 ? locParts.join(', ') : 'Unknown';
+
+            const ispStr = (entry.org && entry.org !== 'Unknown' && entry.org !== 'N/A')
+                ? `<div style="font-size: 0.8em; color: #888; margin-top: 2px;">${escapeHtml(entry.org)}</div>`
+                : '';
+
             html += '<tr>' +
-                '<td>' + timestamp + '</td>' +
-                '<td>' + (data.country     || 'N/A') + '</td>' +
-                '<td>' + (data.ipAddress   || 'N/A') + '</td>' +
-                '<td>' + (data.deviceOS    || 'N/A') + '</td>' +
-                '<td>' + (data.browser     || 'N/A') + '</td>' +
-                '<td>' + (data.pageVisited || 'N/A') + '</td>' +
+                '<td>' + escapeHtml(timeFormatted) + '</td>' +
+                '<td><span style="display:inline-block; padding: 2px 6px; background: rgba(59,130,246,0.1); color: #2563eb; border-radius: 4px; font-weight: 500; font-size: 0.85em;">' + escapeHtml(entry.appName || 'eg1.in') + '</span></td>' +
+                '<td>' + escapeHtml(locationStr) + '</td>' +
+                '<td>' + escapeHtml(entry.ip || 'Unknown') + ispStr + '</td>' +
+                '<td>' + escapeHtml(entry.os || 'Unknown') + '</td>' +
+                '<td>' + escapeHtml(entry.browser || 'Unknown') + '</td>' +
+                '<td><code>' + escapeHtml(entry.pageVisited || '/') + '</code></td>' +
             '</tr>';
         });
 
         tableBody.innerHTML = html;
-        renderAnalyticsPagination(from, to);
+
+        const from = (analyticsPage - 1) * 25 + 1;
+        const to = from + logs.length - 1;
+        renderAnalyticsPagination(from, to, maxPage);
 
     } catch (error) {
         console.error('Error loading analytics:', error);
-        tableBody.innerHTML = '<tr><td colspan="6" class="no-data">Error loading data: ' + error.message + '</td></tr>';
+        tableBody.innerHTML = '<tr><td colspan="7" class="no-data">Error loading data: ' + escapeHtml(error.message) + '</td></tr>';
     }
 }
 
-// Render pagination controls for analytics
-function renderAnalyticsPagination(from, to) {
+/**
+ * Render pagination controls for analytics.
+ */
+function renderAnalyticsPagination(from, to, maxPages) {
     const controls = document.getElementById('analyticsPagination');
     if (!controls) return;
 
-    const prevDisabled = analyticsPage === 1 ? 'disabled' : '';
-    const nextDisabled = !analyticsHasMore   ? 'disabled' : '';
-    const info         = (from && to) ? 'Page ' + analyticsPage + ' &nbsp;(' + from + '&ndash;' + to + ' shown)' : 'Page ' + analyticsPage;
+    const prevDisabled = analyticsPage <= 1 ? 'disabled' : '';
+    const nextDisabled = analyticsPage >= maxPages ? 'disabled' : '';
+    const info = (from && to) ? `Page ${analyticsPage} of ${maxPages} &nbsp;(${to - from + 1} logs shown)` : `Page ${analyticsPage}`;
 
     controls.innerHTML =
         '<span class="pagination-info">' + info + '</span>' +
-        '<button class="pg-btn" data-table="analytics" data-dir="prev" ' + prevDisabled + '>\u2039 Prev</button>' +
+        '<button class="pg-btn" data-table="analytics" data-dir="prev" ' + prevDisabled + '>\u2039 Newer</button>' +
         '<button class="pg-btn active">' + analyticsPage + '</button>' +
-        '<button class="pg-btn" data-table="analytics" data-dir="next" ' + nextDisabled + '>Next \u203a</button>';
+        '<button class="pg-btn" data-table="analytics" data-dir="next" ' + nextDisabled + '>Older \u203a</button>';
 }
 
-// Filter analytics – triggered by the Filter button; always resets to page 1
+/**
+ * Filter analytics (reloads page 1).
+ */
 function filterAnalytics() {
-    const startVal = document.getElementById('startDate').value
-        || new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
-    const endVal = document.getElementById('endDate').value
-        || new Date().toISOString().split('T')[0];
-
-    // Reset cursors whenever date range changes
-    analyticsCursors  = [null];
-    analyticsPage     = 1;
-    analyticsHasMore  = false;
-    analyticsStartDate = startVal;
-    analyticsEndDate   = endVal;
-
+    analyticsPage = 1;
     loadAnalyticsData();
 }
 
-// Track visitor (called from main website)
-async function trackVisitor(pageVisited) {
-    try {
-        await db.collection('analytics').add({
-            timestamp:   new Date(),
-            pageVisited: pageVisited,
-            userAgent:   navigator.userAgent,
-            url:         window.location.href,
-        });
-    } catch (error) {
-        console.error('Error tracking visitor:', error);
-    }
-}
-
-// Update today's visitors count on dashboard
+/**
+ * Update today's visitors count on dashboard using 1 single read on meta document.
+ */
 async function updateTodayVisitors() {
     try {
-        const today    = new Date(); today.setHours(0, 0, 0, 0);
-        const tomorrow = new Date(today); tomorrow.setDate(tomorrow.getDate() + 1);
-        const snapshot = await db.collection('analytics')
-            .where('timestamp', '>=', today)
-            .where('timestamp', '<',  tomorrow)
-            .get();
-        document.getElementById('todayVisitors').textContent = snapshot.size;
+        const metaSnap = await db.collection('visitor_analytics').doc('meta').get();
+        if (metaSnap.exists) {
+            const data = metaSnap.data() || {};
+            const todayStr = getTodayDateString();
+            const count = (data.todayDate === todayStr) ? (data.todayCount || 0) : 0;
+            const el = document.getElementById('todayVisitors');
+            if (el) el.textContent = count;
+        } else {
+            const el = document.getElementById('todayVisitors');
+            if (el) el.textContent = 0;
+        }
     } catch (error) {
         console.error('Error updating today visitors:', error);
     }
 }
 
-// Update total visitors count on dashboard
+/**
+ * Update total visitors count on dashboard using 1 single read on meta document.
+ */
 async function updateTotalVisitors() {
     try {
-        const snapshot = await db.collection('analytics').get();
-        document.getElementById('totalVisitors').textContent = snapshot.size;
+        const metaSnap = await db.collection('visitor_analytics').doc('meta').get();
+        if (metaSnap.exists) {
+            const data = metaSnap.data() || {};
+            const el = document.getElementById('totalVisitors');
+            if (el) el.textContent = data.totalVisitors || 0;
+        } else {
+            const el = document.getElementById('totalVisitors');
+            if (el) el.textContent = 0;
+        }
     } catch (error) {
         console.error('Error updating total visitors:', error);
     }
 }
 
-console.log('Analytics module loaded');
+/**
+ * Helper to escape HTML characters.
+ */
+function escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
+console.log('Visitor Analytics module loaded (Bucket pattern)');
