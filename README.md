@@ -1,6 +1,6 @@
 # EG1 - Web Application
 
-Welcome to **EG1** ([eg1.in](https://www.eg1.in)), a web platform offering open-source engineering tools, software applications, and technical tutorials.
+**EG1** ([eg1.in](https://www.eg1.in)), a web platform offering open-source engineering tools, apps and technical blog.
 
 ---
 
@@ -165,17 +165,3 @@ flowchart TD
 | **Privacy Policy** | [`privacypolicy.html`](file:///e:/EG1DOTIN/eg1/privacypolicy.html) | Comprehensive privacy terms, cookies information, data protection guidelines, and user rights. |
 
 ---
-
-## 🧩 Global Reusable Components
-
-- **Header (`components/header.html`)**:
-  - EG1 stylized branding logo
-  - Top navigation bar with active page indicator
-  - Responsive mobile drawer menu toggle
-  - Top-right GitHub fork / repository banner
-
-- **Footer (`components/footer.html`)**:
-  - About summary snippet with quick link
-  - Social network links (GitHub, Facebook, Instagram, X/Twitter)
-  - Direct email contact launcher (`mailto:eg1dotin@gmail.com`)
-  - Copyright statement and Privacy Policy link

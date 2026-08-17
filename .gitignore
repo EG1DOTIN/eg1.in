@@ -1,16 +1,47 @@
-# IDE / Editor
-.vscode/
-
-# Internal documentation
+# ─── Internal documentation ─────────────────────────────────
 docs/
 
-# Old/unused files
+# ─── Old/unused files ─────────────────────────────────
 unused-old-files/
 
-# Backend scripts
+# ─── Backend & Firestore ─────────────────────────────────
 FireStore/
 
 # Test & debug files
 test.html
 test-blog-debug.html
 logo-test.html
+
+# ─── IDE & Editor Configurations ─────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ─── OS Specific Files ───────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ─── Firebase CLI Artifacts ──────────────────────────────
+.firebase/
+firebase-debug.log*
+firestore-debug.log*
+ui-debug.log*
+
+# ─── Environment & Secrets ───────────────────────────────
+.env
+.env.*
+*.env
+*.pem
+*serviceAccount*.json
+*service_account*.json
+firebase_credentials*.json
+
+# ─── Node & Python Cache ─────────────────────────────────
+node_modules/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
