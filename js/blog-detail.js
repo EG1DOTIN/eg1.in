@@ -76,7 +76,7 @@
 
             let html = [
                 '<div class="blog-header">',
-                imageUrl ? '<img src="' + imageUrl + '" alt="' + title + '" class="blog-featured-image" loading="lazy" onerror="this.style.display=\'none\'">' : '',
+                imageUrl ? '<img src="' + imageUrl + '" alt="' + title + '" class="blog-featured-image" loading="lazy" onerror="this.src=\'img/eg1logo.webp\'">' : '',
                 '<h1>' + title + '</h1>',
                 '<div class="blog-meta-detail">',
                 '<span class="author"><i class="fas fa-user"></i> ' + author + '</span>',

@@ -151,10 +151,12 @@ function setBlogCategoryFilter(category) {
 
 // Fetch all blogs flat (adapted from mchess)
 async function fetchAllBlogsFlat() {
-    var cacheKey = 'eg1_blogs_cache';
+    var cacheKey = 'eg1_blogs_cache_v2';
+    var isDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:';
+    var ttl = isDev ? 60000 : 3600000; // 60s on dev, 1 hour in prod
     var cachedData = localStorage.getItem(cacheKey);
     var cachedTime = localStorage.getItem(cacheKey + '_time');
-    var cacheValid = cachedData && cachedTime && (Date.now() - parseInt(cachedTime) < 3600000);
+    var cacheValid = cachedData && cachedTime && (Date.now() - parseInt(cachedTime) < ttl);
 
     if (cacheValid) {
         return JSON.parse(cachedData);
@@ -319,7 +321,10 @@ document.getElementById('blogFormElement').addEventListener('submit', async (e) 
 
         messageElement.classList.add('show', 'success');
 
+        localStorage.removeItem('eg1_blogs_cache_v2');
+        localStorage.removeItem('eg1_blogs_cache_v2_time');
         localStorage.removeItem('eg1_blogs_cache');
+        localStorage.removeItem('eg1_blogs_cache_time');
         
         setTimeout(() => {
             hideBlogForm();
@@ -459,7 +464,10 @@ async function deleteBlog(blogId) {
             deletePayload[`${blog._pageKey}.${blogId}`] = firebase.firestore.FieldValue.delete();
             await db.collection('eg1_blog').doc(blog._categoryId).update(deletePayload);
             
+            localStorage.removeItem('eg1_blogs_cache_v2');
+            localStorage.removeItem('eg1_blogs_cache_v2_time');
             localStorage.removeItem('eg1_blogs_cache');
+            localStorage.removeItem('eg1_blogs_cache_time');
             blogsPage = 1;
             loadBlogsList();
             alert('Blog deleted successfully');
@@ -488,7 +496,10 @@ async function toggleBlogActive(blogId, isActive) {
             updatePayload[`${blog._pageKey}.${blogId}`] = updatedBlogData;
             await db.collection('eg1_blog').doc(blog._categoryId).update(updatePayload);
             
+            localStorage.removeItem('eg1_blogs_cache_v2');
+            localStorage.removeItem('eg1_blogs_cache_v2_time');
             localStorage.removeItem('eg1_blogs_cache');
+            localStorage.removeItem('eg1_blogs_cache_time');
             // reload list
             loadBlogsList();
         }

@@ -83,14 +83,33 @@ var DataCache = {
   blogs: null,
   pages: null,
   lastError: null,
-  CACHE_TTL: 3600000, // 1 hour TTL
+  CACHE_TTL_DEV: 60000,       // 60 seconds TTL on localhost / dev
+  CACHE_TTL_PROD: 3600000,    // 1 hour TTL in production
   lastFetchSource: {}, // Stores 'network' or 'cache' for diagnostics
+
+  isDev: function() {
+    try {
+      var host = window.location.hostname;
+      return host === 'localhost' || host === '127.0.0.1' || window.location.protocol === 'file:';
+    } catch (e) {
+      return false;
+    }
+  },
+
+  getCacheTTL: function() {
+    return this.isDev() ? this.CACHE_TTL_DEV : this.CACHE_TTL_PROD;
+  },
 
   _getPersistentCache: function(key) {
     try {
+      // Force refresh on demand via URL query param (e.g. ?refresh=1 or ?nocache=1)
+      if (window.location.search.indexOf('nocache') !== -1 || window.location.search.indexOf('refresh') !== -1) {
+        return null;
+      }
       var data = localStorage.getItem(key);
       var time = localStorage.getItem(key + '_time');
-      if (data && time && (Date.now() - parseInt(time, 10) < this.CACHE_TTL)) {
+      var ttl = this.getCacheTTL();
+      if (data && time && (Date.now() - parseInt(time, 10) < ttl)) {
         return JSON.parse(data);
       }
     } catch (e) {
@@ -108,10 +127,14 @@ var DataCache = {
     }
   },
 
+  BLOGS_CACHE_KEY: 'eg1_blogs_cache_v2',
+
   clearCache: function(type) {
     try {
       if (!type || type === 'blogs') {
         this.blogs = null;
+        localStorage.removeItem(this.BLOGS_CACHE_KEY);
+        localStorage.removeItem(this.BLOGS_CACHE_KEY + '_time');
         localStorage.removeItem('eg1_blogs_cache');
         localStorage.removeItem('eg1_blogs_cache_time');
       }
@@ -254,7 +277,7 @@ var DataCache = {
     }
 
     if (!forceRefresh) {
-      var cached = this._getPersistentCache('eg1_blogs_cache');
+      var cached = this._getPersistentCache(this.BLOGS_CACHE_KEY);
       if (cached) {
         this.blogs = cached;
         this.lastFetchSource.blogs = 'localStorage (0 reads)';
@@ -311,7 +334,7 @@ var DataCache = {
         }
       });
       console.log("Successfully loaded " + this.blogs.length + " blogs from network");
-      this._setPersistentCache('eg1_blogs_cache', this.blogs);
+      this._setPersistentCache(this.BLOGS_CACHE_KEY, this.blogs);
       this.lastFetchSource.blogs = 'network (' + snapshot.docs.length + ' doc reads)';
       this.lastError = null;
     } catch (e) {
@@ -451,7 +474,7 @@ var RenderHelpers = {
                             <div class="col-md-12">
                                 <div class="row">
                                     <div class="col-lg-10 col-md-10 col-sm-12 col-xs-12">
-                                        <img src="${imageUrl}" style="width: 100%;" />
+                                        <img src="${imageUrl}" alt="${title}" loading="lazy" onerror="this.src='img/eg1logo.webp'" style="width: 100%;" />
                                     </div>
                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 left">
                                         <h3 class="text-blue"><a href="blog.html?id=${blog.id}">${title}</a></h3>

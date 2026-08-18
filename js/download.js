@@ -51,7 +51,7 @@ $(document).ready(function () {
         var urlString;
         slideIndex++;
         if (slideIndex > 6) { slideIndex = 1 }
-        urlString = 'url(img/home' + slideIndex + '.png)';
+        urlString = 'url(img/home' + slideIndex + '.webp)';
         slides.style.backgroundImage = urlString;
         setTimeout(showSlides, 5000);
     }
