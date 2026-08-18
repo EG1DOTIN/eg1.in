@@ -38,12 +38,11 @@ $(document).ready(async function () {
                 '<p>Version: ' + (product.version || '1.0') + '</p>' +
                 '<hr />' +
                 '<h4>Request Registration Key</h4>' +
-                '<p>To get a registration key for <strong>' + productName + '</strong>, please contact via email or fill the contact form on the Contact page.</p>' +
-                '<p><strong>Email:</strong> <a href="mailto:eg1dotin@gmail.com">eg1dotin@gmail.com</a></p>' +
+                '<p>To get a registration key for <strong>' + productName + '</strong>, please send us a message via our Contact form.</p>' +
                 '<p style="margin-top: 20px;">' +
                 '<a href="contact.html" class="btn btn-primary">Send Request via Contact Form</a>' +
                 '&nbsp;&nbsp;' +
-                '<a href="app-details.html?id=' + product.id + '" class="btn btn-default" style="background:#ddd; padding:6px 12px; border-radius:4px; text-decoration:none; color:#333;">Back to Product</a>' +
+                '<a href="apps.html?id=' + product.id + '" class="btn btn-default" style="background:#ddd; padding:6px 12px; border-radius:4px; text-decoration:none; color:#333;">Back to Product</a>' +
                 '</p>' +
                 '</div>' +
                 '</div>';
