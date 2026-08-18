@@ -372,29 +372,19 @@ var RenderHelpers = {
     if (isHomepage) {
       return `
                 <div class="col-md-4 col-sm-4 col-xs-12">
-                    <div class="box box-widget widget-user box-shadow-bottom">
-                        <!-- <a href="${detailLink}" ${linkTarget} style="text-decoration: none; color: inherit;"> -->
-                            <div class="wid-user-head bg-gray1-active">
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <img src="${iconUrl}" width="50px" />
-                                    </div>
-                                    <div class="col-md-9 left">
-                                        <h4 class="">${productName}</h4>
-                                        <h5 class="widget-user-desc">Version ${version}</h5>
-                                    </div>
-                                </div>
+                    <div class="box box-widget home-product-card box-shadow-bottom">
+                        <div class="home-product-header">
+                            <img src="${iconUrl}" class="home-product-icon" alt="${productName}" />
+                            <div class="home-product-title-wrap">
+                                <h4 class="home-product-title">${productName}</h4>
+                                <h5 class="home-product-version">Version ${version}</h5>
                             </div>
-                            <div class="box-footer">
-                                <div class="row">
-                                    <div class="col-md-12" style="min-height: 130px; text-align: left;">
-                                        <b style="color: #444;">${shortDesc}</b>&emsp; <span class="underline" style="color: #3c8dbc;"></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        <div class="pad">
-                            <a href="${detailLink}" ${linkTarget}  class="btn btn-primary btn-read"><i class="icon icon-newspaper-o"></i>&nbsp;VIEW DETAILS</a>
+                        </div>
+                        <div class="home-product-body">
+                            <p class="home-product-desc">${shortDesc}</p>
+                        </div>
+                        <div class="home-product-actions">
+                            <a href="${detailLink}" ${linkTarget} class="btn btn-primary btn-read"><i class="icon icon-newspaper-o"></i>&nbsp;VIEW DETAILS</a>
                             ${(product.show_download === "true" || product.show_download === undefined) ? `<a href="download.html?id=${product.id}" class="btn btn-success btn-down"><i class="icon icon-download"></i>&nbsp;DOWNLOAD</a>` : ""}
                             ${paidVersion === "true" ? `<a href="get-registration-key.html?id=${product.id}" class="btn btn-primary"><i class="icon icon-key"></i>&nbsp;Get Key</a>` : ""}
                         </div>
