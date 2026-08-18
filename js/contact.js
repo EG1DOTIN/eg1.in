@@ -2,10 +2,10 @@
  * @file contact.js
  * @description Handles client-side contact form interactions, math CAPTCHA anti-spam verification,
  * submission rate-limiting, Cloud Firestore database writes, and dynamic page content loading.
- * @project EG1 Electrical Engineering Portal
+ * @project EG1 Website Portal
  */
 
-$(document).ready(function() {
+$(document).ready(function () {
     // Expected answer for the dynamic math CAPTCHA
     var expectedAnswer = 0;
     // Tracks whether user has focused on form inputs to lazy-load the CAPTCHA
@@ -20,7 +20,7 @@ $(document).ready(function() {
         var op = operations[Math.floor(Math.random() * operations.length)];
         var n1 = Math.floor(Math.random() * 10) + 1;
         var n2 = Math.floor(Math.random() * 10) + 1;
-        
+
         // Ensure subtraction results in a non-negative integer
         if (op === '-' && n1 < n2) {
             var temp = n1; n1 = n2; n2 = temp;
@@ -29,11 +29,11 @@ $(document).ready(function() {
         $('#num1').text(n1);
         $('#mathOp').text(op);
         $('#num2').text(n2);
-        
+
         if (op === '+') expectedAnswer = n1 + n2;
         if (op === '-') expectedAnswer = n1 - n2;
         if (op === '*') expectedAnswer = n1 * n2;
-        
+
         $('#botCheckContainer').show();
         $('#txtbot').val('');
         $('#txtbot').attr('required', true);
@@ -43,7 +43,7 @@ $(document).ready(function() {
      * Lazy initialization of CAPTCHA on initial user input focus
      * to avoid unnecessary DOM changes for casual visitors.
      */
-    $('#contactForm input, #contactForm textarea').on('focus', function() {
+    $('#contactForm input, #contactForm textarea').on('focus', function () {
         if (!formAttempted) {
             generateCaptcha();
             formAttempted = true;
@@ -55,9 +55,9 @@ $(document).ready(function() {
      * Validates user input, checks math CAPTCHA, enforces 24h client rate-limiting,
      * and persists message payload into Cloud Firestore `/messages` collection.
      */
-    $('#contactForm').submit(function(e) {
+    $('#contactForm').submit(function (e) {
         e.preventDefault();
-        
+
         // Enforce 24-hour rate limit via localStorage check
         var lastSent = localStorage.getItem('lastMessageTime');
         if (lastSent && (Date.now() - parseInt(lastSent) < 86400000)) {
@@ -71,7 +71,7 @@ $(document).ready(function() {
         var contact = $('#txtcontact').val().trim();
         var message = $('#txtenq').val().trim();
         var botAnswer = parseInt($('#txtbot').val().trim());
-        
+
         // Verify CAPTCHA answer
         if (botAnswer !== expectedAnswer) {
             showMessage('Incorrect anti-spam answer. Please try again.', 'error');
@@ -97,22 +97,22 @@ $(document).ready(function() {
             message: message,
             createdAt: firebase.firestore.FieldValue.serverTimestamp()
         })
-        .then(function(docRef) {
-            console.log("Message saved with ID: ", docRef.id);
-            localStorage.setItem('lastMessageTime', Date.now().toString());
-            showMessage('Thank you for contacting us! We will get back to you shortly.', 'success');
-            $('#contactForm')[0].reset();
-            formAttempted = false;
-            $('#botCheckContainer').hide();
-            $('#txtbot').removeAttr('required');
-        })
-        .catch(function(error) {
-            console.error("Error saving message: ", error);
-            showMessage('Error sending message. Please try again later.', 'error');
-        })
-        .finally(function() {
-            btn.prop('disabled', false).text('Send Enquiry');
-        });
+            .then(function (docRef) {
+                console.log("Message saved with ID: ", docRef.id);
+                localStorage.setItem('lastMessageTime', Date.now().toString());
+                showMessage('Thank you for contacting us! We will get back to you shortly.', 'success');
+                $('#contactForm')[0].reset();
+                formAttempted = false;
+                $('#botCheckContainer').hide();
+                $('#txtbot').removeAttr('required');
+            })
+            .catch(function (error) {
+                console.error("Error saving message: ", error);
+                showMessage('Error sending message. Please try again later.', 'error');
+            })
+            .finally(function () {
+                btn.prop('disabled', false).text('Send Enquiry');
+            });
     });
 
     /**
@@ -123,14 +123,14 @@ $(document).ready(function() {
     function showMessage(msg, type) {
         var msgBox = $('#contactMessage');
         msgBox.removeClass('alert-success alert-danger').show().text(msg);
-        
+
         if (type === 'success') {
             msgBox.css({ 'background-color': '#d4edda', 'color': '#155724', 'border': '1px solid #c3e6cb' });
         } else {
             msgBox.css({ 'background-color': '#f8d7da', 'color': '#721c24', 'border': '1px solid #f5c6cb' });
         }
-        
-        setTimeout(function() {
+
+        setTimeout(function () {
             msgBox.fadeOut();
         }, 5000);
     }

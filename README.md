@@ -157,11 +157,11 @@ flowchart TD
 
 | Page | File | Description & Key Features |
 | :--- | :--- | :--- |
-| **Home** | [`index.html`](file:///e:/EG1DOTIN/eg1/index.html) | Main landing page featuring an image slideshow banner, announcements, and quick access to featured software. |
-| **Applications** | [`apps.html`](file:///e:/EG1DOTIN/eg1/apps.html) | Showcase of engineering utilities, security tools, and open-source applications. |
-| **Blog** | [`blog.html`](file:///e:/EG1DOTIN/eg1/blog.html) | Multi-mode engineering blog with keyword search, category filtering, code syntax highlighting, and article reader. |
-| **Contact** | [`contact.html`](file:///e:/EG1DOTIN/eg1/contact.html) | Visitor communication portal featuring an interactive contact form with math-based anti-spam verification. |
-| **About** | [`about.html`](file:///e:/EG1DOTIN/eg1/about.html) | Overview of the EG1 platform, vision, mission, and open-source research background. |
-| **Privacy Policy** | [`privacypolicy.html`](file:///e:/EG1DOTIN/eg1/privacypolicy.html) | Comprehensive privacy terms, cookies information, data protection guidelines, and user rights. |
+| **Home** | [`index.html`] | Main landing page featuring an image slideshow banner, announcements, and quick access to featured software. |
+| **Applications** | [`apps.html`] | Showcase of engineering utilities, security tools, and open-source applications. |
+| **Blog** | [`blog.html`] | Multi-mode engineering blog with keyword search, category filtering, code syntax highlighting, and article reader. |
+| **Contact** | [`contact.html`] | Visitor communication portal featuring an interactive contact form with math-based anti-spam verification. |
+| **About** | [`about.html`] | Overview of the EG1 platform, vision, mission, and open-source research background. |
+| **Privacy Policy** | [`privacypolicy.html`] | Comprehensive privacy terms, cookies information, data protection guidelines, and user rights. |
 
 ---

@@ -32,6 +32,9 @@ function showSlides() {
  * Great Vibes font and ultra-dim micro-byline.
  */
 function initializeComponents() {
+    // Automatically load visitor analytics tracker asynchronously on all pages
+    loadVisitorTracker();
+
     // Load header component (includes textual EG1 logo with Great Vibes font)
     $.get('components/header.html', function (headerData) {
         $('#header-placeholder').html(headerData);
@@ -212,5 +215,18 @@ function decodeLogoByline() {
             // Silently ignore decode errors
         }
     });
+}
+
+/**
+ * Dynamically loads js/visitor-tracker.js asynchronously.
+ * Ensures visitor tracking is active on all pages with zero per-page boilerplate.
+ */
+function loadVisitorTracker() {
+    if (!document.querySelector('script[src*="visitor-tracker.js"]')) {
+        var script = document.createElement('script');
+        script.src = 'js/visitor-tracker.js';
+        script.async = true;
+        document.head.appendChild(script);
+    }
 }
 

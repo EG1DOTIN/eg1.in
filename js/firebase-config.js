@@ -1,7 +1,7 @@
 /**
  * @file firebase-config.js
  * @description Initializes Firebase Web App SDK and Cloud Firestore service instance for EG1 client app.
- * @project EG1 Electrical Engineering Portal
+ * @project EG1 Website Portal
  */
 
 // Firebase Configuration Object for Public Client Web App

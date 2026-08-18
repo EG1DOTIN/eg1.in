@@ -5,7 +5,7 @@
  *   Layer 2: 16-digit Security PIN verified via SHA-256 hash comparison against Firestore.
  *   Layer 3: Login attempt logging (paginated, 18 entries/doc) and IP-based lockout
  *            after 3 failed attempts (24-hour block).
- * @project EG1 Electrical Engineering Portal - Admin Panel
+ * @project EG1 Website Portal - Admin Panel
  */
 
 // ─── Global State ──────────────────────────────────────────────────────────────
