@@ -46,8 +46,12 @@ async function handleImageUpload(blobInfo, success, failure) {
 // Load dashboard stats
 async function loadDashboardStats() {
     try {
-        updateTotalVisitors();
-        updateTodayVisitors();
+        if (typeof updateVisitorStats === 'function') {
+            await updateVisitorStats();
+        } else {
+            updateTotalVisitors();
+            updateTodayVisitors();
+        }
         
         if (typeof fetchAllBlogsFlat === 'function') {
             allBlogsFlat = await fetchAllBlogsFlat();

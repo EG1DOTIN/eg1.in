@@ -472,7 +472,10 @@ function showSection(sectionId) {
     event.target.closest('.nav-link').classList.add('active');
 
     // Load section-specific data
-    if (sectionId === 'analytics') loadAnalyticsData();
+    if (sectionId === 'analytics') {
+        if (typeof loadAnalyticsData === 'function') loadAnalyticsData();
+        if (typeof updateVisitorStats === 'function') updateVisitorStats();
+    }
     else if (sectionId === 'blogs') loadBlogsList();
     else if (sectionId === 'products') loadProductsList();
     else if (sectionId === 'contents') resetContentTabs();
