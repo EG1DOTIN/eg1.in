@@ -157,30 +157,136 @@ p {
 .mainContentHeader {
     padding-top: 28px;
     background-position: center;
-    box-shadow: 0px 5px 10px #777;
+    box-shadow: inset 0 0 80px #000000, 0px 6px 25px rgba(0, 0, 0, 0.85);
     z-index: 100;
-    background-image: url('../img/home1.webp');
     width: 100%;
     height: 320px;
-    background-repeat: repeat-x;
     background-color: #000000;
-    animation-name: mainContentHeaderfade;
-    animation-duration: 1.5s;
+    transition: background 1.5s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 1.5s ease-in-out;
+    position: relative;
+    overflow: hidden;
 }
 
-.mainContentHeaderfade {
-    animation-name: mainContentHeaderfade;
-    animation-duration: 1.5s;
+/* Crystal Facet Low-Poly Geometric Structure Overlay with Slow Liquid Drift */
+.mainContentHeader::before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    left: -20px;
+    right: -20px;
+    bottom: -20px;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240" viewBox="0 0 240 240"><defs><linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="%23ffffff" stop-opacity="0.10"/><stop offset="100%" stop-color="%23ffffff" stop-opacity="0.01"/></linearGradient><linearGradient id="g2" x1="100%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="%23ffffff" stop-opacity="0.07"/><stop offset="100%" stop-color="%23ffffff" stop-opacity="0.005"/></linearGradient></defs><polygon points="0,0 120,0 60,72" fill="url(%23g1)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/><polygon points="120,0 240,0 180,96" fill="url(%23g2)" stroke="rgba(255,255,255,0.09)" stroke-width="1"/><polygon points="60,72 120,0 180,96 120,168" fill="url(%23g1)" stroke="rgba(255,255,255,0.14)" stroke-width="1"/><polygon points="0,0 60,72 0,144" fill="url(%23g2)" stroke="rgba(255,255,255,0.08)" stroke-width="1"/><polygon points="180,96 240,0 240,120" fill="url(%23g1)" stroke="rgba(255,255,255,0.10)" stroke-width="1"/><polygon points="0,144 60,72 120,168 36,240 0,240" fill="url(%23g1)" stroke="rgba(255,255,255,0.09)" stroke-width="1"/><polygon points="120,168 180,96 240,120 240,240 144,240" fill="url(%23g2)" stroke="rgba(255,255,255,0.11)" stroke-width="1"/><polygon points="60,72 120,168 144,240 36,240" fill="url(%23g1)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/></svg>');
+    background-repeat: repeat;
+    background-size: 320px 320px;
+    opacity: 0.85;
+    pointer-events: none;
+    z-index: 1;
+    animation: crystalFacetDrift 35s infinite ease-in-out;
 }
 
-@keyframes mainContentHeaderfade {
-    from {
-        opacity: .8
-    }
+/* Subtle Dot-Matrix Ambient Grid Overlay */
+.mainContentHeader::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: 24px 24px;
+    pointer-events: none;
+    z-index: 1;
+}
 
-    to {
-        opacity: 1
+.mainContentHeader > * {
+    position: relative;
+    z-index: 2;
+}
+
+/* Continuous Fluid Water-Flowing Animations */
+@keyframes crystalFluidFlow {
+    0% {
+        background-position: 0% 50%, 0% 0%, 0% 0%, 0% 50%;
     }
+    25% {
+        background-position: 50% 100%, 50% 50%, 30% 70%, 50% 100%;
+    }
+    50% {
+        background-position: 100% 50%, 100% 100%, 70% 30%, 100% 50%;
+    }
+    75% {
+        background-position: 50% 0%, 50% 50%, 70% 80%, 50% 0%;
+    }
+    100% {
+        background-position: 0% 50%, 0% 0%, 0% 0%, 0% 50%;
+    }
+}
+
+@keyframes crystalFacetDrift {
+    0% {
+        transform: translate(0px, 0px) scale(1);
+    }
+    50% {
+        transform: translate(-14px, 8px) scale(1.02);
+    }
+    100% {
+        transform: translate(0px, 0px) scale(1);
+    }
+}
+
+/* 6 Water Flowing Themes: Shaded Black, Dark Gray, Slate Gray & Silver Liquid Waves */
+.mainContentHeader.crystal-theme-1 {
+    background: linear-gradient(60deg, rgba(255, 255, 255, 0.10) 0%, transparent 40%, rgba(255, 255, 255, 0.05) 70%),
+                radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.22) 0%, rgba(180, 190, 205, 0.09) 35%, transparent 65%),
+                radial-gradient(circle at 15% 85%, rgba(140, 150, 165, 0.14) 0%, transparent 50%),
+                linear-gradient(135deg, #000000 0%, #0d0f16 30%, #1a1e2a 65%, #2e3546 100%);
+    background-size: 300% 300%, 250% 250%, 200% 200%, 300% 300%;
+    animation: crystalFluidFlow 28s infinite ease-in-out;
+}
+
+.mainContentHeader.crystal-theme-2 {
+    background: linear-gradient(120deg, transparent 30%, rgba(255, 255, 255, 0.11) 50%, transparent 70%),
+                radial-gradient(circle at 20% 25%, rgba(240, 245, 255, 0.24) 0%, rgba(140, 150, 165, 0.08) 40%, transparent 65%),
+                radial-gradient(circle at 85% 75%, rgba(200, 210, 225, 0.12) 0%, transparent 50%),
+                linear-gradient(135deg, #020204 0%, #13151c 35%, #242936 70%, #3a4255 100%);
+    background-size: 300% 300%, 250% 250%, 200% 200%, 300% 300%;
+    animation: crystalFluidFlow 32s infinite ease-in-out;
+}
+
+.mainContentHeader.crystal-theme-3 {
+    background: linear-gradient(30deg, rgba(255, 255, 255, 0.09) 0%, transparent 35%, rgba(255, 255, 255, 0.07) 65%),
+                radial-gradient(circle at 50% 45%, rgba(255, 255, 255, 0.22) 0%, rgba(160, 170, 185, 0.10) 40%, transparent 70%),
+                radial-gradient(circle at 85% 15%, rgba(140, 150, 165, 0.14) 0%, transparent 45%),
+                linear-gradient(135deg, #000000 0%, #0e1016 40%, #1e222e 75%, #303749 100%);
+    background-size: 300% 300%, 250% 250%, 200% 200%, 300% 300%;
+    animation: crystalFluidFlow 25s infinite ease-in-out;
+}
+
+.mainContentHeader.crystal-theme-4 {
+    background: linear-gradient(150deg, rgba(255, 255, 255, 0.10) 10%, transparent 45%, rgba(255, 255, 255, 0.06) 80%),
+                radial-gradient(circle at 85% 30%, rgba(255, 255, 255, 0.20) 0%, rgba(170, 180, 195, 0.09) 40%, transparent 65%),
+                radial-gradient(circle at 15% 70%, rgba(150, 160, 175, 0.13) 0%, transparent 50%),
+                linear-gradient(135deg, #040406 0%, #161923 35%, #282e3c 70%, #3f485e 100%);
+    background-size: 300% 300%, 250% 250%, 200% 200%, 300% 300%;
+    animation: crystalFluidFlow 30s infinite ease-in-out;
+}
+
+.mainContentHeader.crystal-theme-5 {
+    background: linear-gradient(75deg, transparent 25%, rgba(255, 255, 255, 0.12) 48%, transparent 65%),
+                radial-gradient(circle at 35% 75%, rgba(255, 255, 255, 0.24) 0%, rgba(150, 160, 175, 0.10) 40%, transparent 70%),
+                radial-gradient(circle at 70% 20%, rgba(200, 210, 225, 0.12) 0%, transparent 45%),
+                linear-gradient(135deg, #000000 0%, #10121a 40%, #202533 75%, #333a4d 100%);
+    background-size: 300% 300%, 250% 250%, 200% 200%, 300% 300%;
+    animation: crystalFluidFlow 27s infinite ease-in-out;
+}
+
+.mainContentHeader.crystal-theme-6 {
+    background: linear-gradient(105deg, rgba(255, 255, 255, 0.09) 15%, transparent 50%, rgba(255, 255, 255, 0.07) 85%),
+                radial-gradient(circle at 15% 30%, rgba(255, 255, 255, 0.22) 0%, rgba(165, 175, 190, 0.09) 40%, transparent 65%),
+                radial-gradient(circle at 80% 80%, rgba(150, 160, 175, 0.13) 0%, transparent 50%),
+                linear-gradient(135deg, #020204 0%, #12151e 35%, #242937 70%, #384054 100%);
+    background-size: 300% 300%, 250% 250%, 200% 200%, 300% 300%;
+    animation: crystalFluidFlow 34s infinite ease-in-out;
 }
 
 .mainContentHeader .overflow {
@@ -838,6 +944,7 @@ p {
         flex-direction: column;
         gap: 6px;
     }
+
     .footer-bottom-links {
         text-align: center;
     }

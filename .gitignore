@@ -3,6 +3,8 @@ docs/
 
 # ─── Old/unused files ─────────────────────────────────
 unused-old-files/
+*_previous.*
+*.bak
 
 # ─── Backend & Firestore ─────────────────────────────────
 FireStore/
@@ -11,6 +13,7 @@ FireStore/
 test.html
 test-blog-debug.html
 logo-test.html
+test-svg-logo.html
 
 # ─── IDE & Editor Configurations ─────────────────────────
 .vscode/

@@ -52,7 +52,7 @@ async function initializeApps() {
                         '</div>',
                         '<div class="row">',
                         '<div class="col-md-2">',
-                        '<img src="' + (selectedProduct.icon || selectedProduct.imageUrl || 'img/eg1logo.webp') + '" style="width:100%; max-width:140px;" />',
+                        '<img src="' + (selectedProduct.icon || selectedProduct.imageUrl || "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23050814'/><text x='50%' y='62%' font-family='serif' font-size='42' fill='%23ffffff' text-anchor='middle'>EG1</text></svg>") + '" style="width:100%; max-width:140px;" />',
                         '</div>',
                         '<div class="col-md-10 left">',
                         '<h2 class="color-lightblack">' + (selectedProduct.product_name || selectedProduct.name || 'Unknown Product') + '</h2>',

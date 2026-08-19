@@ -20,7 +20,8 @@ function showSlides() {
         slideIndex = 1;
     }
 
-    slides.style.backgroundImage = "url(img/home" + slideIndex + ".webp)";
+    // Dynamic dark crystal gradient theme transition
+    slides.className = "row mainContentHeader crystal-theme-" + slideIndex;
 
     clearTimeout(sliderTimeout);
     sliderTimeout = setTimeout(showSlides, 5000);
