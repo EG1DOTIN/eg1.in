@@ -29,7 +29,7 @@ $(document).ready(async function () {
                 (file2 ? '&nbsp;&nbsp;<a href="' + file2 + '" class="btn btn-info btn-lg" target="_blank"><i class="icon icon-download"></i>&nbsp;Download File 2</a>' : '') +
                 '</p>' +
                 '<p style="margin-top: 20px;">' +
-                '<a href="app-details.html?id=' + product.id + '" class="btn btn-primary">Back to Product Details</a>' +
+                '<a href="apps.html?id=' + product.id + '" class="btn btn-primary">Back to Product Details</a>' +
                 '</p>' +
                 '</div>' +
                 '</div>';
@@ -40,19 +40,3 @@ $(document).ready(async function () {
     });
 });
 
-
-$(document).ready(function () {
-    var slideIndex = 0;
-    showSlides();
-
-    function showSlides() {
-        var slides = document.getElementById("mainContentHeaderslide");
-        if (!slides) return;
-        var urlString;
-        slideIndex++;
-        if (slideIndex > 6) { slideIndex = 1 }
-        urlString = 'url(img/home' + slideIndex + '.webp)';
-        slides.style.backgroundImage = urlString;
-        setTimeout(showSlides, 5000);
-    }
-});
