@@ -6,13 +6,15 @@ var AppConfig = {
   dataPath: "data/",
   imagePath: "img/",
 
-  // Load JSON data
-  loadData: function (filename) {
-    return $.ajax({
-      url: this.dataPath + filename,
-      dataType: "json",
-      async: false,
-    }).responseJSON;
+  // Load JSON data asynchronously
+  loadData: async function (filename) {
+    try {
+      const response = await fetch(this.dataPath + filename);
+      return await response.json();
+    } catch (e) {
+      console.error("Error loading data from " + filename + ":", e);
+      return null;
+    }
   },
 
   // Get query parameter from URL
@@ -371,7 +373,11 @@ var DataCache = {
   filterBlogsByCategory: async function (category) {
     var blogs = await this.getBlogs();
     if (category === "all") return blogs;
-    return blogs.filter((b) => b.tags && b.tags.includes(category));
+    var catLower = String(category).toLowerCase();
+    return blogs.filter(function (b) {
+      return (b.tags && Array.isArray(b.tags) && b.tags.some(function (t) { return String(t).toLowerCase() === catLower; })) ||
+             (b.category && String(b.category).toLowerCase() === catLower);
+    });
   },
 };
 
@@ -726,10 +732,12 @@ $(document).ready(function () {
  * fails or returns no data, so the page never ends up blank.
  */
 document.addEventListener("DOMContentLoaded", function () {
-    if (typeof isFirebaseReady === "function" && !isFirebaseReady()) {
-        waitForFirebase(loadAppsContent);
-    } else {
-        loadAppsContent();
+    if (document.getElementById("appsTitleText") || document.getElementById("appsContentText")) {
+        if (typeof isFirebaseReady === "function" && !isFirebaseReady()) {
+            waitForFirebase(loadAppsContent);
+        } else {
+            loadAppsContent();
+        }
     }
 });
 

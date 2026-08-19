@@ -54,31 +54,40 @@ function initializeComponents() {
         decodeLogoByline();
 
         // Fetch about content from DataCache
-        if (typeof waitForFirebase === 'function') {
-            waitForFirebase(async () => {
-                if (typeof DataCache !== 'undefined') {
-                    const aboutPage = await DataCache.getPageContent('about');
-                    if (aboutPage && aboutPage.title) {
-                        const tempDiv = document.createElement('div');
-                        tempDiv.innerHTML = aboutPage.title;
-                        const text = tempDiv.textContent || tempDiv.innerText || '';
+        function fetchFooterAbout() {
+            if (typeof waitForFirebase === 'function') {
+                waitForFirebase(async () => {
+                    if (typeof DataCache !== 'undefined') {
+                        try {
+                            const aboutPage = await DataCache.getPageContent('about');
+                            if (aboutPage && aboutPage.title) {
+                                const tempDiv = document.createElement('div');
+                                tempDiv.innerHTML = aboutPage.title;
+                                const text = tempDiv.textContent || tempDiv.innerText || '';
 
-                        const targetString = 'A personal hobb';
-                        const startIndex = text.indexOf(targetString);
-                        if (startIndex !== -1) {
-                            let snippet = text.substring(startIndex, startIndex + 146);
-                            if (snippet.length === 146 && text.length > startIndex + 146) {
-                                snippet += '...';
+                                const targetString = 'A personal hobb';
+                                const startIndex = text.indexOf(targetString);
+                                if (startIndex !== -1) {
+                                    let snippet = text.substring(startIndex, startIndex + 146);
+                                    if (snippet.length === 146 && text.length > startIndex + 146) {
+                                        snippet += '...';
+                                    }
+                                    const aboutTextEl = document.getElementById('footer-about-text');
+                                    if (aboutTextEl) {
+                                        aboutTextEl.textContent = snippet;
+                                    }
+                                }
                             }
-                            const aboutTextEl = document.getElementById('footer-about-text');
-                            if (aboutTextEl) {
-                                aboutTextEl.textContent = snippet;
-                            }
+                        } catch (err) {
+                            console.warn('Error loading footer about snippet:', err);
                         }
                     }
-                }
-            });
+                });
+            } else {
+                setTimeout(fetchFooterAbout, 100);
+            }
         }
+        fetchFooterAbout();
     });
 
     // Load slider component

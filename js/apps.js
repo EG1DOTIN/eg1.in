@@ -111,23 +111,37 @@ $(document).ready(function () {
 });
 
 function CopyToClipboard(containerid) {
-    if (document.selection) {
-        var range = document.body.createTextRange();
-        range.moveToElementText(
-            document.getElementById(containerid),
-        );
-        range.select().createTextRange();
-        document.execCommand("copy");
-        $("#clipmsg").html(
-            "<span style='margin-left:20px;background-color:#000;color:#fff;padding:3px 10px;margin-top:3px;font-size:12px;border-radius:3px;'>Copied</span>",
-        );
-    } else if (window.getSelection) {
-        var range = document.createRange();
-        range.selectNode(document.getElementById(containerid));
-        window.getSelection().addRange(range);
-        document.execCommand("copy");
-        $("#clipmsg").html(
-            "<span style='margin-left:20px;background-color:#000;color:#fff;padding:3px 10px;margin-top:3px;font-size:12px;border-radius:3px;'>Copied</span>",
-        );
+    var container = document.getElementById(containerid);
+    if (!container) return;
+
+    var text = container.innerText || container.textContent || '';
+    if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(function () {
+            $("#clipmsg").html(
+                "<span style='margin-left:20px;background-color:#000;color:#fff;padding:3px 10px;margin-top:3px;font-size:12px;border-radius:3px;'>Copied</span>"
+            );
+        }).catch(function () {
+            fallbackCopy(container);
+        });
+    } else {
+        fallbackCopy(container);
+    }
+
+    function fallbackCopy(element) {
+        if (window.getSelection) {
+            var range = document.createRange();
+            range.selectNode(element);
+            window.getSelection().removeAllRanges();
+            window.getSelection().addRange(range);
+            try {
+                document.execCommand("copy");
+                $("#clipmsg").html(
+                    "<span style='margin-left:20px;background-color:#000;color:#fff;padding:3px 10px;margin-top:3px;font-size:12px;border-radius:3px;'>Copied</span>"
+                );
+            } catch (e) {
+                console.error("Copy failed:", e);
+            }
+            window.getSelection().removeAllRanges();
+        }
     }
 }

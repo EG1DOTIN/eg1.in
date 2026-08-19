@@ -831,6 +831,18 @@ p {
     color: #ffffff;
 }
 
+@media (max-width: 768px) {
+    .footer-bottom-content {
+        justify-content: center;
+        text-align: center;
+        flex-direction: column;
+        gap: 6px;
+    }
+    .footer-bottom-links {
+        text-align: center;
+    }
+}
+
 @media screen and (max-width: 470px) {
     .subfooter>div>div>.col-exs-12 {
         width: 100%;
