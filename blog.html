@@ -12,6 +12,7 @@
 <html lang="en">
 
 <head>
+    <script>(function(){try{var t=localStorage.getItem('eg1_theme')||'light-gray';document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','light-gray');}})();</script>
     <title>EG1 BLOG</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2, user-scalable=no" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -29,10 +30,11 @@
     <link href="css/fonts.css" rel="stylesheet" type="text/css" />
     <link href="css/common.css" rel="stylesheet" type="text/css" />
     <link href="css/menuCss.css" rel="stylesheet" type="text/css" />
+    <link href="css/theme.css" rel="stylesheet" type="text/css" />
     <link href="css/scrollbar.css" rel="stylesheet" type="text/css" />
     <link href="css/socialbuttons.css" rel="stylesheet" type="text/css" />
-    <link href="js/slick.css" rel="stylesheet" type="text/css" />
-    <link href="js/slick-theme.css" rel="stylesheet" type="text/css" />
+    <link href="css/slick.css" rel="stylesheet" type="text/css" />
+    <link href="css/slick-theme.css" rel="stylesheet" type="text/css" />
     <link href="css/blog-detail.css" rel="stylesheet" type="text/css" />
     <link href="css/blog-grid.css" rel="stylesheet" type="text/css" />
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'><circle cx='60' cy='60' r='58' fill='%23000000'/><circle cx='60' cy='60' r='54' fill='none' stroke='%23ffffff' stroke-width='4'/><text x='50%25' y='68%25' font-family='Great Vibes, Georgia, serif' font-style='italic' font-weight='bold' font-size='50' fill='%23ffffff' text-anchor='middle'>EG1</text></svg>" />
@@ -76,12 +78,11 @@
                         <div class="sidebar" id="sidebarContainer">
                             <div class="row">
                                 <div class="col-md-12 margin-bottom">
-                                    <div class="input-group input-group-lg"
-                                        style="border-radius: 6px; border: 1px solid #3b3b3b;">
+                                    <div class="input-group input-group-lg">
                                         <input type="text" id="txtSearch" class="form-control"
                                             placeholder="search blog here" />
                                         <span class="input-group-btn">
-                                            <button class="btn btn-default bg-f2" onclick="searchBlogs()">
+                                            <button id="btnSearchBlog" class="btn btn-default bg-f2">
                                                 Search
                                             </button>
                                         </span>
@@ -90,9 +91,8 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
-                                    <div class="box box-solid box-black"
-                                        style="border-radius: 6px; border: 1px solid #3b3b3b;">
-                                        <div class="box-header" style="border-radius: 6px; border: 1px solid #3b3b3b;">
+                                    <div class="box box-solid box-black">
+                                        <div class="box-header">
                                             Category</div>
                                         <div class="box-body">
                                             <ul class="mrgin-top10 abc row" id="category-list">

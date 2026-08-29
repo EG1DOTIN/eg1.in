@@ -1,5 +1,6 @@
-# ─── Internal documentation ─────────────────────────────────
+# ─── Internal documentation and scripts ─────────────────────────────────
 docs/
+automation-scripts/
 
 # ─── Old/unused files ─────────────────────────────────
 unused-old-files/
@@ -9,11 +10,13 @@ unused-old-files/
 # ─── Backend & Firestore ─────────────────────────────────
 FireStore/
 
-# Test & debug files
+# inprogress, Test & debug files
 test.html
 test-blog-debug.html
 logo-test.html
 test-svg-logo.html
+get-registration-key.html
+download.html
 
 # ─── IDE & Editor Configurations ─────────────────────────
 .vscode/

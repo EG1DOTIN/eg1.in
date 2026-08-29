@@ -3,14 +3,13 @@
 
 <head>
     <script>(function(){try{var t=localStorage.getItem('eg1_theme')||'light-gray';document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','light-gray');}})();</script>
-    <title>ABOUT EG1</title>
+    <title>EG1 Updates &amp; Release Log</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2, user-scalable=no" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta charset="UTF-8" />
-    <meta name="title" content="ABOUT EG1" />
-    <meta name="description"
-        content="A platform for solutions, coding, programming, innovations, innovative ideas, arts, crafting, learning, creativity, research & development and many more..." />
-    <meta name="keywords" content="eg1, eg1.in, about eg1, programming, technology, blogs, tutorials" />
+    <meta name="title" content="EG1 Updates & Release Log" />
+    <meta name="description" content="Changelog, latest platform updates, feature releases, and optimizations across EG1 platform and applications." />
+    <meta name="keywords" content="EG1 updates, changelog, releases, what is new, platform updates, version history" />
 
     <!-- Stylesheets -->
     <link href="css/main.css" rel="stylesheet" type="text/css" />
@@ -22,8 +21,6 @@
     <link href="css/theme.css" rel="stylesheet" type="text/css" />
     <link href="css/scrollbar.css" rel="stylesheet" type="text/css" />
     <link href="css/socialbuttons.css" rel="stylesheet" type="text/css" />
-    <link href="css/slick.css" rel="stylesheet" type="text/css" />
-    <link href="css/slick-theme.css" rel="stylesheet" type="text/css" />
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'><circle cx='60' cy='60' r='58' fill='%23000000'/><circle cx='60' cy='60' r='54' fill='none' stroke='%23ffffff' stroke-width='4'/><text x='50%25' y='68%25' font-family='Great Vibes, Georgia, serif' font-style='italic' font-weight='bold' font-size='50' fill='%23ffffff' text-anchor='middle'>EG1</text></svg>" />
 
     <!-- Scripts -->
@@ -37,20 +34,41 @@
             <!-- Header will be loaded by include-components.js -->
             <div id="header-placeholder"></div>
 
-            <!-- Main Content -->
+            <!-- Header Banner Section -->
             <div class="box-100 bg-E3 main-master">
                 <div id="Content3Header" class="col-md-12" style="display:none;">
-                    <span id="aboutTitleText"></span>
+                    <h1><span id="updatesTitleText">UPDATES &amp; RELEASES</span></h1>
+                    <div>
+                        <br />
+                    </div>
                 </div>
-                <!-- <div class="row body"></div> -->
             </div>
 
-            <!-- About Content -->
+            <!-- Updates Main Content Area -->
             <div class="box-90 content">
-                <div class="row">
-                    <div class="col-md-9">
-                        <span id="aboutContentText"></span>
+                <div class="updates-page-container">
+                    
+                    <!-- Filter and Meta Header -->
+                    <div class="updates-page-header">
+                        <div>
+                            <h2 class="updates-page-title">Changelog &amp; Release Notes</h2>
+                            <p class="updates-page-subtitle">Track platform enhancements, security fixes, and new application releases.</p>
+                        </div>
+                        <div class="updates-filter-group" id="updatesFilterGroup" role="tablist">
+                            <button type="button" class="updates-filter-btn active" data-filter="all">All Updates</button>
+                            <button type="button" class="updates-filter-btn" data-filter="website">Website</button>
+                            <button type="button" class="updates-filter-btn" data-filter="app">Apps</button>
+                        </div>
                     </div>
+
+                    <!-- Updates Timeline List -->
+                    <div id="updatesPageListContainer" class="updates-timeline-list">
+                        <div class="updates-loading-box">
+                            <div class="updates-spinner"></div>
+                            <p>Loading latest updates...</p>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 
@@ -60,13 +78,7 @@
     </center>
 
     <!-- Scripts -->
-    <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-analytics-compat.js"></script>
-    <script src="js/firebase-config.js"></script>
-    <script src="js/slick.min.js" type="text/javascript"></script>
-    <script src="js/app.js" type="text/javascript"></script>
-    <script src="js/about.js" type="text/javascript"></script>
+    <script src="js/updates.js" type="text/javascript"></script>
 </body>
 
 </html>

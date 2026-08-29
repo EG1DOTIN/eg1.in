@@ -656,5 +656,19 @@
         $(document).on('click', '[data-action="page"]', function () {
             goToPage($(this).data('page'));
         });
+        $(document).on('click', '#btnSearchBlog', function (e) {
+            e.preventDefault();
+            if (typeof searchBlogs === 'function') {
+                searchBlogs();
+            }
+        });
+        $(document).on('keydown', '#txtSearch', function (e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                if (typeof searchBlogs === 'function') {
+                    searchBlogs();
+                }
+            }
+        });
     });
 })();
