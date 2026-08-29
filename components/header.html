@@ -9,17 +9,53 @@
         </a>
     </div>
     <div class="box-90">
-        <div class="row mrgin-top10">
-            <div class="col-md-12 companylogo">
-                <!-- EG1 Textual Logo using Great Vibes Font & Ultra-Dim Micro-Byline (Light Theme for White Header) -->
+        <div class="row mrgin-top10 topbar-header-row">
+            <div class="companylogo">
+                <!-- EG1 Textual Logo using Great Vibes Font & Ultra-Dim Micro-Byline -->
                 <a href="index.html" class="eg1-logo-link" title="EG1 Home">
-                    <div class="eg1-logo-badge theme-light">
+                    <div class="eg1-logo-badge theme-light" id="header-logo-badge">
                         <div class="eg1-logo-content">
                             <span class="eg1-logo-script">EG1</span><span class="eg1-logo-domain">.in</span>
                         </div>
                         <div class="eg1-logo-byline" data-info="YnkgR2F1dGFtIEphbmdpZA=="></div>
                     </div>
                 </a>
+            </div>
+            <div class="header-controls-col">
+                <!-- Website Updates Notification Bell Button -->
+                <div class="notification-bell-container" id="notificationBellContainer">
+                    <button type="button" id="notificationBellBtn" class="notification-bell-btn" aria-label="Website Updates and Notifications" aria-expanded="false" title="What's New & Updates">
+                        <span class="bell-icon-wrapper">
+                            <span class="bell-icon" aria-hidden="true"></span>
+                            <span class="bell-badge" id="notificationBadge" style="display: none;">0</span>
+                        </span>
+                    </button>
+                    <!-- Updates Dropdown / Popover Panel -->
+                    <div class="updates-dropdown-panel" id="updatesDropdownPanel" style="display: none;" role="dialog" aria-labelledby="updatesPanelTitle">
+                        <div class="updates-panel-header">
+                            <div class="updates-panel-title-wrapper">
+                                <span class="updates-panel-bell-icon" aria-hidden="true"></span>
+                                <h3 id="updatesPanelTitle" class="updates-panel-title">What's New</h3>
+                            </div>
+                            <button type="button" id="markAllReadBtn" class="updates-mark-read-btn">Mark all read</button>
+                        </div>
+                        <div class="updates-panel-body" id="updatesListContainer">
+                            <div class="updates-loading">Loading updates...</div>
+                        </div>
+                        <div class="updates-panel-footer">
+                            <a href="updates.html" class="updates-browse-all-link" id="browseAllUpdatesLink">Browse All Updates &rarr;</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Theme Switcher Control Button -->
+                <button type="button" id="themeToggleBtn" class="theme-toggle-btn is-light" aria-label="Toggle Light Gray / Dark Gray theme" aria-checked="false" role="switch" title="Switch to Dark Gray theme">
+                    <span class="theme-toggle-track">
+                        <span class="theme-icon theme-icon-sun" aria-hidden="true"></span>
+                        <span class="theme-icon theme-icon-moon" aria-hidden="true"></span>
+                    </span>
+                    <span class="theme-toggle-label" id="theme-toggle-text">Light Gray</span>
+                </button>
             </div>
         </div>
     </div>
@@ -55,7 +91,13 @@
                         <a href="index.html" class="home">HOME</a>
                     </li>
                     <li><a href="apps.html">APPS</a></li>
-                    <li><a href="blog.html">BLOG</a></li>
+                    <li class="has-submenu">
+                        <a href="javascript:void(0);" class="parent" role="button" aria-haspopup="true" aria-expanded="false">EXPLORE <span class="nav-caret" aria-hidden="true">&#9662;</span></a>
+                        <ul class="sub-nav">
+                            <li><a href="updates.html">UPDATES</a></li>
+                            <li><a href="blog.html">BLOG</a></li>
+                        </ul>
+                    </li>
                     <li><a href="about.html">ABOUT</a></li>
                     <li><a href="contact.html">CONTACT</a></li>
                 </ul>

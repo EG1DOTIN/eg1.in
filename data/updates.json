@@ -1,0 +1,25 @@
+[
+    {
+        "id": "update-2026-08-29-v3-0-0",
+        "type": "website",
+        "version": "3.0.0",
+        "title": "Light & Dark Theme and Updates System",
+        "date": "Aug 29, 2026",
+        "category": "FEATURE",
+        "icon": "spark",
+        "badge": "New",
+        "description": "Introduced dynamic Light Gray & Dark Gray themes with high-contrast navigation, zero-flicker loading, and the new Website Updates notification bell system.",
+        "link": "index.html"
+    },
+    {
+        "id": "update-2026-08-27-mchess-v371",
+        "type": "app",
+        "title": "Marwadi Chess v3.7.1 Released",
+        "date": "Aug 27, 2026",
+        "category": "APP",
+        "icon": "refresh",
+        "badge": "Release",
+        "description": "Play interactive online chess, explore grandmaster PGN archives, and analyze opening theory with the latest Marwadi Chess release.",
+        "link": "https://mchess.eg1.in"
+    }
+]
