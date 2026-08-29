@@ -87,6 +87,9 @@ html[data-theme="light-gray"] {
     --toggle-text-color: #475569;
     --toggle-icon-active: #f59e0b;
     --toggle-icon-inactive: #94a3b8;
+
+    --sidebar-header-bg: #1e293b;
+    --sidebar-header-text: #ffffff;
 }
 
 html[data-theme="dark-gray"] {
@@ -122,28 +125,28 @@ html[data-theme="dark-gray"] {
 
     --card-bg: #20242d;
     --card-border: #2e3440;
-    --card-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-    --card-shadow-hover: 0 10px 28px rgba(0, 0, 0, 0.55);
+    --card-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+    --card-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.55);
 
-    --input-bg: #16181f;
-    --input-border: #383e4d;
+    --input-bg: #14161b;
+    --input-border: #3b4252;
     --input-text: #f1f5f9;
     --input-placeholder: #64748b;
-    --input-addon-bg: #272c36;
+    --input-addon-bg: #2c323d;
     --input-focus-ring: rgba(56, 189, 248, 0.25);
 
-    --btn-primary-bg: #2d3542;
-    --btn-primary-hover: #384252;
-    --btn-primary-text: #ffffff;
-    --btn-primary-border: #475569;
-    --btn-primary-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    --btn-primary-bg: #38bdf8;
+    --btn-primary-hover: #0284c7;
+    --btn-primary-text: #0f172a;
+    --btn-primary-border: #38bdf8;
+    --btn-primary-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
     --btn-success-bg: #10b981;
     --btn-success-hover: #059669;
 
-    --footer-bg: #111317;
+    --footer-bg: #0f1115;
     --footer-text: #94a3b8;
     --footer-border: rgba(255, 255, 255, 0.06);
-    --footer-bottom-bg: #111317;
+    --footer-bottom-bg: #0b0d10;
 
     --accent-color: #38bdf8;
     --link-color: #38bdf8;
@@ -167,6 +170,9 @@ html[data-theme="dark-gray"] {
     --toggle-text-color: #cbd5e1;
     --toggle-icon-active: #38bdf8;
     --toggle-icon-inactive: #64748b;
+
+    --sidebar-header-bg: #272c36;
+    --sidebar-header-text: #f1f5f9;
 }
 
 /* ==========================================================================
@@ -443,8 +449,8 @@ html[data-theme="dark-gray"] .bell-icon {
 }
 
 .updates-panel-header {
-    background: var(--nav-hover-bg);
-    color: #ffffff;
+    background: var(--sidebar-header-bg);
+    color: var(--sidebar-header-text);
     padding: 12px 16px;
     display: flex;
     justify-content: space-between;
@@ -471,25 +477,25 @@ html[data-theme="dark-gray"] .bell-icon {
     margin: 0 !important;
     font-size: 15.5px !important;
     font-weight: 700 !important;
-    color: #ffffff !important;
+    color: var(--sidebar-header-text) !important;
     letter-spacing: 0.3px;
 }
 
 .updates-mark-read-btn {
     background: transparent;
     border: none;
-    color: #94a3b8;
+    color: var(--text-muted);
     font-size: 12px;
     font-weight: 600;
     cursor: pointer;
-    padding: 3px 6px;
+    padding: 3px 8px;
     border-radius: 4px;
     transition: color 0.2s ease, background-color 0.2s ease;
 }
 
 .updates-mark-read-btn:hover {
-    color: #ffffff;
-    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--sidebar-header-text);
+    background-color: rgba(255, 255, 255, 0.15);
 }
 
 .updates-panel-body {
@@ -1340,7 +1346,7 @@ html:not([data-theme="dark-gray"]) .nav>li.hover>a {
 #pagination-controls .btn.btn-primary,
 #pagination-controls .btn.btn-primary.disabled {
     background-color: var(--btn-primary-bg) !important;
-    color: #ffffff !important;
+    color: var(--btn-primary-text) !important;
     border-color: var(--btn-primary-border) !important;
     font-weight: 700;
     opacity: 1 !important;
@@ -1376,7 +1382,7 @@ html:not([data-theme="dark-gray"]) .nav>li.hover>a {
 
 #sidebarContainer .input-group-btn .btn:hover {
     background: var(--btn-primary-bg) !important;
-    color: #ffffff !important;
+    color: var(--btn-primary-text) !important;
 }
 
 /* Sidebar Category Box */
@@ -1390,8 +1396,8 @@ html:not([data-theme="dark-gray"]) .nav>li.hover>a {
 }
 
 .box.box-solid.box-black>.box-header {
-    background: var(--nav-hover-bg) !important;
-    color: #ffffff !important;
+    background: var(--sidebar-header-bg) !important;
+    color: var(--sidebar-header-text) !important;
     border-radius: 0 !important;
     border: none !important;
     font-size: 16px !important;
@@ -1472,8 +1478,8 @@ html:not([data-theme="dark-gray"]) .nav>li.hover>a {
 }
 
 .sidebar-topic-list h3 {
-    background: var(--nav-hover-bg) !important;
-    color: #ffffff !important;
+    background: var(--sidebar-header-bg) !important;
+    color: var(--sidebar-header-text) !important;
     margin: 0;
     padding: 10px 15px;
     text-align: center;

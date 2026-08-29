@@ -115,7 +115,8 @@
                     }
 
                     var title = escapeHtml(blog.heading || blog.title || 'Untitled Blog');
-                    var imageUrl = escapeHtml(blog.output_image || blog.imageUrl || "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23050814'/><text x='50%' y='62%' font-family='serif' font-size='42' fill='%23ffffff' text-anchor='middle'>EG1</text></svg>");
+                    var defaultPlaceholder = window.DEFAULT_PLACEHOLDER_ICON || "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23050814'/><text x='50%' y='62%' font-family='serif' font-size='42' fill='%23ffffff' text-anchor='middle'>EG1</text></svg>";
+                    var imageUrl = escapeHtml(blog.output_image || blog.imageUrl || defaultPlaceholder);
                     var author = escapeHtml(blog.author || 'Unknown Author');
                     var category = escapeHtml(blog.category || (blog.tags && blog.tags.length > 0 ? blog.tags[0] : 'Uncategorized'));
                     var description = sanitizeRichText(blog.short_description || blog.description || '');
@@ -335,7 +336,8 @@
 
         var createdDate = formatBlogDate(latestBlog.createdAt || latestBlog.release_date);
         var title = escapeHtml(latestBlog.heading || latestBlog.title || 'Untitled Blog');
-        var imageUrl = escapeHtml(latestBlog.output_image || latestBlog.imageUrl || "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23050814'/><text x='50%' y='62%' font-family='serif' font-size='42' fill='%23ffffff' text-anchor='middle'>EG1</text></svg>");
+        var defaultPlaceholder = window.DEFAULT_PLACEHOLDER_ICON || "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23050814'/><text x='50%' y='62%' font-family='serif' font-size='42' fill='%23ffffff' text-anchor='middle'>EG1</text></svg>";
+        var imageUrl = escapeHtml(latestBlog.output_image || latestBlog.imageUrl || defaultPlaceholder);
         var author = escapeHtml(latestBlog.author || 'Unknown Author');
         var category = escapeHtml(latestBlog.category || (latestBlog.tags && latestBlog.tags.length > 0 ? latestBlog.tags[0] : 'Uncategorized'));
         var content = sanitizeRichText(latestBlog.full_description || latestBlog.content || '<p>No content available</p>');

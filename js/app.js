@@ -382,12 +382,20 @@ var DataCache = {
 };
 
 /**
+ * Default SVG data URI placeholder for products and blogs when no image is specified.
+ */
+var DEFAULT_PLACEHOLDER_ICON = "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23050814'/><text x='50%' y='62%' font-family='serif' font-size='42' fill='%23ffffff' text-anchor='middle'>EG1</text></svg>";
+window.DEFAULT_PLACEHOLDER_ICON = DEFAULT_PLACEHOLDER_ICON;
+
+/**
  * Utility functions for rendering dynamic HTML components.
  * Contains methods to generate HTML strings for products and blogs.
  */
 var RenderHelpers = {
+  DEFAULT_ICON: DEFAULT_PLACEHOLDER_ICON,
+
   renderProductCard: function (product, isHomepage) {
-    const iconUrl = product.icon || product.imageUrl || "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23050814'/><text x='50%' y='62%' font-family='serif' font-size='42' fill='%23ffffff' text-anchor='middle'>EG1</text></svg>";
+    const iconUrl = product.icon || product.imageUrl || DEFAULT_PLACEHOLDER_ICON;
     const productName = product.product_name || product.name || "Unknown Product";
     const version = product.version || "1.0";
     const shortDesc = product.short_description || product.description || "";
@@ -464,7 +472,7 @@ var RenderHelpers = {
   },
 
   renderBlogCard: function (blog) {
-    const imageUrl = blog.output_image || blog.imageUrl || "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23050814'/><text x='50%' y='62%' font-family='serif' font-size='42' fill='%23ffffff' text-anchor='middle'>EG1</text></svg>";
+    const imageUrl = blog.output_image || blog.imageUrl || DEFAULT_PLACEHOLDER_ICON;
     const title = blog.heading || blog.title || "Untitled";
     const category = blog.category || (blog.tags && blog.tags.length > 0 ? blog.tags[0] : "Uncategorized");
     const author = blog.author || "Admin";
@@ -524,7 +532,7 @@ var RenderHelpers = {
   },
 
   renderBlogCardGrid: function (blog) {
-    const imageUrl = blog.output_image || blog.imageUrl || "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23050814'/><text x='50%' y='62%' font-family='serif' font-size='42' fill='%23ffffff' text-anchor='middle'>EG1</text></svg>";
+    const imageUrl = blog.output_image || blog.imageUrl || DEFAULT_PLACEHOLDER_ICON;
     const title = blog.heading || blog.title || "Untitled";
     const category = blog.category || (blog.tags && blog.tags.length > 0 ? blog.tags[0] : "Uncategorized");
     const author = blog.author || "Admin";
@@ -567,7 +575,7 @@ var RenderHelpers = {
   // List-style card matching the reference site (eg1.in/Blogs.aspx)
   // Used for categories where blogs have content/diagram images (not portrait thumbnails)
   renderBlogListCard: function (blog) {
-    const imageUrl = blog.output_image || blog.imageUrl || "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23050814'/><text x='50%' y='62%' font-family='serif' font-size='42' fill='%23ffffff' text-anchor='middle'>EG1</text></svg>";
+    const imageUrl = blog.output_image || blog.imageUrl || DEFAULT_PLACEHOLDER_ICON;
     const title    = blog.heading || blog.title || 'Untitled';
     const category = blog.category || (blog.tags && blog.tags.length > 0 ? blog.tags[0] : 'Uncategorized');
     const author   = blog.author || 'Admin';

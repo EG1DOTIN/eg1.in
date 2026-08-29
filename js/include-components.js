@@ -66,25 +66,29 @@ function initializeComponents() {
         $('#footer-placeholder').html(footerData);
         decodeLogoByline();
 
-        // Fetch about content from DataCache
+        // Fetch about content from DataCache if Firebase is loaded on the page
+        var footerAboutRetries = 0;
         function fetchFooterAbout() {
             if (typeof waitForFirebase === 'function') {
                 waitForFirebase(async () => {
                     if (typeof DataCache !== 'undefined') {
                         try {
                             const aboutPage = await DataCache.getPageContent('about');
-                            if (aboutPage && aboutPage.title) {
+                            if (aboutPage && (aboutPage.content || aboutPage.title)) {
                                 const tempDiv = document.createElement('div');
-                                tempDiv.innerHTML = aboutPage.title;
-                                const text = tempDiv.textContent || tempDiv.innerText || '';
+                                tempDiv.innerHTML = aboutPage.content || aboutPage.title;
+                                const text = (tempDiv.textContent || tempDiv.innerText || '').trim();
 
                                 const targetString = 'A personal hobb';
                                 const startIndex = text.indexOf(targetString);
+                                let snippet = '';
                                 if (startIndex !== -1) {
-                                    let snippet = text.substring(startIndex, startIndex + 146);
-                                    if (snippet.length === 146 && text.length > startIndex + 146) {
-                                        snippet += '...';
-                                    }
+                                    snippet = text.substring(startIndex, startIndex + 146);
+                                } else if (text.length > 0) {
+                                    snippet = text.substring(0, 146);
+                                }
+                                if (snippet) {
+                                    if (text.length > 146) snippet += '...';
                                     const aboutTextEl = document.getElementById('footer-about-text');
                                     if (aboutTextEl) {
                                         aboutTextEl.textContent = snippet;
@@ -96,7 +100,8 @@ function initializeComponents() {
                         }
                     }
                 });
-            } else {
+            } else if (footerAboutRetries < 15) {
+                footerAboutRetries++;
                 setTimeout(fetchFooterAbout, 100);
             }
         }
@@ -396,24 +401,36 @@ function initializeNotificationBell() {
         }
     }
 
-    function getUpdateIconSvg(iconType, category) {
+    /**
+     * Shared SVG icon resolver for update categories
+     * Available globally on window.getUpdateIconSvg
+     */
+    function getUpdateIconSvg(iconType, category, size) {
+        var iconSize = size || 16;
         var type = (iconType || category || '').toLowerCase();
         if (type.indexOf('bug') !== -1 || type.indexOf('fix') !== -1 || type === 'refresh') {
-            return '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/></svg>';
+            return '<svg viewBox="0 0 24 24" width="' + iconSize + '" height="' + iconSize + '" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/></svg>';
         } else if (type.indexOf('opt') !== -1 || type.indexOf('data') !== -1 || type === 'database') {
-            return '<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 3c-4.42 0-8 1.34-8 3v12c0 1.66 3.58 3 8 3s8-1.34 8-3V6c0-1.66-3.58-3-8-3zm0 2c3.87 0 6 1.05 6 1s-2.13 1-6 1-6-1.05-6-1 2.13-1 6-1zm0 5c3.87 0 6 1.05 6 1s-2.13 1-6 1-6-1.05-6-1 2.13-1 6-1zm0 5c3.87 0 6 1.05 6 1s-2.13 1-6 1-6-1.05-6-1 2.13-1 6-1zm0 5c-3.87 0-6-1.05-6-1s2.13-1 6-1 6 1.05 6 1-2.13 1-6 1z"/></svg>';
+            return '<svg viewBox="0 0 24 24" width="' + iconSize + '" height="' + iconSize + '" fill="currentColor"><path d="M12 3c-4.42 0-8 1.34-8 3v12c0 1.66 3.58 3 8 3s8-1.34 8-3V6c0-1.66-3.58-3-8-3zm0 2c3.87 0 6 1.05 6 1s-2.13 1-6 1-6-1.05-6-1 2.13-1 6-1zm0 5c3.87 0 6 1.05 6 1s-2.13 1-6 1-6-1.05-6-1 2.13-1 6-1zm0 5c3.87 0 6 1.05 6 1s-2.13 1-6 1-6-1.05-6-1 2.13-1 6-1zm0 5c-3.87 0-6-1.05-6-1s2.13-1 6-1 6 1.05 6 1-2.13 1-6 1z"/></svg>';
         } else {
-            return '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>';
+            return '<svg viewBox="0 0 24 24" width="' + iconSize + '" height="' + iconSize + '" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>';
         }
     }
+    window.getUpdateIconSvg = getUpdateIconSvg;
 
+    /**
+     * Shared category CSS class resolver
+     * Available globally on window.getCategoryClass
+     */
     function getCategoryClass(category) {
         var cat = (category || '').toLowerCase();
         if (cat.indexOf('bug') !== -1 || cat.indexOf('fix') !== -1) return 'cat-bugfixes';
         if (cat.indexOf('opt') !== -1 || cat.indexOf('data') !== -1) return 'cat-optimization';
         if (cat.indexOf('feat') !== -1 || cat.indexOf('new') !== -1) return 'cat-feature';
+        if (cat.indexOf('app') !== -1) return 'cat-app';
         return 'cat-release';
     }
+    window.getCategoryClass = getCategoryClass;
 
     function renderUpdates(updates) {
         var seenIds = getSeenUpdates();
