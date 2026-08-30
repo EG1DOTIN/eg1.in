@@ -201,14 +201,15 @@ a.blog-grid-card:hover,
    from making an entire row taller than the others.
 -------------------------------------------------- */
 .blog-grid-card .blog-grid-title {
-    font-size: 15px;
+    font-size: clamp(15px, 0.95vw + 12px, 17px);
     font-weight: 700;
     color: #222;
     margin: 0 0 8px 0;
-    line-height: 1.4;
+    line-height: 1.45;
     /* 2-line clamp */
     display: -webkit-box;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
@@ -233,14 +234,15 @@ a.blog-grid-card:hover,
    Clamp to 3 lines — equal-height rows need this.
 -------------------------------------------------- */
 .blog-grid-card .blog-grid-description {
-    font-size: 13px;
+    font-size: clamp(13px, 0.75vw + 10.5px, 14.5px);
     color: #555;
     margin: 0 0 10px 0;
-    line-height: 1.5;
+    line-height: 1.6;
     flex: 1 1 auto;                  /* push footer down */
     /* 3-line clamp */
     display: -webkit-box;
     -webkit-line-clamp: 3;
+    line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
@@ -372,6 +374,7 @@ a.blog-list-card:hover {
     /* 4-line clamp */
     display: -webkit-box;
     -webkit-line-clamp: 4;
+    line-clamp: 4;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }

@@ -89,7 +89,7 @@ var DataCache = {
   CACHE_TTL_PROD: 3600000,    // 1 hour TTL in production
   lastFetchSource: {}, // Stores 'network' or 'cache' for diagnostics
 
-  isDev: function() {
+  isDev: function () {
     try {
       var host = window.location.hostname;
       return host === 'localhost' || host === '127.0.0.1' || window.location.protocol === 'file:';
@@ -98,11 +98,11 @@ var DataCache = {
     }
   },
 
-  getCacheTTL: function() {
+  getCacheTTL: function () {
     return this.isDev() ? this.CACHE_TTL_DEV : this.CACHE_TTL_PROD;
   },
 
-  _getPersistentCache: function(key) {
+  _getPersistentCache: function (key) {
     try {
       // Force refresh on demand via URL query param (e.g. ?refresh=1 or ?nocache=1)
       if (window.location.search.indexOf('nocache') !== -1 || window.location.search.indexOf('refresh') !== -1) {
@@ -120,7 +120,7 @@ var DataCache = {
     return null;
   },
 
-  _setPersistentCache: function(key, data) {
+  _setPersistentCache: function (key, data) {
     try {
       localStorage.setItem(key, JSON.stringify(data));
       localStorage.setItem(key + '_time', Date.now().toString());
@@ -131,7 +131,7 @@ var DataCache = {
 
   BLOGS_CACHE_KEY: 'eg1_blogs_cache_v2',
 
-  clearCache: function(type) {
+  clearCache: function (type) {
     try {
       if (!type || type === 'blogs') {
         this.blogs = null;
@@ -161,6 +161,177 @@ var DataCache = {
     }
   },
 
+  /**
+   * Extracts 'owner/repo' from a URL string if it points to GitHub.
+   */
+  extractGithubRepo: function (url) {
+    if (!url || typeof url !== 'string') return null;
+    const match = url.match(/github\.com\/([^\/]+)\/([^\/\s#?]+)/i);
+    if (match) {
+      const owner = match[1];
+      let repo = match[2];
+      if (repo.endsWith('.git')) repo = repo.slice(0, -4);
+      const reserved = ['features', 'about', 'topics', 'collections', 'site', 'orgs', 'users', 'pricing', 'explore'];
+      if (reserved.includes(owner.toLowerCase())) return null;
+      return owner + '/' + repo;
+    }
+    return null;
+  },
+
+  /**
+   * Finds any GitHub repository referenced in a product (in button1, button2, or webapp_link).
+   */
+  findGithubRepoInProduct: function (product) {
+    if (!product) return null;
+    const urls = [];
+    if (product.button1 && typeof product.button1 === 'object') {
+      Object.values(product.button1).forEach(function (v) { if (typeof v === 'string') urls.push(v); });
+    } else if (typeof product.button1 === 'string') {
+      urls.push(product.button1);
+    }
+    if (product.button2 && typeof product.button2 === 'object') {
+      Object.values(product.button2).forEach(function (v) { if (typeof v === 'string') urls.push(v); });
+    } else if (typeof product.button2 === 'string') {
+      urls.push(product.button2);
+    }
+    if (product.webapp_link && typeof product.webapp_link === 'string') {
+      urls.push(product.webapp_link);
+    }
+
+    for (var i = 0; i < urls.length; i++) {
+      var repo = this.extractGithubRepo(urls[i]);
+      if (repo) return repo;
+    }
+    return null;
+  },
+
+  /**
+   * Asynchronously fetches latest release/tag version from GitHub with persistent caching.
+   * TTL: 1 hour (3600 seconds) to avoid GitHub rate limits.
+   */
+  getGithubVersion: async function (repo) {
+    if (!repo) return null;
+    const cacheKey = 'eg1_gh_version_' + repo.replace(/[^a-zA-Z0-9_]/g, '_');
+    const cached = this._getPersistentCache(cacheKey);
+    if (cached && typeof cached === 'string') {
+      return cached;
+    }
+
+    try {
+      // 1. Try /releases/latest
+      const res = await fetch('https://api.github.com/repos/' + repo + '/releases/latest', {
+        headers: { 'Accept': 'application/vnd.github.v3+json' }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        let tag = data.tag_name || data.name;
+        if (tag) {
+          tag = tag.trim().replace(/^v/i, '');
+          this._setPersistentCache(cacheKey, tag);
+          return tag;
+        }
+      }
+
+      // 2. Fallback to /tags if no official release exists
+      const tagsRes = await fetch('https://api.github.com/repos/' + repo + '/tags?per_page=1', {
+        headers: { 'Accept': 'application/vnd.github.v3+json' }
+      });
+      if (tagsRes.ok) {
+        const tagsData = await tagsRes.json();
+        if (Array.isArray(tagsData) && tagsData.length > 0 && tagsData[0].name) {
+          const tag = tagsData[0].name.trim().replace(/^v/i, '');
+          this._setPersistentCache(cacheKey, tag);
+          return tag;
+        }
+      }
+    } catch (e) {
+      console.warn('[DataCache] Could not fetch GitHub version for ' + repo + ':', e.message);
+    }
+    return null;
+  },
+
+  /**
+   * Resolves the version for a product synchronously:
+   * 1. If "version" is an object with "fetch-github": "true", checks for cached GitHub version.
+   *    If not cached or fetch-github is false, uses "version-string" (e.g. "3.7.1").
+   * 2. If "version" is a plain string/number, uses that value.
+   * 3. If no "version" key in the JSON, defaults to "1.0.0".
+   */
+  resolveProductVersion: function (product) {
+    if (!product || product.version === undefined || product.version === null) {
+      return '1.0.0';
+    }
+
+    // 1. If version is an object: { "version-string": "3.7.1", "fetch-github": "true" }
+    if (typeof product.version === 'object') {
+      const isFetchGithub = product.version['fetch-github'] === true ||
+        String(product.version['fetch-github']).toLowerCase() === 'true' ||
+        product.version.fetchGithub === true ||
+        String(product.version.fetchGithub).toLowerCase() === 'true';
+
+      const fallbackString = product.version['version-string'] || product.version.versionString || '1.0.0';
+
+      if (isFetchGithub) {
+        const repo = this.findGithubRepoInProduct(product);
+        if (repo) {
+          const cacheKey = 'eg1_gh_version_' + repo.replace(/[^a-zA-Z0-9_]/g, '_');
+          const cached = this._getPersistentCache(cacheKey);
+          if (cached && typeof cached === 'string' && cached.trim().length > 0) {
+            return cached.trim();
+          }
+        }
+      }
+      return String(fallbackString || '1.0.0').trim();
+    }
+
+    // 2. If version is a plain string or number
+    if (typeof product.version === 'string' && product.version.trim().length > 0) {
+      return product.version.trim();
+    }
+    if (typeof product.version === 'number') {
+      return String(product.version);
+    }
+
+    // 3. Default fallback
+    return '1.0.0';
+  },
+
+  /**
+   * Background synchronizer that fetches live GitHub versions for products
+   * where product.version['fetch-github'] is set to true.
+   */
+  syncGithubVersions: async function (products) {
+    if (!products || !Array.isArray(products)) return;
+    const self = this;
+    for (var i = 0; i < products.length; i++) {
+      (async function (prod) {
+        if (!prod || !prod.version || typeof prod.version !== 'object') return;
+        var isFetchGithub = prod.version['fetch-github'] === true ||
+          String(prod.version['fetch-github']).toLowerCase() === 'true' ||
+          prod.version.fetchGithub === true ||
+          String(prod.version.fetchGithub).toLowerCase() === 'true';
+        if (!isFetchGithub) return;
+
+        var repo = self.findGithubRepoInProduct(prod);
+        if (!repo) return;
+        var version = await self.getGithubVersion(repo);
+        if (version) {
+          prod.resolvedVersion = version;
+          var elements = document.querySelectorAll('[data-product-version-id="' + prod.id + '"]');
+          elements.forEach(function (el) {
+            if (el.tagName === 'H5' && el.classList.contains('home-product-version')) {
+              el.textContent = 'Version ' + version;
+            } else if (el.tagName === 'SPAN') {
+              el.textContent = version;
+            } else {
+              el.textContent = 'Version: ' + version;
+            }
+          });
+        }
+      })(products[i]);
+    }
+  },
+
   getProducts: async function (forceRefresh) {
     if (this.products && !forceRefresh) {
       this.lastFetchSource.products = 'memory';
@@ -177,20 +348,20 @@ var DataCache = {
     }
 
     try {
-      console.log("[DataCache] Fetching products from Firestore (Network Read)...");
-      const snapshot = await db.collection("products").get();
-      var allProducts = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      this.products = allProducts.filter(function(p) {
+      console.log("[DataCache] Fetching products from static JSON (data/products.json, 0 Firestore Reads)...");
+      const response = await fetch("data/products.json");
+      if (!response.ok) {
+        throw new Error("HTTP " + response.status + " while fetching data/products.json");
+      }
+      var allProducts = await response.json();
+      this.products = (allProducts || []).filter(function (p) {
         return p.active === "1" || p.active === 1 || p.active === true || !p.hasOwnProperty('active');
       });
       this._setPersistentCache('eg1_products_cache', this.products);
-      this.lastFetchSource.products = 'network (' + snapshot.docs.length + ' reads)';
+      this.lastFetchSource.products = 'static JSON (0 Firestore reads)';
     } catch (e) {
       this.lastError = e;
-      console.error("Error fetching products [" + e.code + "]:", e.message);
+      console.error("Error fetching products from data/products.json:", e.message);
       this.products = [];
     }
     return this.products;
@@ -212,23 +383,25 @@ var DataCache = {
     }
 
     try {
-      console.log("[DataCache] Fetching news from Firestore (Network Read)...");
-      const snapshot = await db
-        .collection("website_content")
-        .doc("pages")
-        .get();
-      if (snapshot.exists) {
-        this.pages = snapshot.data();
-        this._setPersistentCache('eg1_pages_cache', this.pages);
-        this.news = [{ id: "1", description: snapshot.data().homepage.content, title: snapshot.data().homepage.title }];
+      console.log("[DataCache] Fetching news from static JSON (data/website_content.json, 0 Firestore Reads)...");
+      const response = await fetch("data/website_content.json");
+      if (!response.ok) {
+        throw new Error("HTTP " + response.status + " while fetching data/website_content.json");
+      }
+      const data = await response.json();
+      const pages = (data && data.pages) ? data.pages : (data || {});
+      this.pages = pages;
+      this._setPersistentCache('eg1_pages_cache', this.pages);
+      if (pages.homepage) {
+        this.news = [{ id: "1", description: pages.homepage.content || "", title: pages.homepage.title || "" }];
         this._setPersistentCache('eg1_news_cache', this.news);
-        this.lastFetchSource.news = 'network (1 read)';
       } else {
         this.news = [];
       }
+      this.lastFetchSource.news = 'static JSON (0 Firestore reads)';
     } catch (e) {
       this.lastError = e;
-      console.error("Error fetching news [" + e.code + "]:", e.message);
+      console.error("Error fetching news from data/website_content.json:", e.message);
       this.news = [];
     }
     return this.news;
@@ -250,17 +423,17 @@ var DataCache = {
     }
 
     try {
-      console.log("[DataCache] Fetching pages from Firestore (Network Read)...");
-      const snapshot = await db.collection("website_content").doc("pages").get();
-      if (snapshot.exists) {
-        this.pages = snapshot.data();
-        this._setPersistentCache('eg1_pages_cache', this.pages);
-        this.lastFetchSource.pages = 'network (1 read)';
-      } else {
-        this.pages = {};
+      console.log("[DataCache] Fetching pages from static JSON (data/website_content.json, 0 Firestore Reads)...");
+      const response = await fetch("data/website_content.json");
+      if (!response.ok) {
+        throw new Error("HTTP " + response.status + " while fetching data/website_content.json");
       }
+      const data = await response.json();
+      this.pages = (data && data.pages) ? data.pages : (data || {});
+      this._setPersistentCache('eg1_pages_cache', this.pages);
+      this.lastFetchSource.pages = 'static JSON (0 Firestore reads)';
     } catch (e) {
-      console.error("Error fetching pages:", e.message);
+      console.error("Error fetching pages from data/website_content.json:", e.message);
       this.pages = {};
     }
     return this.pages[pageId] || null;
@@ -273,7 +446,7 @@ var DataCache = {
   getBlogs: async function (forceRefresh) {
     if (this.blogs && !forceRefresh) {
       this.lastFetchSource.blogs = 'memory (0 reads)';
-      return (this.blogs || []).filter(function(b) {
+      return (this.blogs || []).filter(function (b) {
         return b.active === "1" || b.active === 1 || b.active === true || !b.hasOwnProperty('active');
       });
     }
@@ -284,7 +457,7 @@ var DataCache = {
         this.blogs = cached;
         this.lastFetchSource.blogs = 'localStorage (0 reads)';
         console.log("[DataCache] Using cached blogs from localStorage (0 Firestore reads)");
-        return (this.blogs || []).filter(function(b) {
+        return (this.blogs || []).filter(function (b) {
           return b.active === "1" || b.active === 1 || b.active === true || !b.hasOwnProperty('active');
         });
       }
@@ -346,7 +519,7 @@ var DataCache = {
       this.blogs = [];
     }
     // Only return active blogs (active === "1" or active === 1 or active === true, or no active field)
-    return (this.blogs || []).filter(function(b) {
+    return (this.blogs || []).filter(function (b) {
       return b.active === "1" || b.active === 1 || b.active === true || !b.hasOwnProperty('active');
     });
   },
@@ -376,7 +549,7 @@ var DataCache = {
     var catLower = String(category).toLowerCase();
     return blogs.filter(function (b) {
       return (b.tags && Array.isArray(b.tags) && b.tags.some(function (t) { return String(t).toLowerCase() === catLower; })) ||
-             (b.category && String(b.category).toLowerCase() === catLower);
+        (b.category && String(b.category).toLowerCase() === catLower);
     });
   },
 };
@@ -394,17 +567,164 @@ window.DEFAULT_PLACEHOLDER_ICON = DEFAULT_PLACEHOLDER_ICON;
 var RenderHelpers = {
   DEFAULT_ICON: DEFAULT_PLACEHOLDER_ICON,
 
+  /**
+   * Parses button configuration from product JSON.
+   * Supports formats like:
+   *   "button1": { "VIEW DETAILS": "https://mchess.eg1.in", "sameTab": "false" }
+   *   "button2": { "DOWNLOAD": "https://eg1.in/anydownload", "sameTab": "true" }
+   *   "button1": { label: "OPEN APP", url: "https://...", sameTab: false, icon: "icon icon-play" }
+   *   "button1": "https://example.com"
+   */
+  parseButton: function (btnConfig, fallbackLabel, fallbackUrl, fallbackSameTab, defaultBtnClass) {
+    if (!btnConfig && !fallbackUrl) return null;
+
+    if (!btnConfig) {
+      if (!fallbackUrl || fallbackUrl === "#") return null;
+      const isInternal = (typeof fallbackSameTab === "boolean")
+        ? fallbackSameTab
+        : (fallbackUrl.startsWith("#") || fallbackUrl.startsWith("/") || !fallbackUrl.startsWith("http"));
+      return {
+        label: fallbackLabel || "VIEW DETAILS",
+        url: fallbackUrl,
+        sameTab: isInternal,
+        target: isInternal ? "" : 'target="_blank" rel="noopener noreferrer"',
+        icon: (fallbackLabel || "").toUpperCase().includes("DOWN") ? "icon icon-download" : "icon icon-newspaper-o",
+        btnClass: defaultBtnClass || "btn btn-primary"
+      };
+    }
+
+    if (typeof btnConfig === "string") {
+      const isInternal = btnConfig.startsWith("#") || btnConfig.startsWith("/") || !btnConfig.startsWith("http");
+      return {
+        label: fallbackLabel || "VIEW DETAILS",
+        url: btnConfig,
+        sameTab: isInternal,
+        target: isInternal ? "" : 'target="_blank" rel="noopener noreferrer"',
+        icon: (fallbackLabel || "").toUpperCase().includes("DOWN") ? "icon icon-download" : "icon icon-newspaper-o",
+        btnClass: defaultBtnClass || "btn btn-primary"
+      };
+    }
+
+    let label = "";
+    let url = "";
+    let sameTab = false;
+    let icon = "";
+    let customClass = "";
+
+    if (btnConfig.hasOwnProperty("sameTab")) {
+      sameTab = btnConfig.sameTab === true || String(btnConfig.sameTab).toLowerCase() === "true";
+    } else if (btnConfig.hasOwnProperty("sametab")) {
+      sameTab = btnConfig.sametab === true || String(btnConfig.sametab).toLowerCase() === "true";
+    }
+
+    if (btnConfig.hasOwnProperty("icon")) {
+      icon = btnConfig.icon;
+    }
+    if (btnConfig.hasOwnProperty("class") || btnConfig.hasOwnProperty("btnClass")) {
+      customClass = btnConfig.class || btnConfig.btnClass;
+    }
+
+    if (btnConfig.label && btnConfig.url) {
+      label = btnConfig.label;
+      url = btnConfig.url;
+    } else {
+      const metadataKeys = ["sametab", "target", "icon", "class", "btnclass", "rel"];
+      for (const [k, v] of Object.entries(btnConfig)) {
+        if (!metadataKeys.includes(k.toLowerCase()) && typeof v === "string") {
+          label = k;
+          url = v;
+          break;
+        }
+      }
+    }
+
+    if (!url && fallbackUrl) url = fallbackUrl;
+    if (!label && fallbackLabel) label = fallbackLabel;
+    if (!url) return null;
+
+    const target = sameTab ? "" : 'target="_blank" rel="noopener noreferrer"';
+
+    if (icon) {
+      icon = icon.trim();
+      if (!icon.includes(" ") && !icon.startsWith("fa-") && !icon.startsWith("icon-")) {
+        icon = "icon icon-" + icon;
+      } else if (!icon.includes(" ") && icon.startsWith("icon-")) {
+        icon = "icon " + icon;
+      }
+    } else {
+      const upperLabel = (label || "").toUpperCase();
+      if (upperLabel.includes("DOWNLOAD") || upperLabel.includes("DOWN")) {
+        icon = "icon icon-download";
+      } else if (upperLabel.includes("KEY") || upperLabel.includes("REGISTER")) {
+        icon = "icon icon-key";
+      } else if (upperLabel.includes("VIEW") || upperLabel.includes("DETAIL") || upperLabel.includes("READ")) {
+        icon = "icon icon-newspaper-o";
+      } else if (upperLabel.includes("PLAY") || upperLabel.includes("GAME") || upperLabel.includes("CHESS")) {
+        icon = "icon icon-gamepad";
+      } else if (upperLabel.includes("OPEN") || upperLabel.includes("VISIT") || upperLabel.includes("WEB")) {
+        icon = "icon icon-external-link";
+      }
+      else if (upperLabel.includes("GITHUB") || upperLabel.includes("CODE") || upperLabel.includes("SOURCE")) {
+        icon = "icon icon-github";
+      }
+      else {
+        icon = "icon icon-arrow-right";
+      }
+    }
+
+    return {
+      label: label || "VIEW DETAILS",
+      url: url,
+      sameTab: sameTab,
+      target: target,
+      icon: icon,
+      btnClass: customClass || defaultBtnClass || "btn btn-primary"
+    };
+  },
+
   renderProductCard: function (product, isHomepage) {
     const iconUrl = product.icon || product.imageUrl || DEFAULT_PLACEHOLDER_ICON;
     const productName = product.product_name || product.name || "Unknown Product";
-    const version = product.version || "1.0";
+    const version = DataCache.resolveProductVersion(product);
     const shortDesc = product.short_description || product.description || "";
     const paidVersion = product.paid_version || "false";
     const productType = product.product_type || "Desktop App";
     const webappLink = product.webapp_link || "#";
-    const detailLink = (productType === "WebApp" && webappLink) ? webappLink : `apps.html?id=${product.id}`;
-    // 2. Add a conditional target attribute (only "_blank" for WebApp)
-    const linkTarget = (productType === "WebApp" && webappLink) ? 'target="_blank" rel="noopener noreferrer"' : '';
+
+    // Resolve Button 1 (Left / Primary Action)
+    const defaultDetailLink = (productType === "WebApp" && webappLink) ? webappLink : `apps.html?id=${product.id}`;
+    const defaultDetailSameTab = productType !== "WebApp";
+    const btn1 = this.parseButton(
+      product.button1,
+      "VIEW DETAILS",
+      defaultDetailLink,
+      defaultDetailSameTab,
+      "btn btn-primary btn-read"
+    );
+
+    // Resolve Button 2 (Right / Secondary Action)
+    let fallbackBtn2Url = null;
+    let fallbackBtn2Label = "DOWNLOAD";
+    let fallbackBtn2Class = "btn btn-success btn-down";
+    if (product.button2 !== undefined) {
+      fallbackBtn2Url = null;
+    } else if (paidVersion === "true") {
+      fallbackBtn2Url = `get-registration-key.html?id=${product.id}`;
+      fallbackBtn2Label = "Get Key";
+      fallbackBtn2Class = "btn btn-primary btn-down";
+    } else if (product.show_download === "true" || product.show_download === undefined) {
+      fallbackBtn2Url = `download.html?id=${product.id}`;
+      fallbackBtn2Label = "DOWNLOAD";
+      fallbackBtn2Class = "btn btn-success btn-down";
+    }
+
+    const btn2 = this.parseButton(
+      product.button2,
+      fallbackBtn2Label,
+      fallbackBtn2Url,
+      true,
+      fallbackBtn2Class
+    );
 
     if (isHomepage) {
       return `
@@ -414,16 +734,15 @@ var RenderHelpers = {
                             <img src="${iconUrl}" class="home-product-icon" alt="${productName}" />
                             <div class="home-product-title-wrap">
                                 <h4 class="home-product-title">${productName}</h4>
-                                <h5 class="home-product-version">Version ${version}</h5>
+                                <h5 class="home-product-version" data-product-version-id="${product.id}">Version ${version}</h5>
                             </div>
                         </div>
                         <div class="home-product-body">
                             <p class="home-product-desc">${shortDesc}</p>
                         </div>
                         <div class="home-product-actions">
-                            <a href="${detailLink}" ${linkTarget} class="btn btn-primary btn-read"><i class="icon icon-newspaper-o"></i>&nbsp;VIEW DETAILS</a>
-                            ${(product.show_download === "true" || product.show_download === undefined) ? `<a href="download.html?id=${product.id}" class="btn btn-success btn-down"><i class="icon icon-download"></i>&nbsp;DOWNLOAD</a>` : ""}
-                            ${paidVersion === "true" ? `<a href="get-registration-key.html?id=${product.id}" class="btn btn-primary"><i class="icon icon-key"></i>&nbsp;Get Key</a>` : ""}
+                            ${btn1 ? `<a href="${btn1.url}" ${btn1.target} class="${btn1.btnClass}"><i class="${btn1.icon}"></i>&nbsp;${btn1.label}</a>` : ""}
+                            ${btn2 ? `<a href="${btn2.url}" ${btn2.target} class="${btn2.btnClass}"><i class="${btn2.icon}"></i>&nbsp;${btn2.label}</a>` : ""}
                         </div>
                     </div>
                 </div>
@@ -442,10 +761,10 @@ var RenderHelpers = {
                                 <div class="col-md-10 border">
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <a href="${detailLink}" class="link-name">${productName}</a>
+                                            <a href="${btn1 ? btn1.url : '#'}" ${btn1 ? btn1.target : ''} class="link-name">${productName}</a>
                                         </div>
                                         <div class="col-md-12 left">
-                                            <h5>Version:&nbsp;${version}</h5>
+                                            <h5>Version:&nbsp;<span data-product-version-id="${product.id}">${version}</span></h5>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -455,11 +774,10 @@ var RenderHelpers = {
                                     </div>
                                     <div class="row">
                                         <div class="col-md-5">
-                                            <a href="${detailLink}" ${linkTarget} class="btn btn-primary btn-read"><i class="icon icon-newspaper-o"></i>&nbsp;VIEW DETAILS</a>
+                                            ${btn1 ? `<a href="${btn1.url}" ${btn1.target} class="${btn1.btnClass}"><i class="${btn1.icon}"></i>&nbsp;${btn1.label}</a>` : ""}
                                         </div>
                                         <div class="col-md-7">
-                                            ${(product.show_download === "true" || product.show_download === undefined) ? `<a href="download.html?id=${product.id}" class="btn btn-success btn-down margin-r-5"><i class="icon icon-download"></i>&nbsp;DOWNLOAD</a>` : ""}
-                                            ${paidVersion === "true" ? `<a href="get-registration-key.html?id=${product.id}" class="btn btn-primary btn-down margin-r-5"><i class="icon icon-key"></i>&nbsp;Get Key</a>` : ""}
+                                            ${btn2 ? `<a href="${btn2.url}" ${btn2.target} class="${btn2.btnClass} margin-r-5"><i class="${btn2.icon}"></i>&nbsp;${btn2.label}</a>` : ""}
                                         </div>
                                     </div>
                                 </div>
@@ -505,15 +823,14 @@ var RenderHelpers = {
                                 </div>
                                 <div class="row mrgin-top20">
                                     <div class="col-md-12">
-                                        ${
-                                          content
-                                            ? `
+                                        ${content
+        ? `
                                         <div class='ai-blog-content' style='padding: 12px 10px; background: transparent; text-align: left;'>
                                             <div style="word-break: break-word; overflow-wrap: break-word;">${content}</div>
                                         </div>
                                         `
-                                            : ""
-                                        }
+        : ""
+      }
                                     </div>
                                 </div>
                                 ${endDescription ? `
@@ -576,11 +893,11 @@ var RenderHelpers = {
   // Used for categories where blogs have content/diagram images (not portrait thumbnails)
   renderBlogListCard: function (blog) {
     const imageUrl = blog.output_image || blog.imageUrl || DEFAULT_PLACEHOLDER_ICON;
-    const title    = blog.heading || blog.title || 'Untitled';
+    const title = blog.heading || blog.title || 'Untitled';
     const category = blog.category || (blog.tags && blog.tags.length > 0 ? blog.tags[0] : 'Uncategorized');
-    const author   = blog.author || 'Admin';
+    const author = blog.author || 'Admin';
     const description = blog.short_description || blog.description || '';
-    const shortDesc   = description.length > 150
+    const shortDesc = description.length > 150
       ? description.substring(0, 150) + '...'
       : description;
 
@@ -607,56 +924,56 @@ var RenderHelpers = {
 // Used by both blog.html
 // ---------------------------------------------------------------------------
 function initializeCodeBlocks() {
-    document.querySelectorAll('.ai-blog-content pre').forEach(pre => {
-        const code = pre.querySelector('code');
-        if (!code) return;
+  document.querySelectorAll('.ai-blog-content pre').forEach(pre => {
+    const code = pre.querySelector('code');
+    if (!code) return;
 
-        // Syntax highlighting
-        hljs.highlightElement(code);
+    // Syntax highlighting
+    hljs.highlightElement(code);
 
-        // Prevent duplicate initialization
-        if (pre.parentElement.classList.contains('code-wrapper'))
-            return;
+    // Prevent duplicate initialization
+    if (pre.parentElement.classList.contains('code-wrapper'))
+      return;
 
-        // Detect language
-        let language = "Code";
-        pre.classList.forEach(cls => {
-            if (cls.startsWith("language-")) {
-                language = cls.replace("language-", "");
-            }
-        });
-
-        // Wrapper
-        const wrapper = document.createElement('div');
-        wrapper.className = 'code-wrapper';
-
-        // Header
-        const header = document.createElement('div');
-        header.className = 'code-header';
-
-        // Language label
-        const lang = document.createElement('span');
-        lang.innerText = language;
-
-        // Copy button
-        const copyBtn = document.createElement('button');
-        copyBtn.innerText = 'Copy';
-        copyBtn.onclick = () => {
-            const text = code.innerText;
-            navigator.clipboard.writeText(text).then(() => {
-                copyBtn.innerText = 'Copied!';
-                setTimeout(() => {
-                    copyBtn.innerText = 'Copy';
-                }, 2000);
-            });
-        };
-
-        header.appendChild(lang);
-        header.appendChild(copyBtn);
-        wrapper.appendChild(header);
-        wrapper.appendChild(pre.cloneNode(true));
-        pre.parentElement.replaceChild(wrapper, pre);
+    // Detect language
+    let language = "Code";
+    pre.classList.forEach(cls => {
+      if (cls.startsWith("language-")) {
+        language = cls.replace("language-", "");
+      }
     });
+
+    // Wrapper
+    const wrapper = document.createElement('div');
+    wrapper.className = 'code-wrapper';
+
+    // Header
+    const header = document.createElement('div');
+    header.className = 'code-header';
+
+    // Language label
+    const lang = document.createElement('span');
+    lang.innerText = language;
+
+    // Copy button
+    const copyBtn = document.createElement('button');
+    copyBtn.innerText = 'Copy';
+    copyBtn.onclick = () => {
+      const text = code.innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        copyBtn.innerText = 'Copied!';
+        setTimeout(() => {
+          copyBtn.innerText = 'Copy';
+        }, 2000);
+      });
+    };
+
+    header.appendChild(lang);
+    header.appendChild(copyBtn);
+    wrapper.appendChild(header);
+    wrapper.appendChild(pre.cloneNode(true));
+    pre.parentElement.replaceChild(wrapper, pre);
+  });
 }
 
 // ---------------------------------------------------------------------------
@@ -664,27 +981,27 @@ function initializeCodeBlocks() {
 // Populates a <ul> element (by id) with links from the eg1_blog collection
 // ---------------------------------------------------------------------------
 async function loadCategoryLinks(listElementId) {
-    try {
-        var blogs = await DataCache.getBlogs();
-        var categorySet = new Set();
-        blogs.forEach(function(b) {
-            if (b.category) categorySet.add(b.category);
-        });
-        var categories = Array.from(categorySet).sort();
-        var categoryHtml = '';
-        categories.forEach(function(catName) {
-            categoryHtml +=
-                '<li><a href="blog.html?cat=' +
-                encodeURIComponent(catName) +
-                '" class="category-link">' +
-                catName +
-                '</a></li>';
-        });
-        var el = document.getElementById(listElementId);
-        if (el) el.innerHTML = categoryHtml;
-    } catch (error) {
-        console.error('Error loading categories:', error);
-    }
+  try {
+    var blogs = await DataCache.getBlogs();
+    var categorySet = new Set();
+    blogs.forEach(function (b) {
+      if (b.category) categorySet.add(b.category);
+    });
+    var categories = Array.from(categorySet).sort();
+    var categoryHtml = '';
+    categories.forEach(function (catName) {
+      categoryHtml +=
+        '<li><a href="blog.html?cat=' +
+        encodeURIComponent(catName) +
+        '" class="category-link">' +
+        catName +
+        '</a></li>';
+    });
+    var el = document.getElementById(listElementId);
+    if (el) el.innerHTML = categoryHtml;
+  } catch (error) {
+    console.error('Error loading categories:', error);
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -694,38 +1011,38 @@ async function loadCategoryLinks(listElementId) {
 //                     blog list page handles the search properly.
 // ---------------------------------------------------------------------------
 function searchBlogs() {
-    var searchTerm = (document.getElementById('txtSearch') || {}).value || '';
-    searchTerm = searchTerm.trim();
+  var searchTerm = (document.getElementById('txtSearch') || {}).value || '';
+  searchTerm = searchTerm.trim();
 
-    // redirect to blog.html with the search term
-    if (typeof allBlogs === 'undefined' || typeof renderBlogsGrid === 'undefined') {
-        if (searchTerm) {
-            window.location.href = 'blog.html?search=' + encodeURIComponent(searchTerm);
-        } else {
-            window.location.href = 'blog.html';
-        }
-        return;
-    }
-
-    // blog.html: filter in place (existing behaviour)
-    var term = searchTerm.toLowerCase();
-    if (!term) {
-        filteredBlogs = [...allBlogs];
+  // redirect to blog.html with the search term
+  if (typeof allBlogs === 'undefined' || typeof renderBlogsGrid === 'undefined') {
+    if (searchTerm) {
+      window.location.href = 'blog.html?search=' + encodeURIComponent(searchTerm);
     } else {
-        filteredBlogs = allBlogs.filter(function (blog) {
-            return (
-                (blog.title        && blog.title.toLowerCase().includes(term)) ||
-                (blog.heading      && blog.heading.toLowerCase().includes(term)) ||
-                (blog.description  && blog.description.toLowerCase().includes(term)) ||
-                (blog.short_description && blog.short_description.toLowerCase().includes(term)) ||
-                (blog.tags         && blog.tags.some(function (tag) {
-                    return tag.toLowerCase().includes(term);
-                }))
-            );
-        });
+      window.location.href = 'blog.html';
     }
-    currentPage = 1;
-    renderBlogsGrid(filteredBlogs);
+    return;
+  }
+
+  // blog.html: filter in place (existing behaviour)
+  var term = searchTerm.toLowerCase();
+  if (!term) {
+    filteredBlogs = [...allBlogs];
+  } else {
+    filteredBlogs = allBlogs.filter(function (blog) {
+      return (
+        (blog.title && blog.title.toLowerCase().includes(term)) ||
+        (blog.heading && blog.heading.toLowerCase().includes(term)) ||
+        (blog.description && blog.description.toLowerCase().includes(term)) ||
+        (blog.short_description && blog.short_description.toLowerCase().includes(term)) ||
+        (blog.tags && blog.tags.some(function (tag) {
+          return tag.toLowerCase().includes(term);
+        }))
+      );
+    });
+  }
+  currentPage = 1;
+  renderBlogsGrid(filteredBlogs);
 }
 
 $(document).ready(function () {
@@ -735,41 +1052,37 @@ $(document).ready(function () {
 
 /**
  * Fetches Apps page content ("title" and "content" fields) from
- * Firestore (website_content -> pages -> apps) and populates the page.
+ * data/website_content.json (0 Firestore Reads) and populates the page.
  * Falls back to the static HTML already in apps.html if the fetch
  * fails or returns no data, so the page never ends up blank.
  */
 document.addEventListener("DOMContentLoaded", function () {
-    if (document.getElementById("appsTitleText") || document.getElementById("appsContentText")) {
-        if (typeof isFirebaseReady === "function" && !isFirebaseReady()) {
-            waitForFirebase(loadAppsContent);
-        } else {
-            loadAppsContent();
-        }
-    }
+  if (document.getElementById("appsTitleText") || document.getElementById("appsContentText")) {
+    loadAppsContent();
+  }
 });
 
 async function loadAppsContent() {
-    var titleEl = document.getElementById("appsTitleText");
-    var contentEl = document.getElementById("appsContentText");
+  var titleEl = document.getElementById("appsTitleText");
+  var contentEl = document.getElementById("appsContentText");
 
-    try {
-        var data = await DataCache.getPageContent("apps");
-        // console.log("Fetched Apps page content:", data);
-        if (!data) {
-            console.warn("No content found for page 'apps'. Using default static content.");
-            return;
-        }
-
-        if (data.title && titleEl) {
-            titleEl.innerHTML = data.title;
-        }
-
-        if (data.content && contentEl) {
-            contentEl.innerHTML = data.content;
-        }
-    } catch (e) {
-        console.error("Error loading Apps page content:", e.message);
-        // Static fallback content already present in the HTML remains visible.
+  try {
+    var data = await DataCache.getPageContent("apps");
+    // console.log("Fetched Apps page content:", data);
+    if (!data) {
+      console.warn("No content found for page 'apps'. Using default static content.");
+      return;
     }
+
+    if (data.title && titleEl) {
+      titleEl.innerHTML = data.title;
+    }
+
+    if (data.content && contentEl) {
+      contentEl.innerHTML = data.content;
+    }
+  } catch (e) {
+    console.error("Error loading Apps page content:", e.message);
+    // Static fallback content already present in the HTML remains visible.
+  }
 }

@@ -10,108 +10,113 @@
 
     async function initializeApps() {
         try {
-            waitForFirebase(async function () {
-                try {
-                    console.log('apps.html: Firebase ready callback fired');
-                    var products = await DataCache.getProducts();
+            console.log('apps.html: Loading products from static JSON cache...');
+            var products = await DataCache.getProducts();
 
-                    if (!products || products.length === 0) {
-                        $("#productContainer").html(
-                            '<div class="alert alert-warning" style="margin:20px;">No results found</div>'
-                        );
-                        return;
-                    }
+            if (!products || products.length === 0) {
+                $("#productContainer").html(
+                    '<div class="alert alert-warning" style="margin:20px;">No results found</div>'
+                );
+                return;
+            }
 
-                    var activeProducts = products.filter(function (p) {
-                        return p.active === "1" || p.active === true || p.active === 1 || !p.hasOwnProperty('active');
-                    });
+            var activeProducts = products.filter(function (p) {
+                return p.active === "1" || p.active === true || p.active === 1 || !p.hasOwnProperty('active');
+            });
 
-                    if (activeProducts.length === 0) {
-                        $("#productContainer").html(
-                            '<div class="alert alert-warning" style="margin:20px;">No active applications found.</div>'
-                        );
-                        return;
-                    }
+            if (activeProducts.length === 0) {
+                $("#productContainer").html(
+                    '<div class="alert alert-warning" style="margin:20px;">No active applications found.</div>'
+                );
+                return;
+            }
 
-                    var urlParams = new URLSearchParams(window.location.search);
-                    var productId = urlParams.get("id");
+            var urlParams = new URLSearchParams(window.location.search);
+            var productId = urlParams.get("id");
 
-                    if (productId) {
-                        var selectedProduct = activeProducts.find(function (product) {
-                            return String(product.id) === String(productId);
-                        });
+            if (productId) {
+                var selectedProduct = activeProducts.find(function (product) {
+                    return String(product.id) === String(productId);
+                });
 
-                        if (!selectedProduct) {
-                            $("#productContainer").html(
-                                '<div class="alert alert-warning" style="margin:20px;">The requested application could not be found.</div>'
-                            );
-                            return;
-                        }
+                if (!selectedProduct) {
+                    $("#productContainer").html(
+                        '<div class="alert alert-warning" style="margin:20px;">The requested application could not be found.</div>'
+                    );
+                    return;
+                }
 
-                        var otherApps = activeProducts.filter(function (product) {
-                            return String(product.id) !== String(selectedProduct.id);
-                        });
+                var otherApps = activeProducts.filter(function (product) {
+                    return String(product.id) !== String(selectedProduct.id);
+                });
 
-                        var placeholderIcon = window.DEFAULT_PLACEHOLDER_ICON || "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23050814'/><text x='50%' y='62%' font-family='serif' font-size='42' fill='%23ffffff' text-anchor='middle'>EG1</text></svg>";
+                var placeholderIcon = window.DEFAULT_PLACEHOLDER_ICON || "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23050814'/><text x='50%' y='62%' font-family='serif' font-size='42' fill='%23ffffff' text-anchor='middle'>EG1</text></svg>";
+                var selectedVersion = (typeof DataCache !== 'undefined' && typeof DataCache.resolveProductVersion === 'function')
+                    ? DataCache.resolveProductVersion(selectedProduct)
+                    : (selectedProduct.version || '1.0.0');
 
-                        var detailHtml = [
-                            '<div class="row" style="margin-bottom:20px;">',
-                            '<div class="col-md-12 left">',
-                            '<a href="apps.html" class="btn btn-default">&larr; Back to all apps</a>',
-                            '</div>',
-                            '</div>',
-                            '<div class="row">',
-                            '<div class="col-md-2">',
-                            '<img src="' + (selectedProduct.icon || selectedProduct.imageUrl || placeholderIcon) + '" style="width:100%; max-width:140px;" alt="' + (selectedProduct.product_name || selectedProduct.name || 'Product Icon') + '" />',
-                            '</div>',
-                            '<div class="col-md-10 left">',
-                            '<h2 class="color-lightblack">' + (selectedProduct.product_name || selectedProduct.name || 'Unknown Product') + '</h2>',
-                            '<p><strong>Version:</strong> ' + (selectedProduct.version || '1.0') + '</p>',
-                            '<p>' + (selectedProduct.full_description || selectedProduct.description || 'No description available.') + '</p>',
-                            '</div>',
-                            '</div>',
-                            '<hr />',
-                            '<div class="row">',
-                            '<div class="col-md-12 left">',
-                            '<h3>Other apps</h3>',
+                var detailHtml = [
+                    '<div class="row" style="margin-bottom:20px;">',
+                    '<div class="col-md-12 left">',
+                    '<a href="apps.html" class="btn btn-default">&larr; Back to all apps</a>',
+                    '</div>',
+                    '</div>',
+                    '<div class="row">',
+                    '<div class="col-md-2">',
+                    '<img src="' + (selectedProduct.icon || selectedProduct.imageUrl || placeholderIcon) + '" style="width:100%; max-width:140px;" alt="' + (selectedProduct.product_name || selectedProduct.name || 'Product Icon') + '" />',
+                    '</div>',
+                    '<div class="col-md-10 left">',
+                    '<h2 class="color-lightblack">' + (selectedProduct.product_name || selectedProduct.name || 'Unknown Product') + '</h2>',
+                    '<p><strong>Version:</strong> <span data-product-version-id="' + selectedProduct.id + '">' + selectedVersion + '</span></p>',
+                    '<p>' + (selectedProduct.full_description || selectedProduct.description || 'No description available.') + '</p>',
+                    '</div>',
+                    '</div>',
+                    '<hr />',
+                    '<div class="row">',
+                    '<div class="col-md-12 left">',
+                    '<h3>Other apps</h3>',
+                    '</div>',
+                    '</div>'
+                ];
+
+                if (otherApps.length > 0) {
+                    otherApps.forEach(function (product) {
+                        detailHtml.push(
+                            '<div class="row margin-bottom">',
+                            '<div class="col-md-12">',
+                            '<a href="apps.html?id=' + product.id + '" class="link-name">' + (product.product_name || product.name || 'Unknown Product') + '</a>',
                             '</div>',
                             '</div>'
-                        ];
-
-                        if (otherApps.length > 0) {
-                            otherApps.forEach(function (product) {
-                                detailHtml.push(
-                                    '<div class="row margin-bottom">',
-                                    '<div class="col-md-12">',
-                                    '<a href="apps.html?id=' + product.id + '" class="link-name">' + (product.product_name || product.name || 'Unknown Product') + '</a>',
-                                    '</div>',
-                                    '</div>'
-                                );
-                            });
-                        }
-
-                        $("#productContainer").html(detailHtml.join(""));
-                        return;
-                    }
-
-                    var productHtml = "";
-                    activeProducts.forEach(function (product) {
-                        try {
-                            productHtml += RenderHelpers.renderProductCard(product, false);
-                        } catch (err) {
-                            console.error("Error rendering product card:", err);
-                        }
+                        );
                     });
-                    $("#productContainer").html(productHtml);
+                }
+
+                $("#productContainer").html(detailHtml.join(""));
+
+                if (typeof DataCache !== 'undefined' && typeof DataCache.syncGithubVersions === 'function') {
+                    DataCache.syncGithubVersions([selectedProduct]);
+                }
+                return;
+            }
+
+            var productHtml = "";
+            activeProducts.forEach(function (product) {
+                try {
+                    productHtml += RenderHelpers.renderProductCard(product, false);
                 } catch (err) {
-                    console.error(err);
-                    $("#productContainer").html(
-                        '<div class="alert alert-danger" style="margin:20px;">' + err.message + '</div>'
-                    );
+                    console.error("Error rendering product card:", err);
                 }
             });
-        } catch (e) {
-            console.error(e);
+            $("#productContainer").html(productHtml);
+
+            if (typeof DataCache !== 'undefined' && typeof DataCache.syncGithubVersions === 'function') {
+                DataCache.syncGithubVersions(activeProducts);
+            }
+        } catch (err) {
+            console.error("Error loading products in apps.js:", err);
+            $("#productContainer").html(
+                '<div class="alert alert-danger" style="margin:20px;">' + err.message + '</div>'
+            );
         }
     }
 

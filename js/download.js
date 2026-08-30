@@ -1,5 +1,5 @@
 $(document).ready(async function () {
-    waitForFirebase(async function () {
+    try {
         var products = await DataCache.getProducts();
 
         if (!products || products.length === 0) {
@@ -17,10 +17,14 @@ $(document).ready(async function () {
         if (product) {
             var file1 = product.attach_upload_file_1 || '#';
             var file2 = product.attach_upload_file_2 || '';
+            var version = (typeof DataCache !== 'undefined' && typeof DataCache.resolveProductVersion === 'function')
+                ? DataCache.resolveProductVersion(product)
+                : (product.version || '1.0.0');
+
             var downloadHtml = '<div class="row">' +
                 '<div class="col-md-12 left">' +
                 '<h3>' + (product.product_name || product.name || 'Unknown Product') + ' - Downloads</h3>' +
-                '<p>Version: ' + (product.version || '1.0') + '</p>' +
+                '<p>Version: <span data-product-version-id="' + product.id + '">' + version + '</span></p>' +
                 '<p>Total Downloads: ' + (product.downloaded || product.downloadCount || 0) + '</p>' +
                 '<hr />' +
                 '<h4>Download Options:</h4>' +
@@ -34,9 +38,16 @@ $(document).ready(async function () {
                 '</div>' +
                 '</div>';
             $('#downloadContainer').html(downloadHtml);
+
+            if (typeof DataCache !== 'undefined' && typeof DataCache.syncGithubVersions === 'function') {
+                DataCache.syncGithubVersions([product]);
+            }
         } else {
             $('#downloadContainer').html('<div class="alert alert-warning">Product not found</div>');
         }
-    });
+    } catch (e) {
+        console.error("Error loading products on download page:", e);
+        $('#downloadContainer').html('<div class="alert alert-danger">Error loading product data.</div>');
+    }
 });
 

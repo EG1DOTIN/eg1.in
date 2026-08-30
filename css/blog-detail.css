@@ -84,17 +84,20 @@
 }
 
 .blog-detail-title {
-    font-size: 28px;
+    font-size: clamp(1.6rem, 3vw + 0.6rem, 2.25rem);
     font-weight: 700;
     color: #090449;
+    margin-top: 10px;
     margin-bottom: 15px;
-    line-height: 3;
+    line-height: 1.35;
+    letter-spacing: -0.01em;
 }
 
 .blog-detail-meta {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
+    align-items: center;
+    gap: 16px;
     margin-bottom: 20px;
     padding-bottom: 15px;
     border-bottom: 2px solid #f0f0f0;
@@ -104,7 +107,7 @@
     display: inline-flex;
     align-items: center;
     color: #64748b;
-    font-size: 14px;
+    font-size: clamp(13px, 0.9vw + 10px, 14.5px);
     font-weight: 500;
 }
 
@@ -114,7 +117,7 @@
 }
 
 .blog-description {
-    font-size: 18px;
+    font-size: clamp(1.05rem, 0.92rem + 0.45vw, 1.18rem);
     color: #060129;
     line-height: 1.8;
     margin-bottom: 20px;
@@ -122,13 +125,16 @@
 
 /* AI Blog Content Styling */
 .ai-blog-content {
-    font-size: 18px;
-    line-height: 1.8;
+    font-size: clamp(1.05rem, 0.95rem + 0.4vw, 1.15rem);
+    line-height: 1.85;
     color: #060129;
+    letter-spacing: 0.01em;
 }
 
 .ai-blog-content p {
-    margin-bottom: 15px;
+    font-size: inherit;
+    line-height: 1.85;
+    margin-bottom: 1.35em;
 }
 
 .ai-blog-content h2,
@@ -136,32 +142,40 @@
 .ai-blog-content h4,
 .ai-blog-content h5,
 .ai-blog-content h6 {
-    margin-top: 25px;
-    margin-bottom: 15px;
+    margin-top: 1.6em;
+    margin-bottom: 0.7em;
     color: #060129;
-    font-weight: 600;
+    font-weight: 700;
+    letter-spacing: -0.01em;
 }
 
 .ai-blog-content h2 {
-    font-size: 24px;
+    font-size: clamp(1.45rem, 2.5vw, 1.85rem);
+    line-height: 1.38;
 }
 
 .ai-blog-content h3 {
-    font-size: 20px;
+    font-size: clamp(1.25rem, 1.8vw, 1.55rem);
+    line-height: 1.4;
 }
 
 .ai-blog-content h4 {
-    font-size: 18px;
+    font-size: clamp(1.12rem, 1.3vw, 1.32rem);
+    line-height: 1.45;
 }
 
 .ai-blog-content ul,
 .ai-blog-content ol {
-    margin-left: 20px;
-    margin-bottom: 15px;
+    margin-left: 24px;
+    margin-bottom: 1.35em;
+    font-size: inherit;
+    line-height: 1.8;
 }
 
 .ai-blog-content li {
-    margin-bottom: 10px;
+    margin-bottom: 8px;
+    font-size: inherit;
+    line-height: 1.8;
 }
 
 .ai-blog-content a {
@@ -178,18 +192,20 @@
 
 .ai-blog-content blockquote {
     border-left: 4px solid #3c8dbc;
-    padding-left: 20px;
-    margin: 20px 0;
+    padding: 14px 20px;
+    margin: 22px 0;
     font-style: italic;
     color: #64748b;
+    font-size: clamp(1.05rem, 0.95rem + 0.35vw, 1.15rem);
+    line-height: 1.8;
 }
 
 .ai-blog-content code {
     background: #f1f5f9;
     padding: 3px 8px;
     border-radius: 4px;
-    font-family: 'Courier New', monospace;
-    font-size: 15px;
+    font-family: 'Fira Code', 'Courier New', monospace;
+    font-size: clamp(13.5px, 0.85vw + 11px, 15px);
     color: #e11d48;
 }
 

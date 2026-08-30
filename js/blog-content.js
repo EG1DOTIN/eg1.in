@@ -1,16 +1,12 @@
 /**
  * blog-content.js
  * Fetches Blog page content ("title" and "content" fields) from
- * Firestore (website_content -> pages -> blog) and populates the page header.
+ * data/website_content.json via DataCache (0 Firestore Reads) and populates the page header.
  * Falls back to the static HTML already in blog.html if the fetch
  * fails or returns no data, so the page never ends up blank.
  */
 document.addEventListener("DOMContentLoaded", function () {
-    if (typeof isFirebaseReady === "function" && !isFirebaseReady()) {
-        waitForFirebase(loadBlogPageContent);
-    } else {
-        loadBlogPageContent();
-    }
+    loadBlogPageContent();
 });
 
 async function loadBlogPageContent() {
