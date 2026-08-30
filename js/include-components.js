@@ -72,9 +72,9 @@ function initializeComponents() {
             if (typeof DataCache !== 'undefined' && typeof DataCache.getPageContent === 'function') {
                 try {
                     const aboutPage = await DataCache.getPageContent('about');
-                    if (aboutPage && (aboutPage.content || aboutPage.title)) {
+                    if (aboutPage && (aboutPage.title || aboutPage.content)) {
                         const tempDiv = document.createElement('div');
-                        tempDiv.innerHTML = aboutPage.content || aboutPage.title;
+                        tempDiv.innerHTML = aboutPage.title || aboutPage.content;
                         const text = (tempDiv.textContent || tempDiv.innerText || '').trim();
 
                         const targetString = 'A personal hobb';
