@@ -929,7 +929,9 @@ function initializeCodeBlocks() {
     if (!code) return;
 
     // Syntax highlighting
-    hljs.highlightElement(code);
+    if (typeof hljs !== 'undefined' && typeof hljs.highlightElement === 'function') {
+      hljs.highlightElement(code);
+    }
 
     // Prevent duplicate initialization
     if (pre.parentElement.classList.contains('code-wrapper'))
@@ -1042,6 +1044,9 @@ function searchBlogs() {
     });
   }
   currentPage = 1;
+  if ($('#Content3Header').length) {
+    $('#Content3Header').show();
+  }
   renderBlogsGrid(filteredBlogs);
 }
 

@@ -1,5 +1,17 @@
 [
     {
+        "id": "update-2026-08-30-v3-1-1",
+        "type": "website",
+        "version": "3.1.1",
+        "title": "Notification Read Tracking, Layout Stability & Safety Fixes",
+        "date": "Aug 30, 2026",
+        "category": "BUGFIXES",
+        "icon": "spark",
+        "badge": "Bugfix",
+        "description": "Fixed individual notification read status persistence, restored filter count badges, resolved initial grid layout reflow on blogs, and added defensive runtime safeguards.",
+        "link": "updates.html"
+    },
+    {
         "id": "update-2026-08-30-v3-1-0",
         "type": "website",
         "version": "3.1.0",

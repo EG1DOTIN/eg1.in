@@ -71,7 +71,7 @@
     "full_description": "<p><em><strong>MChess</strong> is a web-based platform for playing and learning chess. It features online play, live broadcasts, interactive PGN replays, chess blog, inspiring quotes and puzzles.</em></p>",
     "id": "YDLLCZ0ur2gTbkwQtDQV",
     "button1": {
-      "LAUNCH": "http://mchess.eg1.in/",
+      "LAUNCH": "https://mchess.eg1.in/",
       "sameTab": "false"
     },
     "button2": {
