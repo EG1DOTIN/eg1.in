@@ -75,7 +75,7 @@
                 var targetAttr = isExternal ? ' target="_blank" rel="noopener noreferrer"' : '';
                 var btnText = isExternal ? 'Open Application &nearr;' : 'View Details &rarr;';
 
-                html += '<article class="updates-timeline-card">';
+                html += '<article class="updates-timeline-card" data-id="' + $('<div>').text(update.id).html() + '">';
                 html += '  <div class="updates-timeline-icon ' + catClass + '">' + iconSvg + '</div>';
                 html += '  <div class="updates-card-body">';
                 html += '    <div class="updates-card-meta">';
@@ -89,7 +89,7 @@
                 html += '    <h3 class="updates-card-title">' + $('<div>').text(update.title).html() + '</h3>';
                 html += '    <p class="updates-card-desc">' + $('<div>').text(update.description || '').html() + '</p>';
                 html += '    <div class="updates-card-action">';
-                html += '      <a href="' + linkUrl + '" class="updates-card-link-btn"' + targetAttr + '>' + btnText + '</a>';
+                html += '      <a href="' + linkUrl + '" class="updates-card-link-btn" data-id="' + $('<div>').text(update.id).html() + '"' + targetAttr + '>' + btnText + '</a>';
                 html += '    </div>';
                 html += '  </div>';
                 html += '</article>';
@@ -139,6 +139,30 @@
             $(this).addClass('active');
             currentFilter = $(this).data('filter') || 'all';
             renderTimeline(allUpdates, currentFilter);
+        });
+
+        // Mark update as seen when timeline card link is clicked
+        $(document).on('click', '.updates-card-link-btn', function () {
+            var updateId = $(this).attr('data-id') || $(this).closest('.updates-timeline-card').attr('data-id');
+            if (updateId) {
+                if (typeof window.markUpdateAsSeen === 'function') {
+                    window.markUpdateAsSeen(updateId);
+                    if (typeof window.refreshNotificationBadge === 'function') {
+                        window.refreshNotificationBadge();
+                    }
+                } else {
+                    try {
+                        var seen = localStorage.getItem('eg1_seen_updates');
+                        var seenIds = seen ? JSON.parse(seen) : [];
+                        if (seenIds.indexOf(updateId) === -1) {
+                            seenIds.push(updateId);
+                            localStorage.setItem('eg1_seen_updates', JSON.stringify(seenIds));
+                        }
+                    } catch (e) {
+                        console.warn('Error saving seen update:', e);
+                    }
+                }
+            }
         });
 
         // Initialize timeline load

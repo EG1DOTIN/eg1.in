@@ -382,9 +382,23 @@ function initializeNotificationBell() {
         }
     }
 
+    function markSingleAsSeen(updateId) {
+        if (!updateId) return;
+        try {
+            var seen = getSeenUpdates();
+            if (seen.indexOf(updateId) === -1) {
+                seen.push(updateId);
+                localStorage.setItem('eg1_seen_updates', JSON.stringify(seen));
+            }
+        } catch (e) {
+            console.warn('Error saving seen update:', e);
+        }
+    }
+
     function updateUnreadBadge(updates) {
+        var data = updates || updatesData;
         var seenIds = getSeenUpdates();
-        var unreadCount = updates.filter(function (u) {
+        var unreadCount = data.filter(function (u) {
             return seenIds.indexOf(u.id) === -1;
         }).length;
 
@@ -396,6 +410,11 @@ function initializeNotificationBell() {
             $bellBtn.removeClass('has-unread');
         }
     }
+
+    window.markUpdateAsSeen = markSingleAsSeen;
+    window.refreshNotificationBadge = function () {
+        updateUnreadBadge(updatesData);
+    };
 
     /**
      * Shared SVG icon resolver for update categories
@@ -475,6 +494,27 @@ function initializeNotificationBell() {
         }
     });
 
+    // Individual update card item click handler (marks item as seen in localStorage and updates UI)
+    $(document).off('click', '.update-card-item').on('click', '.update-card-item', function (e) {
+        var $item = $(this);
+        var updateId = $item.attr('data-id') || $item.data('id');
+        var href = $item.attr('href');
+
+        if (updateId) {
+            markSingleAsSeen(updateId);
+            $item.removeClass('is-unread');
+            $item.find('.update-unread-dot').fadeOut(150, function () {
+                $(this).remove();
+            });
+            updateUnreadBadge(updatesData);
+        }
+
+        // If link is a placeholder '#', prevent page jump
+        if (!href || href === '#' || href.indexOf('javascript:') === 0) {
+            e.preventDefault();
+        }
+    });
+
     // Mark all read button handler
     $(document).off('click', '#markAllReadBtn').on('click', '#markAllReadBtn', function (e) {
         e.preventDefault();
@@ -483,7 +523,9 @@ function initializeNotificationBell() {
         $badge.fadeOut(200);
         $bellBtn.removeClass('has-unread');
         $('.update-card-item').removeClass('is-unread');
-        $('.update-unread-dot').fadeOut(200);
+        $('.update-unread-dot').fadeOut(200, function () {
+            $(this).remove();
+        });
     });
 
     // Close when clicking outside panel

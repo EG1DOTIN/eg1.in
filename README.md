@@ -1,7 +1,7 @@
 # EG1 - Official Website & Digital Platform
 
 [![Website](https://img.shields.io/badge/Website-eg1.in-0284c7?style=flat-square&logo=google-chrome&logoColor=white)](https://www.eg1.in)
-[![Version](https://img.shields.io/badge/Version-3.1.0-10b981?style=flat-square)](updates.html)
+[![Version](https://img.shields.io/badge/Version-3.1.1-10b981?style=flat-square)](updates.html)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
 
 **EG1** ([eg1.in](https://www.eg1.in)) is a personal hobby platform for open source and creative digital projects, presenting practical engineering software/tools, interactive web applications for real-world use and technical articles/blog posts.

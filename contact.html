@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <script>(function(){try{var t=localStorage.getItem('eg1_theme')||'light-gray';document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','light-gray');}})();</script>
+    <script>(function () { try { var t = localStorage.getItem('eg1_theme') || 'light-gray'; document.documentElement.setAttribute('data-theme', t); } catch (e) { document.documentElement.setAttribute('data-theme', 'light-gray'); } })();</script>
     <title>CONTACT EG1</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2, user-scalable=no" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta charset="UTF-8" />
     <meta name="title" content="CONTACT EG1" />
-    <meta name="description" content="Please, follow EG1. You can contact directly on website or from social-media links." />
+    <meta name="description"
+        content="Please, follow EG1. You can contact directly on website or from social-media links." />
     <meta name="keywords" content="contact, EG1, facebook, twitter" />
-    
+
     <!-- Stylesheets -->
     <link href="css/main.css" rel="stylesheet" type="text/css" />
     <link href="css/responsive.css" rel="stylesheet" type="text/css" />
@@ -22,83 +24,98 @@
     <link href="css/socialbuttons.css" rel="stylesheet" type="text/css" />
     <link href="css/slick.css" rel="stylesheet" type="text/css" />
     <link href="css/slick-theme.css" rel="stylesheet" type="text/css" />
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'><circle cx='60' cy='60' r='58' fill='%23000000'/><circle cx='60' cy='60' r='54' fill='none' stroke='%23ffffff' stroke-width='4'/><text x='50%25' y='68%25' font-family='Great Vibes, Georgia, serif' font-style='italic' font-weight='bold' font-size='50' fill='%23ffffff' text-anchor='middle'>EG1</text></svg>" />
-    
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'><circle cx='60' cy='60' r='58' fill='%23000000'/><circle cx='60' cy='60' r='54' fill='none' stroke='%23ffffff' stroke-width='4'/><text x='50%25' y='68%25' font-family='Great Vibes, Georgia, serif' font-style='italic' font-weight='bold' font-size='50' fill='%23ffffff' text-anchor='middle'>EG1</text></svg>" />
+
     <!-- Scripts -->
     <script src="js/jquery-2.1.1.min.js" type="text/javascript"></script>
     <script src="js/include-components.js" type="text/javascript"></script>
 </head>
+
 <body>
     <center>
-    <div>
-        <!-- Header will be loaded by include-components.js -->
-        <div id="header-placeholder"></div>
-        
-        <!-- Main Content -->
-        <div class="box-100 bg-E3 main-master">
-            <div id="Content3Header" class="col-md-12" style="display:none;">
-                <span id="contactTitleText"></span>
-            </div>
-            <!-- <div class="row body"> -->
-            </div>
-        </div>
-        
-        <!-- Contact Page Content from Firestore (currently not required)-->
-        <!-- <div id="contactContentText" class="box-90 content" style="text-align:left;"></div> -->
-        
-        <!-- Contact Form -->
-        <div id="contact" class="box-90 content">
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="col-md-12 box-bg left">
-                        <h3 class="text-none font-light h3border" style="color:black">Any message?</h3>
-                        <br />
-                        <form id="contactForm">
-                            <div class="row">
-                                <div class="col-sm-12 margin-bottom">
-                                    <div class="input-group">
-                                        <span class="input-group-addon"><i class="icon icon-user i"></i></span>
-                                        <input type="text" id="txtname" name="name" title="Name" required="required" class="form-control flat" placeholder="Name">
-                                    </div>
-                                </div>
-                                <div class="col-sm-12 margin-bottom">
-                                    <div class="input-group">
-                                        <span class="input-group-addon"><i class="icon icon-envelope"></i></span>
-                                        <input type="email" id="txtemail" name="email" title="Email-id" required="required" class="form-control flat" placeholder="Email address">
-                                    </div>
-                                </div>
-                                <div class="col-sm-12 margin-bottom">
-                                    <div class="input-group">
-                                        <span class="input-group-addon"><i class="icon icon-phone"></i></span>
-                                        <input type="tel" id="txtcontact" name="contact" title="Contact No." required="required" maxlength="10" class="form-control flat" placeholder="Contact Number" pattern="[0-9]*">
-                                    </div>
-                                </div>
-                                <!-- Anti-Spam Math Captcha (hidden until user interacts) -->
-                                <div class="row" style="display:none;" id="botCheckContainer">
-                                    <div class="col-sm-12 margin-bottom">
-                                        <label>Anti-Spam Check: What is <span id="num1"></span> <span id="mathOp">+</span> <span id="num2"></span>?</label>
-                                        <input type="number" id="txtbot" class="form-control flat" placeholder="Answer" />
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-12 margin-bottom">
-                                    <div class="input-group">
-                                        <span class="input-group-addon"><i class="icon icon-pencil"></i></span>
-                                        <textarea id="txtenq" name="message" class="form-control flat" style="height: 110px; resize: none; overflow-y: auto;" placeholder="Your message..."></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-12 mrgin-top10">
-                                    <button type="submit" id="btnsend" class="btn btn-primary"> Send ⮠  </button>
-                                </div>
-                            </div>
-                        </form>
-                        <div id="contactMessage" style="margin-top: 10px;"></div>
-                    </div>
+        <div>
+            <!-- Header will be loaded by include-components.js -->
+            <div id="header-placeholder"></div>
+
+            <!-- Main Content -->
+            <div class="box-100 bg-E3 main-master">
+                <div id="Content3Header" class="col-md-12" style="display:none;">
+                    <span id="contactTitleText">
+                        <h1>CONTACT EG1</h1>
+                        <p style="font-size: 20px; text-align: center;">
+                            To maintain a high-quality community, please avoid posting spam or irrelevant content.<br />
+                            Your feedback and suggestions are welcome.
+                        </p>
+                    </span>
                 </div>
-                <!-- <div class="col-md-3">
+            </div>
+
+            <!-- Contact Page Content from Firestore (currently not required)-->
+            <!-- <div id="contactContentText" class="box-90 content" style="text-align:left;"></div> -->
+
+            <!-- Contact Form -->
+            <div id="contact" class="box-90 content">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="col-md-12 box-bg left">
+                            <h3 class="text-none font-light h3border" style="color:black">Any message?</h3>
+                            <br />
+                            <form id="contactForm">
+                                <div class="row">
+                                    <div class="col-sm-12 margin-bottom">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="icon icon-user i"></i></span>
+                                            <input type="text" id="txtname" name="name" title="Name" required="required"
+                                                class="form-control flat" placeholder="Name">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 margin-bottom">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="icon icon-envelope"></i></span>
+                                            <input type="email" id="txtemail" name="email" title="Email-id"
+                                                required="required" class="form-control flat"
+                                                placeholder="Email address">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 margin-bottom">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="icon icon-phone"></i></span>
+                                            <input type="tel" id="txtcontact" name="contact" title="Contact No."
+                                                required="required" maxlength="10" class="form-control flat"
+                                                placeholder="Contact Number" pattern="[0-9]*">
+                                        </div>
+                                    </div>
+                                    <!-- Anti-Spam Math Captcha (hidden until user interacts) -->
+                                    <div class="row" style="display:none;" id="botCheckContainer">
+                                        <div class="col-sm-12 margin-bottom">
+                                            <label>Anti-Spam Check: What is <span id="num1"></span> <span
+                                                    id="mathOp">+</span> <span id="num2"></span>?</label>
+                                            <input type="number" id="txtbot" class="form-control flat"
+                                                placeholder="Answer" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12 margin-bottom">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="icon icon-pencil"></i></span>
+                                            <textarea id="txtenq" name="message" class="form-control flat"
+                                                style="height: 110px; resize: none; overflow-y: auto;"
+                                                placeholder="Your message..."></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12 mrgin-top10">
+                                        <button type="submit" id="btnsend" class="btn btn-primary"> Send ⮠ </button>
+                                    </div>
+                                </div>
+                            </form>
+                            <div id="contactMessage" style="margin-top: 10px;"></div>
+                        </div>
+                    </div>
+                    <!-- <div class="col-md-3">
                     <div class="col-md-12 box-bg left">
                         <h2 style="font-size:19px; font-weight:bold;">CONNECT ON OTHER PLATFORMS</h2>
                     </div>
@@ -111,14 +128,14 @@
                         </p>
                     </div>
                 </div> -->
+                </div>
             </div>
+
+            <!-- Footer will be loaded by include-components.js -->
+            <div id="footer-placeholder"></div>
         </div>
-        
-        <!-- Footer will be loaded by include-components.js -->
-        <div id="footer-placeholder"></div>
-    </div>
     </center>
-    
+
     <!-- Firebase Scripts -->
     <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-firestore-compat.js"></script>
@@ -129,4 +146,5 @@
     <script src="js/app.js" type="text/javascript"></script>
     <script src="js/contact.js" type="text/javascript"></script>
 </body>
+
 </html>

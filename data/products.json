@@ -54,7 +54,7 @@
     "downloaded": "0",
     "categories": "Chess",
     "product_name": "Marwadi Chess",
-    "webapp_link": "http://mchess.eg1.in/",
+    "webapp_link": "https://mchess.eg1.in/",
     "updatedAt": "2026-08-18T08:51:40.662000+00:00",
     "attach_upload_file_1": "",
     "attach_upload_file_2": "",
@@ -71,7 +71,7 @@
     "full_description": "<p><em><strong>MChess</strong> is a web-based platform for playing and learning chess. It features online play, live broadcasts, interactive PGN replays, chess blog, inspiring quotes and puzzles.</em></p>",
     "id": "YDLLCZ0ur2gTbkwQtDQV",
     "button1": {
-      "LAUNCH": "http://mchess.eg1.in/",
+      "LAUNCH": "https://mchess.eg1.in/",
       "sameTab": "false"
     },
     "button2": {
