@@ -1,152 +1,210 @@
-# EG1 - Web Application
+# EG1 - Official Website & Digital Platform
 
-**EG1** ([eg1.in](https://www.eg1.in)), a web platform offering open-source engineering tools, apps and technical blog.
+[![Website](https://img.shields.io/badge/Website-eg1.in-0284c7?style=flat-square&logo=google-chrome&logoColor=white)](https://www.eg1.in)
+[![Version](https://img.shields.io/badge/Version-3.1.0-10b981?style=flat-square)](updates.html)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
+
+**EG1** ([eg1.in](https://www.eg1.in)) is a personal hobby platform for open source and creative digital projects, presenting practical engineering software/tools, interactive web applications for real-world use and technical articles/blog posts.
 
 ---
 
-## 🗺️ Website Navigation & Flow Diagram
+## 🚀 Version 3.1.0 Highlights
+
+| Feature | Description |
+| :--- | :--- |
+| **⚡ Zero-Read Static Data Engine** | Instant catalog and page copy loading from local JSON datasets (`data/products.json`, `data/website_content.json`) with zero Firestore read costs. |
+| **🎛️ Dynamic Dual Action Buttons** | Configurable `button1` and `button2` actions supporting custom labels, URLs, tab targets (`sameTab`), and custom icons. |
+| **🏷️ Automated 3-Tier Versioning** | Dynamic version resolution with live GitHub API release integration, persistent caching, and static fallbacks. |
+| **📖 Fluid Responsive Blog Typography** | Fluid CSS `clamp()` scaling, relaxed `1.85` line-height, and cross-browser multi-line clamping for desktop and mobile. |
+| **🎨 Dual Theme System** | High-contrast Light Gray and Dark Gray themes with instant zero-flicker loading and persistent preference memory. |
+| **🔔 Changelog & Notification Center** | Real-time updates dropdown with unread badge tracking, animated alerts, and category filtering. |
+
+---
+
+## 🗺️ Website Navigation & Visitor Flow
 
 ```mermaid
 flowchart TD
-    %% Entry Point
-    Visitor([🌐 Visitor Enters eg1.in]) --> Home["🏠 Home Page (index.html)"]
+    Visitor(["Visitor Enters eg1.in"]) --> Home["Home Page (index.html)"]
 
-    %% Shared Components
-    subgraph GlobalComponents["Shared Shell Components"]
-        Header["Header & Navigation Bar<br/>(Logo, Nav Menu, GitHub Ribbon)"]
-        Footer["Footer<br/>(About, Social Links, Email, Privacy Link)"]
+    subgraph GlobalShell["Shared Website Shell"]
+        Header["Header & Theme Switcher (Light / Dark)"]
+        NotificationCenter["Notification Bell & Updates Dropdown"]
+        Footer["Footer & Social Channels"]
     end
 
-    Home -.-> GlobalComponents
+    Home --> GlobalShell
 
-    %% Main Navigation
-    Header --> NavHome["🏠 Home<br/>index.html"]
-    Header --> NavApps["📦 Applications<br/>apps.html"]
-    Header --> NavBlog["📝 Technical Blog<br/>blog.html"]
-    Header --> NavAbout["ℹ️ About<br/>about.html"]
-    Header --> NavContact["📬 Contact<br/>contact.html"]
+    Header --> NavHome["Home Page"]
+    Header --> NavApps["Applications Catalog"]
+    Header --> NavUpdates["Changelog & Releases"]
+    Header --> NavBlog["Technical Blog"]
+    Header --> NavAbout["About Platform"]
+    Header --> NavContact["Contact Portal"]
 
-    %% Product Flow
-    NavApps -->|"Browse Catalogue"| ProductCards["📦 Software & Utilities Showcase"]
-
-    %% Blog Flow
-    NavBlog -->|"Browse Articles"| BlogGrid["Blog Grid View"]
-    NavBlog -->|"Search Keyword"| BlogSearch["Filtered by Search Query"]
-    NavBlog -->|"Select Category"| BlogCat["Filtered by Category"]
-    BlogGrid -->|"Read Full Post"| BlogDetail["📖 Article Detail View<br/>blog.html?id=..."]
-    BlogSearch -->|"Read Full Post"| BlogDetail
-    BlogCat -->|"Read Full Post"| BlogDetail
-
-    %% Contact & Privacy
-    NavContact -->|"Fill Form & Solve Captcha"| ContactSubmit["✉️ Submit Message"]
-    Footer --> NavPrivacy["🔒 Privacy Policy<br/>privacypolicy.html"]
+    NavApps -->|"Explore Tools"| AppCatalog["Software & Web Apps Showcase"]
+    NavUpdates -->|"Filter Updates"| UpdateTimeline["Categorized Platform Releases"]
+    NavBlog -->|"Search & Read"| BlogArticles["Categorized Tutorials & Code Guides"]
+    NavContact -->|"Send Message"| ContactForm["Interactive Visitor Message Form"]
+    Footer --> PrivacyPage["Privacy Policy (privacypolicy.html)"]
 ```
 
 ---
 
-## 📐 Page Wireframes & Layout Structures
+## 🎨 Website Pages UI Wireframes
 
-### 1. Global Page Layout Shell
-```
+### 1. Home Page (`index.html`)
+```text
 +-------------------------------------------------------------------------+
-| [EG1.in Logo]                    [GitHub Ribbon]                        |
-| [ HOME ]    [ APPS ]    [ BLOG ]    [ ABOUT ]    [ CONTACT ]   [= MENU] |
+| [EG1 Logo]        [Home] [Apps] [Explore v] [About] [Contact] (Bell)[🌓]|
 +-------------------------------------------------------------------------+
-|                                                                         |
-|                          MAIN PAGE CONTENT                              |
-|                                                                         |
-+-------------------------------------------------------------------------+
-| [EG1.in Summary]         [Follow Us: GH / FB / IG / X]   [Contact Email]|
-| (C) 2026 EG1. All rights reserved.                 Privacy Policy       |
-+-------------------------------------------------------------------------+
-```
-
----
-
-### 2. Home Page (`index.html`)
-```
-+-------------------------------------------------------------------------+
-| HEADER & NAVIGATION                                                     |
-+-------------------------------------------------------------------------+
-| [==================== Hero / Image Slider Banner =====================] |
+| [=================== Image Slider Header Banner =====================]  |
 | "WELCOME TO EG1 - Solutions, Coding, Innovations & Creative Tools"      |
 +-------------------------------------------------------------------------+
-| FEATURED SOFTWARE & TOOLS                                               |
-| +--------------------+  +--------------------+  +--------------------+  |
-| | [Software Icon]    |  | [Software Icon]    |  | [Software Icon]    |  |
-| | Software Title     |  | Software Title     |  | Software Title     |  |
-| | Feature summary    |  | Feature summary    |  | Feature summary    |  |
-| +--------------------+  +--------------------+  +--------------------+  |
+| ANNOUNCEMENTS / NEWS CONTAINER (#newsContainer)                         |
+| "A platform for solutions, coding, programming, innovations..."        |
 +-------------------------------------------------------------------------+
-| FOOTER                                                                  |
+| FEATURED APPLICATIONS (Slick Carousel Slider .regular)                  |
+| +-------------------+  +-------------------+  +-------------------+     |
+| | [App Icon]        |  | [App Icon]        |  | [App Icon]        |     |
+| | Product Title     |  | Product Title     |  | Product Title     |     |
+| | Version 3.1.0     |  | Version 3.1.0     |  | Version 3.1.0     |     |
+| | Short Description |  | Short Description |  | Short Description |     |
+| | [View] [Download] |  | [View] [Download] |  | [View] [Download] |     |
+| +-------------------+  +-------------------+  +-------------------+     |
++-------------------------------------------------------------------------+
+| FOOTER (Logo Badge, About Snippet, Social Links, Contact CTA, Copyright)|
 +-------------------------------------------------------------------------+
 ```
 
----
-
-### 3. Applications Page (`apps.html`)
-```
+### 2. Applications Showcase (`apps.html`)
+```text
 +-------------------------------------------------------------------------+
 | HEADER & NAVIGATION                                                     |
 +-------------------------------------------------------------------------+
 | Page Banner: "APPLICATIONS"                                             |
 +-------------------------------------------------------------------------+
-| SOFTWARE CATALOG                                                        |
+| MODE 1: FULL CATALOGUE MODE (no URL parameters)                         |
 | +---------------------------------------------------------------------+ |
-| | [App Icon]  Application Name                                        | |
-| |             Description, features, supported OS & tools overview.   | |
+| | [App Icon]  Application Title                                       | |
+| |             Version 3.1.0 | Desktop App / Utility                   | |
+| |             Short description, platform, features.                  | |
+| |             [ VIEW DETAILS ]   [ DOWNLOAD ]                         | |
 | +---------------------------------------------------------------------+ |
-| | [App Icon]  Application Name                                        | |
-| |             Description, features, supported OS & tools overview.   | |
+|                                                                         |
+| MODE 2: SINGLE PRODUCT DETAIL MODE (?id=...)                            |
+| +------------------------------------+--------------------------------+ |
+| | MAIN PRODUCT DETAILS               | OTHER APPLICATIONS             | |
+| | [App Icon] Title (v3.1.0)          | - Application #2               | |
+| | Full markdown/HTML description     | - Application #3               | |
+| | System Requirements                | - Application #4               | |
+| | [ DOWNLOAD NOW ] [ VIEW GITHUB ]   |                                | |
+| +------------------------------------+--------------------------------+ |
++-------------------------------------------------------------------------+
+| FOOTER                                                                  |
++-------------------------------------------------------------------------+
+```
+
+### 3. Changelog & Releases (`updates.html`)
+```text
++-------------------------------------------------------------------------+
+| HEADER & NAVIGATION                                                     |
++-------------------------------------------------------------------------+
+| Page Banner: "UPDATES & RELEASES - Release changelogs & software updates"|
++-------------------------------------------------------------------------+
+| FILTER TABS:  [ All (3) ]  [ Website (2) ]  [ Apps (1) ]                |
++-------------------------------------------------------------------------+
+| TIMELINE CARDS CONTAINER (#updatesPageListContainer)                   |
+|                                                                         |
+| +---------------------------------------------------------------------+ |
+| | [Spark Icon]  EG1 Website v3.1.0               [Aug 30, 2026] [v3.1]| |
+| | Static Data Engine, Dynamic Buttons & Fluid Typography...           | |
+| | [View Details ->]                                                   | |
+| +---------------------------------------------------------------------+ |
+|                                                                         |
+| +---------------------------------------------------------------------+ |
+| | [Globe Icon]  EG1 Website v3.0.0               [Aug 29, 2026] [v3.0]| |
+| | Light & Dark Theme and Updates System...                            | |
+| | [View Details ->]                                                   | |
 | +---------------------------------------------------------------------+ |
 +-------------------------------------------------------------------------+
 | FOOTER                                                                  |
 +-------------------------------------------------------------------------+
 ```
 
----
-
-### 4. Technical Blog Page (`blog.html`)
-```
+### 4. Technical Blog Engine (`blog.html`)
+```text
 +-------------------------------------------------------------------------+
 | HEADER & NAVIGATION                                                     |
 +-------------------------------------------------------------------------+
 | Page Banner: "BLOG"                                                     |
 +------------------------------------------+------------------------------+
-| MAIN CONTENT AREA                        | SIDEBAR                      |
-|                                          | [ Search Blog...      ] [Go] |
-| [Detail Mode]                            |                              |
-| - Article Title & Publication Metadata   | CATEGORIES                   |
-| - Rich Body with Syntax Highlighting     | - Programming                |
-| - Embedded Media & Code Samples          | - Security                   |
-|                                          | - Mathematics & Logic        |
-| [Grid Mode]                              |                              |
-| - Article Cards (Thumbnail, Excerpt)     | RECENT POSTS                 |
-| - Pagination Controls                    | - Post Link #1               |
-|                                          | - Post Link #2               |
+| MAIN CONTENT AREA (col-md-8)             | SIDEBAR (col-md-4)           |
+|                                          | [ Search blog...    ] [Go]   |
+| [Detail / Latest Mode]                   |                              |
+| - Hero Banner Image                      | CATEGORIES                   |
+| - Title & Metadata (Category, Date)      | - Programming                |
+| - Fluid Body Text & Formatted Paragraphs | - Security & Logic           |
+| - Copyable Code Blocks (Highlight.js)    | - Web Utilities              |
+|                                          |                              |
+| [Grid Mode: ?cat= or ?search=]           | PREVIOUS TOPICS              |
+| - 3-Column Card Grid (18 items/page)     | - Topic Post Link #1         |
+| - Pagination: [Prev] 1 2 3 [Next]        | - Topic Post Link #2         |
 +------------------------------------------+------------------------------+
 | FOOTER                                                                  |
 +-------------------------------------------------------------------------+
 ```
 
----
-
-### 5. Contact Page (`contact.html`)
-```
+### 5. About Platform (`about.html`)
+```text
 +-------------------------------------------------------------------------+
 | HEADER & NAVIGATION                                                     |
 +-------------------------------------------------------------------------+
-| Page Banner: "CONTACT"                                                  |
+| Header Banner: "ABOUT EG1"                                              |
++-------------------------------------------------------------------------+
+| ABOUT CONTENT BOX (#aboutTitleText & #aboutContentText)                 |
+| - Overview of the EG1 open-source platform                              |
+| - Platform vision, mission, and technical research                      |
+| - Developer profile, tools highlights, and community links              |
+| - Fallback static HTML copy displayed if offline                        |
++-------------------------------------------------------------------------+
+| FOOTER                                                                  |
++-------------------------------------------------------------------------+
+```
+
+### 6. Contact Portal (`contact.html`)
+```text
++-------------------------------------------------------------------------+
+| HEADER & NAVIGATION                                                     |
++-------------------------------------------------------------------------+
+| Header Banner: "CONTACT US"                                             |
 +------------------------------------------+------------------------------+
-| CONTACT FORM                             | DIRECT CHANNELS              |
-| [ Your Name                          ]   | Email: eg1dotin@gmail.com    |
-| [ Email Address                      ]   |                              |
-| [ Contact Number                     ]   | Social Handles:              |
-| [ Anti-Spam Math: 4 + 7 = [    ]     ]   | - GitHub: @EG1DOTIN          |
-| [ Message Box                        ]   | - Facebook: @eg1dotin        |
-| [ Submit Message ⮠                   ]   | - Instagram: @eg1dotin       |
-|                                          | - X / Twitter: @eg1dotin     |
+| INQUIRY FORM (col-md-6)                  | DIRECT CHANNELS (col-md-6)   |
+| "Any message?"                           | Email: eg1dotin@gmail.com    |
+| [ Your Name                          ]   |                              |
+| [ Email Address                      ]   | Social Platforms:            |
+| [ Phone Number                       ]   | - GitHub: @EG1DOTIN          |
+| [ Anti-Spam Check: 5 + 3 = [    ]    ]   | - Facebook: @eg1dotin        |
+| [ Message Textarea                   ]   | - Instagram: @eg1dotin       |
+| [ Send Enquiry ⮠                      ]   | - X / Twitter: @eg1dotin     |
 +------------------------------------------+------------------------------+
+| FOOTER                                                                  |
++-------------------------------------------------------------------------+
+```
+
+### 7. Privacy Policy (`privacypolicy.html`)
+```text
++-------------------------------------------------------------------------+
+| HEADER & NAVIGATION                                                     |
++-------------------------------------------------------------------------+
+| Header Banner: "PRIVACY POLICY"                                         |
+| Last updated: 2026                                                      |
+| <hr />                                                                  |
+| 1. Information Collection and Use (IP, Device, City Telemetry)          |
+| 2. No Sale of Data Guarantee                                            |
+| 3. Analytics Preferences & Consent Control                              |
+|    [ ⚙️ Open Analytics Preferences Banner ]                             |
++-------------------------------------------------------------------------+
 | FOOTER                                                                  |
 +-------------------------------------------------------------------------+
 ```
@@ -157,11 +215,16 @@ flowchart TD
 
 | Page | File | Description & Key Features |
 | :--- | :--- | :--- |
-| **Home** | [`index.html`] | Main landing page featuring an image slideshow banner, announcements, and quick access to featured software. |
-| **Applications** | [`apps.html`] | Showcase of engineering utilities, security tools, and open-source applications. |
-| **Blog** | [`blog.html`] | Multi-mode engineering blog with keyword search, category filtering, code syntax highlighting, and article reader. |
-| **Contact** | [`contact.html`] | Visitor communication portal featuring an interactive contact form with math-based anti-spam verification. |
+| **Home** | [`index.html`] | Main landing page featuring an animated slideshow banner, quick access to featured software. |
+| **Apps** | [`apps.html`] | Showcase of open-source digital projects/Software/applications. |
+| **Updates** | [`updates.html`] | Interactive changelog timeline with categorized release filters and update badges. |
+| **Blog** | [`blog.html`] | Multi-mode technical blog with keyword search, category filtering, code syntax highlighting, and article reader. |
 | **About** | [`about.html`] | Overview of the EG1 platform, vision, mission, and open-source research background. |
+| **Contact** | [`contact.html`] | Visitor communication portal featuring an interactive contact form with math-based anti-spam verification. |
 | **Privacy Policy** | [`privacypolicy.html`] | Comprehensive privacy terms, cookies information, data protection guidelines, and user rights. |
 
 ---
+
+## 📜 License & Legal Notice
+
+This project is licensed under the terms of the **MIT License**. See the [LICENSE](LICENSE) file for complete details.

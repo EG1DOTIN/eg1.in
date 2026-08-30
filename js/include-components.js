@@ -66,43 +66,39 @@ function initializeComponents() {
         $('#footer-placeholder').html(footerData);
         decodeLogoByline();
 
-        // Fetch about content from DataCache if Firebase is loaded on the page
+        // Fetch about content from DataCache (data/website_content.json, 0 Firestore reads)
         var footerAboutRetries = 0;
-        function fetchFooterAbout() {
-            if (typeof waitForFirebase === 'function') {
-                waitForFirebase(async () => {
-                    if (typeof DataCache !== 'undefined') {
-                        try {
-                            const aboutPage = await DataCache.getPageContent('about');
-                            if (aboutPage && (aboutPage.content || aboutPage.title)) {
-                                const tempDiv = document.createElement('div');
-                                tempDiv.innerHTML = aboutPage.content || aboutPage.title;
-                                const text = (tempDiv.textContent || tempDiv.innerText || '').trim();
+        async function fetchFooterAbout() {
+            if (typeof DataCache !== 'undefined' && typeof DataCache.getPageContent === 'function') {
+                try {
+                    const aboutPage = await DataCache.getPageContent('about');
+                    if (aboutPage && (aboutPage.title || aboutPage.content)) {
+                        const tempDiv = document.createElement('div');
+                        tempDiv.innerHTML = aboutPage.title || aboutPage.content;
+                        const text = (tempDiv.textContent || tempDiv.innerText || '').trim();
 
-                                const targetString = 'A personal hobb';
-                                const startIndex = text.indexOf(targetString);
-                                let snippet = '';
-                                if (startIndex !== -1) {
-                                    snippet = text.substring(startIndex, startIndex + 146);
-                                } else if (text.length > 0) {
-                                    snippet = text.substring(0, 146);
-                                }
-                                if (snippet) {
-                                    if (text.length > 146) snippet += '...';
-                                    const aboutTextEl = document.getElementById('footer-about-text');
-                                    if (aboutTextEl) {
-                                        aboutTextEl.textContent = snippet;
-                                    }
-                                }
+                        const targetString = 'A personal hobb';
+                        const startIndex = text.indexOf(targetString);
+                        let snippet = '';
+                        if (startIndex !== -1) {
+                            snippet = text.substring(startIndex, startIndex + 146);
+                        } else if (text.length > 0) {
+                            snippet = text.substring(0, 146);
+                        }
+                        if (snippet) {
+                            if (text.length > 146) snippet += '...';
+                            const aboutTextEl = document.getElementById('footer-about-text');
+                            if (aboutTextEl) {
+                                aboutTextEl.textContent = snippet;
                             }
-                        } catch (err) {
-                            console.warn('Error loading footer about snippet:', err);
                         }
                     }
-                });
-            } else if (footerAboutRetries < 15) {
+                } catch (err) {
+                    console.warn('Error loading footer about snippet:', err);
+                }
+            } else if (footerAboutRetries < 20) {
                 footerAboutRetries++;
-                setTimeout(fetchFooterAbout, 100);
+                setTimeout(fetchFooterAbout, 50);
             }
         }
         fetchFooterAbout();

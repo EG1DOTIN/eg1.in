@@ -1,0 +1,29 @@
+{
+  "pages": {
+    "apps": {
+      "content": "",
+      "title": "",
+      "updatedAt": "2026-07-19T12:41:53+00:00"
+    },
+    "contact": {
+      "content": "",
+      "title": "<h1>Contact EG1</h1>\n    <p style=\"font-size: 20px; text-align: center\"> \n        To maintain a high-quality community, please avoid posting spam or irrelevant content. <br /> \n        Your feedback and suggestions are welcome. <br /> \n    </p>",
+      "updatedAt": "2026-07-19T12:22:46.217000+00:00"
+    },
+    "blog": {
+      "content": "",
+      "title": "",
+      "updatedAt": "2026-07-20T12:54:26.096000+00:00"
+    },
+    "about": {
+      "updateAt": "2026-07-19T11:54:08+00:00",
+      "title": "    <h1>ABOUT EG1</h1>\n    <p style=\"font-size: 20px; text-align: center;\"> \n        A personal hobby platform for open-source and creative digital <br />\n        projects, featuring practical engineering software/tools, interactive web <br />\n        applications and technical articles. <br />\n    </p>",
+      "content": "<p style=\"font-size: 18px; \">\n    This website is a personal space for creating and sharing helpful, open-source digital projects built for real-world use.\n    <br />\n    <br />\n    It features two main sections: an Apps section, showcasing custom webapps, and software/tools made for practical application; and a Blog section, featuring technical articles, tutorials, and engineering write-ups. Driven by an open-source approach, everything here is built with simplicity, functionality, and open access for curious minds who love building and tinkering from the ground up.\n</p>"
+    },
+    "homepage": {
+      "title": "Welcome to EG1",
+      "content": "",
+      "updatedAt": "2026-07-29T16:15:23.417000+00:00"
+    }
+  }
+}

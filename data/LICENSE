@@ -1,0 +1,49 @@
+MIT License
+
+Copyright (c) 2026 EG1 (Gautam Jangid)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software, data schemas, sample data formats, and associated documentation 
+files (the "Software"), to deal in the Software without restriction, including 
+without limitation the rights to use, copy, modify, merge, publish, distribute, 
+sublicense, and/or sell copies of the Software, and to permit persons to whom 
+the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+===============================================================================
+PROJECT LICENSES, TRADEMARKS & CONTENT NOTICE
+===============================================================================
+
+1. INDIVIDUAL OPEN-SOURCE PROJECTS (products.json):
+   The digital products, applications, and tools listed in "products.json" 
+   (such as Marwadi Chess / MChess, EGClamNetAntivirus, etc.) are open-source 
+   projects. Anyone is welcome to use, run, fork, and contribute to these projects 
+   in accordance with their own respective open-source licenses and repository 
+   terms (e.g., individual project LICENSE files in their source repositories).
+   Listing them in this data catalog does not restrict the rights granted by their 
+   individual open-source licenses.
+
+2. TRADEMARKS & BRAND IDENTITY:
+   The names "EG1", "EG1.in", "EG1DOTIN", the EG1 logo designs, SVG brand marks, 
+   badges, icons, and platform trade dress are trademarks owned exclusively by 
+   EG1 (Gautam Jangid). 
+   This license does NOT grant any rights to use the EG1 platform trademarks, logos, 
+   or brand identity for commercial endorsement, impersonation, or unauthorized 
+   promotion without prior written authorization.
+
+3. PLATFORM WEBSITE CONTENT (website_content.json):
+   The platform-specific website copy, mission statements, and editorial content 
+   contained in "website_content.json" represent the official website identity of EG1.
+   If you reuse this website framework, schemas, or data structure for your own 
+   catalog or project hub, you must replace the EG1-specific website copy and platform 
+   branding with your own authentic content.

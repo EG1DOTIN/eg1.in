@@ -1,16 +1,12 @@
 /**
  * about.js
  * Fetches About page content ("title" and "content" fields) from
- * Firestore (website_content -> about) and populates the page.
+ * data/website_content.json via DataCache (0 Firestore Reads) and populates the page.
  * Falls back to the static HTML already in about.html if the fetch
  * fails or returns no data, so the page never ends up blank.
  */
 document.addEventListener("DOMContentLoaded", function () {
-    if (typeof isFirebaseReady === "function" && !isFirebaseReady()) {
-        waitForFirebase(loadAboutContent);
-    } else {
-        loadAboutContent();
-    }
+    loadAboutContent();
 });
 
 async function loadAboutContent() {

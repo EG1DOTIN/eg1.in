@@ -137,19 +137,15 @@ $(document).ready(function () {
 });
 
 /**
- * Listens for DOM ready and waits for Firebase SDK initialization to fetch
- * custom page header and body content for the Contact page from Firestore cache.
+ * Listens for DOM ready to fetch
+ * custom page header and body content for the Contact page from static JSON via DataCache.
  */
 document.addEventListener("DOMContentLoaded", function () {
-    if (typeof isFirebaseReady === "function" && !isFirebaseReady()) {
-        waitForFirebase(loadContactContent);
-    } else {
-        loadContactContent();
-    }
+    loadContactContent();
 });
 
 /**
- * Asynchronously loads dynamic Contact page title and copy from DataCache / Firestore.
+ * Asynchronously loads dynamic Contact page title and copy from DataCache (data/website_content.json, 0 Firestore reads).
  * Fallbacks to default HTML content if document is missing or fetch fails.
  */
 async function loadContactContent() {

@@ -1,5 +1,5 @@
 $(document).ready(async function () {
-    waitForFirebase(async function () {
+    try {
         var products = await DataCache.getProducts();
 
         if (!products || products.length === 0) {
@@ -16,10 +16,14 @@ $(document).ready(async function () {
 
         if (product) {
             var productName = product.product_name || product.name || 'Unknown Product';
+            var version = (typeof DataCache !== 'undefined' && typeof DataCache.resolveProductVersion === 'function')
+                ? DataCache.resolveProductVersion(product)
+                : (product.version || '1.0.0');
+
             var registrationHtml = '<div class="row">' +
                 '<div class="col-md-12 left">' +
                 '<h3>' + productName + ' - Registration Key</h3>' +
-                '<p>Version: ' + (product.version || '1.0') + '</p>' +
+                '<p>Version: <span data-product-version-id="' + product.id + '">' + version + '</span></p>' +
                 '<hr />' +
                 '<h4>Request Registration Key</h4>' +
                 '<p>To get a registration key for <strong>' + productName + '</strong>, please send us a message via our Contact form.</p>' +
@@ -31,8 +35,15 @@ $(document).ready(async function () {
                 '</div>' +
                 '</div>';
             $('#registrationContainer').html(registrationHtml);
+
+            if (typeof DataCache !== 'undefined' && typeof DataCache.syncGithubVersions === 'function') {
+                DataCache.syncGithubVersions([product]);
+            }
         } else {
             $('#registrationContainer').html('<div class="alert alert-warning">Product not found</div>');
         }
-    });
+    } catch (e) {
+        console.error("Error loading products on registration key page:", e);
+        $('#registrationContainer').html('<div class="alert alert-danger">Error loading product data.</div>');
+    }
 });

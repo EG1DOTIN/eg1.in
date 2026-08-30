@@ -1,5 +1,17 @@
 [
     {
+        "id": "update-2026-08-30-v3-1-0",
+        "type": "website",
+        "version": "3.1.0",
+        "title": "Static Data Engine, Dynamic Buttons & Fluid Typography",
+        "date": "Aug 30, 2026",
+        "category": "FEATURE",
+        "icon": "spark",
+        "badge": "New",
+        "description": "Zero-read static dataset architecture, dynamic dual-action card buttons with custom icons, automated GitHub version resolution, and responsive fluid blog typography.",
+        "link": "apps.html"
+    },
+    {
         "id": "update-2026-08-29-v3-0-0",
         "type": "website",
         "version": "3.0.0",
