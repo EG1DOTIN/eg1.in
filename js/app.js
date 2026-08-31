@@ -72,12 +72,11 @@ function waitForFirebase(callback, attempts = 0, maxAttempts = 100) {
 }
 
 /**
- * Cache controller for retrieving and storing application data from Firestore.
+ * Cache controller for retrieving and storing application data.
  *
- * This helper centralizes data access for products, news, and blogs so the UI
- * can stay consistent after database structure changes. Blog content is loaded
- * from the flattened eg1_blog collection and normalized into a single array of
- * blog objects with the same field names used by the web page templates.
+ * This helper centralizes data access for products, news, and blogs.
+ * Blog content is loaded directly from Markdown (.md) files in data/blog/
+ * with zero Firestore database dependencies.
  */
 var DataCache = {
   products: null,
@@ -129,16 +128,18 @@ var DataCache = {
     }
   },
 
-  BLOGS_CACHE_KEY: 'eg1_blogs_cache_v2',
+  BLOGS_CACHE_KEY: 'eg1_direct_md_cache_v5',
 
   clearCache: function (type) {
     try {
       if (!type || type === 'blogs') {
         this.blogs = null;
         localStorage.removeItem(this.BLOGS_CACHE_KEY);
-        localStorage.removeItem(this.BLOGS_CACHE_KEY + '_time');
-        localStorage.removeItem('eg1_blogs_cache');
-        localStorage.removeItem('eg1_blogs_cache_time');
+        localStorage.removeItem('eg1_direct_md_cache');
+        localStorage.removeItem('eg1_direct_md_cache_v2');
+        localStorage.removeItem('eg1_direct_md_cache_v3');
+        localStorage.removeItem('eg1_direct_md_cache_v4');
+        localStorage.removeItem('eg1_blogs_cache_v2');
       }
       if (!type || type === 'products') {
         this.products = null;
@@ -348,10 +349,10 @@ var DataCache = {
     }
 
     try {
-      console.log("[DataCache] Fetching products from static JSON (data/products.json, 0 Firestore Reads)...");
-      const response = await fetch("data/products.json");
+      console.log("[DataCache] Fetching products/apps from static JSON (data/apps.json, 0 Firestore Reads)...");
+      const response = await fetch("data/apps.json");
       if (!response.ok) {
-        throw new Error("HTTP " + response.status + " while fetching data/products.json");
+        throw new Error("HTTP " + response.status + " while fetching data/apps.json");
       }
       var allProducts = await response.json();
       this.products = (allProducts || []).filter(function (p) {
@@ -361,7 +362,7 @@ var DataCache = {
       this.lastFetchSource.products = 'static JSON (0 Firestore reads)';
     } catch (e) {
       this.lastError = e;
-      console.error("Error fetching products from data/products.json:", e.message);
+      console.error("Error fetching apps from data/apps.json:", e.message);
       this.products = [];
     }
     return this.products;
@@ -440,88 +441,35 @@ var DataCache = {
   },
 
   /**
-   * Loads the flattened blog collection used by the migrated Firestore schema.
-   * Uses persistent localStorage caching to avoid impacting Firestore usage limits.
+   * Loads all blog posts directly from Markdown (.md) files in data/blog/
+   * with zero Firestore read operations.
    */
   getBlogs: async function (forceRefresh) {
-    if (this.blogs && !forceRefresh) {
+    if (this.blogs && this.blogs.length > 0 && !forceRefresh) {
       this.lastFetchSource.blogs = 'memory (0 reads)';
-      return (this.blogs || []).filter(function (b) {
-        return b.active === "1" || b.active === 1 || b.active === true || !b.hasOwnProperty('active');
-      });
+      return this.blogs;
     }
 
     if (!forceRefresh) {
-      var cached = this._getPersistentCache(this.BLOGS_CACHE_KEY);
-      if (cached) {
+      var cached = this._getPersistentCache('eg1_direct_md_cache_v5');
+      if (cached && Array.isArray(cached) && cached.length > 0) {
         this.blogs = cached;
         this.lastFetchSource.blogs = 'localStorage (0 reads)';
-        console.log("[DataCache] Using cached blogs from localStorage (0 Firestore reads)");
-        return (this.blogs || []).filter(function (b) {
-          return b.active === "1" || b.active === 1 || b.active === true || !b.hasOwnProperty('active');
-        });
+        return this.blogs;
       }
     }
 
-    try {
-      if (!isFirebaseReady()) {
-        throw new Error("Firebase not ready. db object is undefined");
+    if (typeof MarkdownStore !== 'undefined' && typeof MarkdownStore.fetchAllBlogs === 'function') {
+      try {
+        this.blogs = await MarkdownStore.fetchAllBlogs();
+        this.lastFetchSource.blogs = 'direct markdown (.md, 0 Firestore reads)';
+        return this.blogs;
+      } catch (e) {
+        console.error("Error loading blogs from MarkdownStore:", e);
       }
-      console.log("[DataCache] Fetching blogs from Firestore (Network Read)...");
-
-      // Fetch all blogs without orderBy to prevent silent exclusion of missing fields
-      const snapshot = await db.collection("eg1_blog").get();
-      this.blogs = [];
-      snapshot.docs.forEach((doc) => {
-        const catData = doc.data();
-        const catName = doc.id;
-        for (const [key, value] of Object.entries(catData)) {
-          if (key.startsWith('page') && value && typeof value === 'object') {
-            const sortedPageEntries = Object.entries(value).sort(function (a, b) {
-              const idA = String(a[0]);
-              const idB = String(b[0]);
-              const numA = Number(idA);
-              const numB = Number(idB);
-              if (!isNaN(numA) && !isNaN(numB)) {
-                return numB - numA;
-              }
-              return idB.localeCompare(idA, undefined, { numeric: true, sensitivity: 'base' });
-            });
-
-            sortedPageEntries.forEach(([blogId, blogData]) => {
-              if (!blogData || typeof blogData !== 'object') {
-                return;
-              }
-
-              const normalizedBlogData = Object.assign({}, blogData);
-              if (normalizedBlogData.createdAt && typeof normalizedBlogData.createdAt.toDate === "function") {
-                normalizedBlogData.createdAt = normalizedBlogData.createdAt.toDate();
-              } else if (normalizedBlogData.release_date && typeof normalizedBlogData.release_date.toDate === "function") {
-                normalizedBlogData.createdAt = normalizedBlogData.release_date.toDate();
-              }
-              if (normalizedBlogData.updatedAt && typeof normalizedBlogData.updatedAt.toDate === "function") {
-                normalizedBlogData.updatedAt = normalizedBlogData.updatedAt.toDate();
-              }
-
-              this.blogs.push({ id: blogId, category: catName, ...normalizedBlogData });
-            });
-          }
-        }
-      });
-      console.log("Successfully loaded " + this.blogs.length + " blogs from network");
-      this._setPersistentCache(this.BLOGS_CACHE_KEY, this.blogs);
-      this.lastFetchSource.blogs = 'network (' + snapshot.docs.length + ' doc reads)';
-      this.lastError = null;
-    } catch (e) {
-      this.lastError = e;
-      console.error("Error fetching blogs [" + e.code + "]:", e.message);
-      console.error("Full error:", e);
-      this.blogs = [];
     }
-    // Only return active blogs (active === "1" or active === 1 or active === true, or no active field)
-    return (this.blogs || []).filter(function (b) {
-      return b.active === "1" || b.active === 1 || b.active === true || !b.hasOwnProperty('active');
-    });
+
+    return this.blogs || [];
   },
 
   getProductById: async function (id) {
@@ -980,7 +928,7 @@ function initializeCodeBlocks() {
 
 // ---------------------------------------------------------------------------
 // Shared: Category links loader
-// Populates a <ul> element (by id) with links from the eg1_blog collection
+// Populates a <ul> element (by id) with category links from Markdown blogs
 // ---------------------------------------------------------------------------
 async function loadCategoryLinks(listElementId) {
   try {

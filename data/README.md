@@ -6,33 +6,18 @@ This directory houses the structured, static JSON datasets utilized by the **EG1
 
 ## 📁 Dataset Catalog
 
-| File | Description | Source / Pipeline | Primary Consumers |
-| :--- | :--- | :--- | :--- |
-| [`products.json`](products.json) | Software & Web Application catalog with metadata, versioning, links, and status. | Exported via [`FireStore/export-firestore.py`](../FireStore/export-firestore.py) from `products` collection. | [`apps.html`](../apps.html), [`js/app.js`](../js/app.js) |
-| [`website_content.json`](website_content.json) | Static page copy, hero text, and structured section content (`pages` doc: `homepage`, `about`, `contact`, `blog`, `apps`). | Exported via [`FireStore/export-firestore.py`](../FireStore/export-firestore.py) from `website_content` collection. | [`index.html`](../index.html), [`about.html`](../about.html), [`js/about.js`](../js/about.js), [`js/blog-content.js`](../js/blog-content.js) |
-| [`updates.json`](updates.json) | Release notes, changelog history, version badges, and notification center items. | Managed platform updates dataset. | [`updates.html`](../updates.html), [`js/updates.js`](../js/updates.js), [`js/include-components.js`](../js/include-components.js) |
+| File | Description | Primary Consumers |
+| :--- | :--- | :--- |
+| [`apps.json`](apps.json) | Software & Web Application catalog with metadata, versioning, links, and status. | [`apps.html`](../apps.html), [`js/app.js`](../js/app.js) |
+| [`website_content.json`](website_content.json) | Static page copy, hero text, and structured section content (`pages` doc: `homepage`, `about`, `contact`, `blog`, `apps`). | [`index.html`](../index.html), [`about.html`](../about.html), [`js/about.js`](../js/about.js), [`js/blog-content.js`](../js/blog-content.js) |
+| [`updates.json`](updates.json) | Release notes, changelog history, version badges, and notification center items. | [`updates.html`](../updates.html), [`js/updates.js`](../js/updates.js), [`js/include-components.js`](../js/include-components.js) |
+| [`blog/*.md`](blog/) | Pure Markdown blog articles with YAML frontmatter (47+ articles). | [`blog.html`](../blog.html), [`js/blog-page.js`](../js/blog-page.js) |
 
 ---
 
-## 🔄 Data Synchronization Workflow
+## 🎛️ Apps Schema & Custom Button Configuration
 
-```mermaid
-flowchart LR
-    FirestoreDB["Firestore Database (Cloud)"] -->|"Run export-firestore.py"| Exporter["Python Data Pipeline (FireStore/export-firestore.py)"]
-    Exporter --> JSONFiles["Static JSON Cache (data/*.json)"]
-    JSONFiles --> WebClient["Web Client / Browser (0 Firestore Reads)"]
-```
-
-To refresh the static JSON datasets from Firestore, run:
-```bash
-E:\ALL\CODE\PYTHON\TestPy\venv\Scripts\python.exe FireStore/export-firestore.py
-```
-
----
-
-## 🎛️ Products Schema & Custom Button Configuration
-
-Each entry in [`products.json`](products.json) supports dynamic button configuration (`button1` for left/primary action, `button2` for right/secondary action) and explicit versioning configuration:
+Each entry in [`apps.json`](apps.json) supports dynamic button configuration (`button1` for left/primary action, `button2` for right/secondary action) and explicit versioning configuration:
 
 ```json
 {
@@ -72,8 +57,8 @@ App versioning across cards, catalog views, and detail pages is resolved simply 
 ### 1. Data Formats & Schemas (MIT License)
 The data formats, JSON schemas, architecture, and synchronization tooling are open-sourced under the terms of the **[MIT License](LICENSE)**. Anyone is free to adapt, fork, and use these schemas and tools for their own applications.
 
-### 2. Individual Open-Source Projects (`products.json`)
-The digital products, applications, and tools listed in [`products.json`](products.json) (such as **Marwadi Chess / MChess**, **EGClamNetAntivirus**, etc.) are independent open-source projects.
+### 2. Individual Open-Source Projects (`apps.json`)
+The digital products, applications, and tools listed in [`apps.json`](apps.json) (such as **Marwadi Chess / MChess**, **EGClamNetAntivirus**, etc.) are independent open-source projects.
 - Anyone is free to use, run, fork, and contribute to these projects under their respective open-source licenses and source repositories (e.g., individual project LICENSE files).
 
 ### 3. Trademark & Branding Protection

@@ -24,7 +24,7 @@ async function initializeHomePage() {
             );
         }
 
-        // Load Products from static JSON (data/products.json, 0 Firestore reads)
+        // Load Products/Apps from static JSON (data/apps.json, 0 Firestore reads)
         var products = await DataCache.getProducts();
 
         if (products && products.length > 0) {
