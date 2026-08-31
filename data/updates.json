@@ -1,5 +1,17 @@
 [
     {
+        "id": "update-2026-08-31-v3-1-2",
+        "type": "website",
+        "version": "3.1.2",
+        "title": "Pure Markdown Blog Engine & Apps Dataset Optimization",
+        "date": "Aug 31, 2026",
+        "category": "FEATURE",
+        "icon": "spark",
+        "badge": "New",
+        "description": "Migrated blog engine to direct Markdown (.md) fetching with client YAML parser, marked.js & highlight.js code copy, 4-sided table outlines, and renamed catalog to apps.json.",
+        "link": "blog.html"
+    },
+    {
         "id": "update-2026-08-30-v3-1-1",
         "type": "website",
         "version": "3.1.1",
