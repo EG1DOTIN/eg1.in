@@ -1854,33 +1854,86 @@ html:not([data-theme="dark-gray"]) .nav>li.hover>a {
 /* Tables inside blog detail */
 .ai-blog-content table {
     width: 100%;
-    border-collapse: collapse;
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
     margin: 22px 0;
     background-color: var(--card-bg) !important;
-    border: 1px solid var(--border-color) !important;
+    border: 1px solid #000000 !important;
     border-radius: 6px;
     overflow: hidden;
     font-size: clamp(14px, 0.85vw + 11.5px, 15.5px) !important;
 }
 
 .ai-blog-content table th {
-    background-color: var(--nav-hover-bg) !important;
-    color: #ffffff !important;
+    background-color: var(--bg-surface-secondary) !important;
+    color: var(--text-heading) !important;
     padding: 12px 16px !important;
     font-weight: 700;
-    border: 1px solid var(--border-color);
+    border-bottom: 1px solid #000000 !important;
+    border-right: 1px solid #000000 !important;
+    border-top: none !important;
+    border-left: none !important;
     text-align: left;
+}
+
+.ai-blog-content table th:last-child {
+    border-right: none !important;
 }
 
 .ai-blog-content table td {
     padding: 12px 16px !important;
-    border: 1px solid var(--border-light);
+    border-bottom: 1px solid #000000 !important;
+    border-right: 1px solid #000000 !important;
+    border-top: none !important;
+    border-left: none !important;
     color: var(--text-primary) !important;
     line-height: 1.6 !important;
+    vertical-align: top;
+}
+
+.ai-blog-content table td:last-child {
+    border-right: none !important;
+}
+
+.ai-blog-content table tr:last-child td {
+    border-bottom: none !important;
 }
 
 .ai-blog-content table tr:nth-child(even) td {
     background-color: var(--bg-surface-secondary) !important;
+}
+
+/* Dark Theme Table Borders */
+[data-theme="dark-gray"] .ai-blog-content table,
+[data-theme="dark"] .ai-blog-content table {
+    border: 1px solid #ffffff !important;
+}
+
+[data-theme="dark-gray"] .ai-blog-content table th,
+[data-theme="dark"] .ai-blog-content table th {
+    border-bottom: 1px solid #ffffff !important;
+    border-right: 1px solid #ffffff !important;
+}
+
+[data-theme="dark-gray"] .ai-blog-content table th:last-child,
+[data-theme="dark"] .ai-blog-content table th:last-child {
+    border-right: none !important;
+}
+
+[data-theme="dark-gray"] .ai-blog-content table td,
+[data-theme="dark"] .ai-blog-content table td {
+    border-bottom: 1px solid #ffffff !important;
+    border-right: 1px solid #ffffff !important;
+}
+
+[data-theme="dark-gray"] .ai-blog-content table td:last-child,
+[data-theme="dark"] .ai-blog-content table td:last-child {
+    border-right: none !important;
+}
+
+[data-theme="dark-gray"] .ai-blog-content table tr:last-child td,
+[data-theme="dark"] .ai-blog-content table tr:last-child td {
+    border-bottom: none !important;
 }
 
 /* Tags in Detail View */
