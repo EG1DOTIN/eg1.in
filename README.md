@@ -1,22 +1,23 @@
 # EG1 - Official Website & Digital Platform
 
 [![Website](https://img.shields.io/badge/Website-eg1.in-0284c7?style=flat-square&logo=google-chrome&logoColor=white)](https://www.eg1.in)
-[![Version](https://img.shields.io/badge/Version-3.1.1-10b981?style=flat-square)](updates.html)
+[![Version](https://img.shields.io/badge/Version-3.1.3-10b981?style=flat-square)](data/updates.json)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
 
 **EG1** ([eg1.in](https://www.eg1.in)) is a personal hobby platform for open source and creative digital projects, presenting practical engineering software/tools, interactive web applications for real-world use and technical articles/blog posts.
 
 ---
 
-## 🚀 Version 3.1.0 Highlights
+## 🚀 Latest Highlights
 
 | Feature | Description |
 | :--- | :--- |
-| **⚡ Zero-Read Static Data Engine** | Instant catalog and page copy loading from local JSON datasets (`data/products.json`, `data/website_content.json`) with zero Firestore read costs. |
+| **📝 Pure Markdown Blog Engine** | Direct client-side Markdown (.md) rendering with zero Firestore reads, YAML frontmatter parser, and 1-click code copying. |
+| **🛠️ Admin TableToolkit Engine** | Standalone modular table engine with natural alphanumeric (`Intl.Collator`), datetime, numeric sorting, and universal pagination. |
+| **👥 App Users Workspace** | Interactive management grid with multi-app filtering, status toggling, search, and 16-field visitor telemetry inspection. |
 | **🎛️ Dynamic Dual Action Buttons** | Configurable `button1` and `button2` actions supporting custom labels, URLs, tab targets (`sameTab`), and custom icons. |
 | **🏷️ Automated 3-Tier Versioning** | Dynamic version resolution with live GitHub API release integration, persistent caching, and static fallbacks. |
-| **📖 Fluid Responsive Blog Typography** | Fluid CSS `clamp()` scaling, relaxed `1.85` line-height, and cross-browser multi-line clamping for desktop and mobile. |
-| **🎨 Dual Theme System** | High-contrast Light Gray and Dark Gray themes with instant zero-flicker loading and persistent preference memory. |
+| **🎨 Dual Theme System** | High-contrast Light Gray and Dark Gray themes with instant zero-flicker loading across website and Admin Panel. |
 | **🔔 Changelog & Notification Center** | Real-time updates dropdown with unread badge tracking, animated alerts, and category filtering. |
 
 ---
