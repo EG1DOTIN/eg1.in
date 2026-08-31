@@ -461,26 +461,35 @@ function showAdminPanel() {
 // ─── Admin CMS Section Tabs ───────────────────────────────────────────────────
 
 /**
- * Navigates between Admin CMS section tabs (Blogs, Products, Messages, Analytics, Content).
+ * Navigates between Admin CMS section tabs (Analytics, App Users, Messages, Dashboard).
  * @param {string} sectionId - Target section container element ID.
  */
 function showSection(sectionId) {
     document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
     document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
 
-    document.getElementById(sectionId).classList.add('active');
-    event.target.closest('.nav-link').classList.add('active');
+    var secEl = document.getElementById(sectionId);
+    if (secEl) secEl.classList.add('active');
+    
+    if (window.event && window.event.target) {
+        var linkEl = window.event.target.closest('.nav-link');
+        if (linkEl) linkEl.classList.add('active');
+    }
 
     // Load section-specific data
     if (sectionId === 'analytics') {
         if (typeof loadAnalyticsData === 'function') loadAnalyticsData();
         if (typeof updateVisitorStats === 'function') updateVisitorStats();
     }
-    else if (sectionId === 'blogs') loadBlogsList();
-    else if (sectionId === 'products') loadProductsList();
-    else if (sectionId === 'contents') resetContentTabs();
-    else if (sectionId === 'messages') loadMessagesList();
-    else if (sectionId === 'dashboard') loadDashboardStats();
+    else if (sectionId === 'appUsers') {
+        if (typeof loadAppUsersData === 'function') loadAppUsersData();
+    }
+    else if (sectionId === 'messages') {
+        if (typeof loadMessagesList === 'function') loadMessagesList();
+    }
+    else if (sectionId === 'dashboard') {
+        if (typeof loadDashboardStats === 'function') loadDashboardStats();
+    }
 }
 
 // ─── Initializer ──────────────────────────────────────────────────────────────
@@ -489,8 +498,8 @@ function showSection(sectionId) {
  * Initializes TinyMCE WYSIWYG editor and loads dashboard stats on page load.
  */
 document.addEventListener('DOMContentLoaded', function () {
-    initializeTinyMCE();
-    loadDashboardStats();
+    if (typeof initAdminTheme === 'function') initAdminTheme();
+    if (typeof loadDashboardStats === 'function') loadDashboardStats();
 });
 
 // ─── Idle Auto-Logout (10 minutes) ───────────────────────────────────────────

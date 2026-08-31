@@ -64,7 +64,7 @@
       "fetch-github": "true"
     },
     "product_type": "WebApp",
-    "icon": "./AdminPanel/img/apps/mchess-webapp.webp",
+    "icon": "./img/apps/mchess-webapp.webp",
     "paid_version": "false",
     "createdAt": "2026-08-18T08:11:34.927000+00:00",
     "short_description": "<p><em><strong>MChess</strong> is a web-based platform for playing and learning chess. It features online play, live broadcasts, interactive PGN replays, chess blog, inspiring quotes and puzzles.</em></p>",

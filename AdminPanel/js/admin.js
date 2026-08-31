@@ -1,67 +1,59 @@
-// Main Admin Panel Module
+// ── Theme Switcher Module ───────────────────────────────────────────────────
 
-// Initialize TinyMCE Editor
-function initializeTinyMCE() {
-    tinymce.init({
-        selector: 'textarea#blogContent,textarea#contentEditor,textarea#productFullDescription',
-        plugins: 'image link lists code table codesample',
-        toolbar: 'undo redo | styles | formatselect | bold italic underline backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | image link code codesample table',
-        height: 400,
-        image_upload_handler: handleImageUpload,
-        file_picker_types: 'image',
-        file_picker_callback: function (callback, value, meta) {
-            if (meta.filetype === 'image') {
-                const input = document.createElement('input');
-                input.setAttribute('type', 'file');
-                input.setAttribute('accept', 'image/*');
-                input.onchange = async function () {
-                    const file = this.files[0];
-                    try {
-                        const fileName = 'tinymce/' + Date.now() + '_' + file.name;
-                        const uploadTask = await firebase.storage().ref(fileName).put(file);
-                        const url = await uploadTask.ref.getDownloadURL();
-                        callback(url, { title: file.name });
-                    } catch (error) {
-                        alert('Error uploading image: ' + error.message);
-                    }
-                };
-                input.click();
-            }
-        }
-    });
+/**
+ * Initializes Admin Theme from localStorage or defaults to 'light-gray'.
+ */
+function initAdminTheme() {
+    var savedTheme = localStorage.getItem('eg1_theme') || 'light-gray';
+    setAdminTheme(savedTheme, false);
 }
 
-// Handle image upload
-async function handleImageUpload(blobInfo, success, failure) {
-    try {
-        const fileName = 'tinymce/' + Date.now() + '_' + blobInfo.filename();
-        const uploadTask = await firebase.storage().ref(fileName).put(blobInfo.blob());
-        const url = await uploadTask.ref.getDownloadURL();
-        success(url);
-    } catch (error) {
-        failure('Error uploading image: ' + error.message);
+/**
+ * Sets the active theme on the document and optionally saves to localStorage.
+ * @param {string} themeName - 'light-gray' or 'dark-gray'
+ * @param {boolean} persist - whether to save to localStorage
+ */
+function setAdminTheme(themeName, persist) {
+    if (persist === undefined) persist = true;
+    document.documentElement.setAttribute('data-theme', themeName);
+    if (persist) {
+        localStorage.setItem('eg1_theme', themeName);
+    }
+
+    var isDark = (themeName === 'dark-gray' || themeName === 'dark');
+    var labelEl = document.getElementById('themeToggleLabel');
+    if (labelEl) {
+        labelEl.textContent = isDark ? 'Dark Gray' : 'Light Gray';
+    }
+
+    var btn = document.getElementById('themeToggleBtn');
+    if (btn) {
+        btn.setAttribute('aria-checked', isDark ? 'true' : 'false');
     }
 }
+
+/**
+ * Toggles between 'light-gray' and 'dark-gray' themes.
+ */
+function toggleAdminTheme() {
+    var currentTheme = document.documentElement.getAttribute('data-theme') || localStorage.getItem('eg1_theme') || 'light-gray';
+    var isDark = (currentTheme === 'dark-gray' || currentTheme === 'dark');
+    var newTheme = isDark ? 'light-gray' : 'dark-gray';
+    setAdminTheme(newTheme, true);
+}
+
+// Automatically initialize theme as soon as script runs
+initAdminTheme();
 
 // Load dashboard stats
 async function loadDashboardStats() {
     try {
         if (typeof updateVisitorStats === 'function') {
             await updateVisitorStats();
-        } else {
-            updateTotalVisitors();
-            updateTodayVisitors();
         }
-        
-        if (typeof fetchAllBlogsFlat === 'function') {
-            allBlogsFlat = await fetchAllBlogsFlat();
+        if (typeof loadAppUsersData === 'function') {
+            await loadAppUsersData();
         }
-        updateBlogsCount();
-        
-        if (typeof fetchAllProducts === 'function') {
-            await fetchAllProducts();
-        }
-        updateProductsCount();
     } catch (error) {
         console.error('Error loading dashboard stats:', error);
     }
@@ -83,10 +75,6 @@ document.addEventListener('click', function (e) {
     var id     = btn.dataset.id;
 
     // ── Table row actions ────────────────────────────────────────────────
-    if (action === 'edit-blog')       { editBlog(id);    return; }
-    if (action === 'delete-blog')     { deleteBlog(id);  return; }
-    if (action === 'edit-product')    { editProduct(id);    return; }
-    if (action === 'delete-product')  { deleteProduct(id);  return; }
     if (action === 'delete-message')  { deleteMessage(id);  return; }
 
     // ── Pagination Prev / Next / Page Number ───────────────────────────
@@ -95,8 +83,6 @@ document.addEventListener('click', function (e) {
     if (!table || btn.disabled || btn.hasAttribute('disabled')) return;
 
     if (btn.dataset.page) {
-        if (table === 'blogs') { blogsGoToPage(Number(btn.dataset.page)); }
-        if (table === 'products') { productsPage = Number(btn.dataset.page); loadProductsList(); }
         if (table === 'messages') { messagesPage = Number(btn.dataset.page); loadMessagesList(); }
         if (table === 'analytics') { analyticsPage = Number(btn.dataset.page); loadAnalyticsData(); }
         return;
@@ -104,14 +90,6 @@ document.addEventListener('click', function (e) {
 
     if (!dir) return;
 
-    if (table === 'blogs') {
-        if (dir === 'next') { blogsPage++;                        loadBlogsList(); }
-        if (dir === 'prev') { blogsPage = Math.max(1, blogsPage - 1); loadBlogsList(); }
-    }
-    if (table === 'products') {
-        if (dir === 'next') { productsPage++;                           loadProductsList(); }
-        if (dir === 'prev') { productsPage = Math.max(1, productsPage - 1); loadProductsList(); }
-    }
     if (table === 'messages') {
         if (dir === 'next') { messagesPage++;                            loadMessagesList(); }
         if (dir === 'prev') { messagesPage = Math.max(1, messagesPage - 1); loadMessagesList(); }
@@ -120,14 +98,6 @@ document.addEventListener('click', function (e) {
         if (dir === 'next') { analyticsPage++;                             loadAnalyticsData(); }
         if (dir === 'prev') { analyticsPage = Math.max(1, analyticsPage - 1); loadAnalyticsData(); }
     }
-});
-
-// Toggle handlers via delegation (checkboxes)
-document.addEventListener('change', function (e) {
-    var el = e.target;
-    if (!el.dataset.action) return;
-    if (el.dataset.action === 'toggle-blog')    { toggleBlogActive(el.dataset.id, el.checked);    return; }
-    if (el.dataset.action === 'toggle-product') { toggleProductActive(el.dataset.id, el.checked); return; }
 });
 
 console.log('Admin panel module loaded');

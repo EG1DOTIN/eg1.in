@@ -28,7 +28,7 @@ Each entry in [`apps.json`](apps.json) supports dynamic button configuration (`b
     "fetch-github": "false"
   },
   "active": "1",
-  "icon": "./AdminPanel/img/apps/mchess-webapp.webp",
+  "icon": "./img/apps/mchess-webapp.webp",
   "short_description": "<p>...</p>",
   "button1": {
     "VIEW DETAILS": "http://mchess.eg1.in/",

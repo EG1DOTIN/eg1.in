@@ -1,5 +1,17 @@
 [
     {
+        "id": "update-2026-08-31-v3-1-3",
+        "type": "website",
+        "version": "3.1.3",
+        "title": "Admin TableToolkit Engine, App Users Management & Dual-Theme System",
+        "date": "Aug 31, 2026",
+        "category": "FEATURE",
+        "icon": "spark",
+        "badge": "New",
+        "description": "Introduced standalone TableToolkit with natural alphanumeric/date sorting and universal pagination, App Users management workspace, 16-field visitor telemetry inspection, and Admin Dual-Theme (Light & Dark Gray) support.",
+        "link": "updates.html"
+    },
+    {
         "id": "update-2026-08-31-v3-1-2",
         "type": "website",
         "version": "3.1.2",
