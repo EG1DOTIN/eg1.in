@@ -6,6 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel - EG1 Admin</title>
     <base href="/AdminPanel/">
+    <!-- Immediate theme pre-loader to prevent theme flickering (FOUC) -->
+    <script>
+        (function () {
+            var savedTheme = localStorage.getItem('eg1_theme') || 'light-gray';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        })();
+    </script>
     <link rel="stylesheet" href="css/admin-style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -15,7 +22,7 @@
         <div class="login-box">
             <h1>Admin Panel Login</h1>
             <div id="googleLoginSection">
-                <p style="margin-bottom: 15px; font-size: 14px; text-align: center; color: #666;">
+                <p style="margin-bottom: 15px; font-size: 14px; text-align: center; color: var(--secondary-color);">
                     Sign in with your authorized Google account to continue.
                 </p>
                 <button id="googleSignInBtn" class="btn-google" type="button">
@@ -28,8 +35,8 @@
 
             <!-- Step 2: 16-digit grouped PIN (hidden initially) -->
             <form id="firestorePinForm" style="display: none;">
-                <p style="margin-bottom: 8px; font-size: 14px; text-align: center;">Enter your 16-Digit Admin Security PIN.</p>
-                <p style="margin-bottom: 15px; font-size: 12px; text-align: center; color: #888;">Enter 4 digits in each group.</p>
+                <p style="margin-bottom: 8px; font-size: 14px; text-align: center; color: var(--text-color);">Enter your 16-Digit Admin Security PIN.</p>
+                <p style="margin-bottom: 15px; font-size: 12px; text-align: center; color: var(--secondary-color);">Enter 4 digits in each group.</p>
                 <label style="display: block; margin-bottom: 10px; font-size: 13px; font-weight: 600;">16-Digit PIN:</label>
                 <div class="pin-group">
                     <input type="password" class="pin-segment" id="pinSeg1" maxlength="4" placeholder="••••" inputmode="numeric" pattern="[0-9]*" autocomplete="off" required>
@@ -63,14 +70,8 @@
                     <li><a href="#" onclick="showSection('analytics')" class="nav-link">
                             <i class="fas fa-users"></i> Analytics
                         </a></li>
-                    <li><a href="#" onclick="showSection('blogs')" class="nav-link">
-                            <i class="fas fa-blog"></i> Blogs
-                        </a></li>
-                    <li><a href="#" onclick="showSection('products')" class="nav-link">
-                            <i class="fas fa-box"></i> Products
-                        </a></li>
-                    <li><a href="#" onclick="showSection('contents')" class="nav-link">
-                            <i class="fas fa-file-alt"></i> Website Content
+                    <li><a href="#" onclick="showSection('appUsers')" class="nav-link">
+                            <i class="fas fa-users-cog"></i> App Users
                         </a></li>
                     <li><a href="#" onclick="showSection('messages')" class="nav-link">
                             <i class="fas fa-envelope"></i> Messages
@@ -88,6 +89,15 @@
                 <div class="header-content">
                     <h1>Welcome to Admin Panel</h1>
                     <div class="user-info">
+                        <!-- Theme Toggle Switch -->
+                        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Toggle dark and light theme" title="Toggle Theme" onclick="toggleAdminTheme()">
+                            <span class="theme-icon theme-icon-sun"><i class="fas fa-sun"></i></span>
+                            <span class="theme-toggle-track">
+                                <span class="theme-toggle-thumb"></span>
+                            </span>
+                            <span class="theme-icon theme-icon-moon"><i class="fas fa-moon"></i></span>
+                            <span class="theme-toggle-label" id="themeToggleLabel">Light Gray</span>
+                        </button>
                         <span id="userName">User</span>
                         <button onclick="logout()" class="btn-logout">Logout</button>
                     </div>
@@ -115,17 +125,10 @@
                         </div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-icon"><i class="fas fa-blog"></i></div>
+                        <div class="stat-icon"><i class="fas fa-users-cog"></i></div>
                         <div class="stat-content">
-                            <h3>Total Blogs</h3>
-                            <p class="stat-value" id="totalBlogs">0</p>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon"><i class="fas fa-box"></i></div>
-                        <div class="stat-content">
-                            <h3>Total Products</h3>
-                            <p class="stat-value" id="totalProducts">0</p>
+                            <h3>Total App Users</h3>
+                            <p class="stat-value" id="totalAppUsers">0</p>
                         </div>
                     </div>
                 </div>
@@ -173,21 +176,22 @@
                         <button class="btn-primary" style="width: auto; margin-top: 0;" onclick="filterAnalytics()"><i class="fas fa-search"></i> Search</button>
                     </div>
                     <div class="analytics-table-container">
-                        <table class="analytics-table">
+                        <table class="analytics-table" id="analyticsTable">
                             <thead>
                                 <tr>
-                                    <th>Timestamp</th>
-                                    <th>App / Project</th>
-                                    <th>Location</th>
-                                    <th>IP & Network</th>
-                                    <th>Device / OS</th>
-                                    <th>Browser</th>
-                                    <th>Page Visited</th>
+                                    <th class="sortable" data-sort-key="timestamp" data-sort-type="date">Timestamp <span class="sort-icon"><i class="fas fa-sort"></i></span></th>
+                                    <th class="sortable" data-sort-key="appName" data-sort-type="string">App / Project <span class="sort-icon"><i class="fas fa-sort"></i></span></th>
+                                    <th class="sortable" data-sort-key="location" data-sort-type="string">Location <span class="sort-icon"><i class="fas fa-sort"></i></span></th>
+                                    <th class="sortable" data-sort-key="ip" data-sort-type="alphanumeric">IP & Network <span class="sort-icon"><i class="fas fa-sort"></i></span></th>
+                                    <th class="sortable" data-sort-key="os" data-sort-type="string">Device & Screen <span class="sort-icon"><i class="fas fa-sort"></i></span></th>
+                                    <th class="sortable" data-sort-key="browser" data-sort-type="string">Browser <span class="sort-icon"><i class="fas fa-sort"></i></span></th>
+                                    <th class="sortable" data-sort-key="pageVisited" data-sort-type="string">Page Visited <span class="sort-icon"><i class="fas fa-sort"></i></span></th>
+                                    <th>Details</th>
                                 </tr>
                             </thead>
                             <tbody id="analyticsTableBody">
                                 <tr>
-                                    <td colspan="7" class="no-data">Loading analytics data...</td>
+                                    <td colspan="8" class="no-data">Loading analytics data...</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -196,223 +200,55 @@
                 </div>
             </section>
 
-            <!-- Blogs Section -->
-            <section id="blogs" class="content-section">
+            <!-- App Users Section -->
+            <section id="appUsers" class="content-section">
                 <div class="section-header">
-                    <h2>Blog Management</h2>
-                    <button class="btn-primary" onclick="showBlogForm()">+ Add New Blog</button>
-                </div>
-                <div id="blogForm" class="form-container" style="display: none;">
-                    <h3>Add/Edit Blog</h3>
-                    <form id="blogFormElement">
-                        <div class="form-group">
-                            <label>Heading:</label>
-                            <input type="text" id="blogHeading" placeholder="Blog heading" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Category:</label>
-                            <input type="text" id="blogCategory" placeholder="Blog category" list="blogCategoryList">
-                            <datalist id="blogCategoryList"></datalist>
-                        </div>
-                        <div class="form-group">
-                            <label>Short Description:</label>
-                            <textarea id="blogShortDescription" placeholder="Short description" rows="3"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label>Full Description (Content):</label>
-                            <textarea id="blogContent" placeholder="Blog content (use the editor below)"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label>End Description:</label>
-                            <textarea id="blogEndDescription" placeholder="End description" rows="3"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label>Featured Image:</label>
-                            <input type="file" id="blogImage" accept="image/*">
-                            <small>Upload a featured image for the blog</small>
-                        </div>
-                        <div class="form-group">
-                            <label>Featured Image URL:</label>
-                            <input type="text" id="blogImageUrl" placeholder="Or paste image URL">
-                        </div>
-                        <div class="form-group">
-                            <label>Author:</label>
-                            <input type="text" id="blogAuthor" placeholder="Author name">
-                        </div>
-                        <div class="button-group">
-                            <button type="submit" class="btn-primary">Save Blog</button>
-                            <button type="button" class="btn-secondary" onclick="hideBlogForm()">Cancel</button>
-                        </div>
-                        <p id="blogFormMessage"></p>
-                    </form>
+                    <h2>App Users Management</h2>
+                    <button class="btn-primary" style="width: auto; margin-top: 0;" onclick="loadAppUsersData();"><i class="fas fa-sync-alt"></i> Refresh Users</button>
                 </div>
 
-                <div id="blogsList" class="items-list">
-                    <div class="filter-section" style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-                        <label for="blogCategoryFilter">Filter by Category:</label>
-                        <select id="blogCategoryFilter" onchange="setBlogCategoryFilter(this.value)">
-                            <option value="all">All Categories</option>
+                <div class="items-list">
+                    <div class="filter-section" style="margin-bottom: 20px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+                        <label for="appUserFilter"><strong>Filter by App:</strong></label>
+                        <select id="appUserFilter" style="padding: 8px 12px; border-radius: 5px; border: 1px solid var(--border-color);" onchange="filterAppUsers()">
+                            <option value="all">All Apps / Products</option>
+                            <option value="Marwadi Chess" selected>Marwadi Chess (MChess)</option>
+                            <option value="EGClamNetAntivirus">EGClamNetAntivirus</option>
+                            <option value="EG1 Platform">EG1 Platform</option>
                         </select>
+
+                        <label for="appUserStatusFilter" style="margin-left: 5px;"><strong>Status:</strong></label>
+                        <select id="appUserStatusFilter" style="padding: 8px 12px; border-radius: 5px; border: 1px solid var(--border-color);" onchange="filterAppUsers()">
+                            <option value="all">All Statuses</option>
+                            <option value="active">Active Only</option>
+                            <option value="inactive">Inactive Only</option>
+                        </select>
+
+                        <label for="appUserSearchInput" style="margin-left: 5px;"><strong>Search:</strong></label>
+                        <input type="text" id="appUserSearchInput" placeholder="Search by name, email, ID, country..." style="padding: 8px 12px; border-radius: 5px; border: 1px solid var(--border-color); min-width: 220px;" onkeyup="if(event.key==='Enter') filterAppUsers()">
+                        <button class="btn-primary" style="width: auto; margin-top: 0;" onclick="filterAppUsers()"><i class="fas fa-search"></i> Filter</button>
                     </div>
-                    <table class="data-table">
+
+                    <table class="data-table" id="appUsersTable">
                         <thead>
                             <tr>
-                                <th>Title</th>
-                                <th>Author</th>
-                                <th>Created</th>
+                                <th class="sortable" data-sort-key="userId" data-sort-type="alphanumeric">User ID <span class="sort-icon"><i class="fas fa-sort"></i></span></th>
+                                <th class="sortable" data-sort-key="name" data-sort-type="string">Name / Location <span class="sort-icon"><i class="fas fa-sort"></i></span></th>
+                                <th class="sortable" data-sort-key="email" data-sort-type="string">Email <span class="sort-icon"><i class="fas fa-sort"></i></span></th>
+                                <th class="sortable" data-sort-key="appName" data-sort-type="string">Application <span class="sort-icon"><i class="fas fa-sort"></i></span></th>
+                                <th class="sortable" data-sort-key="registeredAt" data-sort-type="date">Registered <span class="sort-icon"><i class="fas fa-sort"></i></span></th>
+                                <th class="sortable" data-sort-key="status" data-sort-type="string">Status <span class="sort-icon"><i class="fas fa-sort"></i></span></th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
-                        <tbody id="blogsTableBody">
+                        <tbody id="appUsersTableBody">
                             <tr>
-                                <td colspan="4" class="no-data">No blogs found</td>
+                                <td colspan="7" class="no-data">Loading registered users...</td>
                             </tr>
                         </tbody>
                     </table>
-                    <div id="blogsPagination" class="pagination-controls"></div>
+                    <div id="appUsersPagination" class="pagination-controls"></div>
                 </div>
-            </section>
-
-            <!-- Products Section -->
-            <section id="products" class="content-section">
-                <div class="section-header">
-                    <h2>Product Management</h2>
-                    <button class="btn-primary" onclick="showProductForm()">+ Add New Product</button>
-                </div>
-                <div id="productForm" class="form-container" style="display: none;">
-                    <h3>Add/Edit Product</h3>
-                    <form id="productFormElement">
-                        <div class="form-group">
-                            <label>Product Name:</label>
-                            <input type="text" id="productName" placeholder="Product name" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Version:</label>
-                            <input type="text" id="productVersion" placeholder="Version (e.g. 1.0)">
-                        </div>
-                        <div class="form-group">
-                            <label>Category:</label>
-                            <input type="text" id="productCategory" placeholder="Product category">
-                        </div>
-                        <div class="form-group">
-                            <label>Product Type:</label>
-                            <select id="productType"
-                                onchange="document.getElementById('webappLinkGroup').style.display = this.value === 'WebApp' ? 'block' : 'none'">
-                                <option value="Desktop App">Desktop App</option>
-                                <option value="WebApp">WebApp</option>
-                                <option value="Mobile App">Mobile App</option>
-                            </select>
-                        </div>
-                        <div class="form-group" id="webappLinkGroup" style="display: none;">
-                            <label>WebApp Link:</label>
-                            <input type="url" id="webappLink" placeholder="Enter URL for WebApp (e.g. https://...)"
-                                style="width: 100%; 
-                            padding:10px 12px; 
-                            border:1px solid; 
-                            border-radius: 5px;font-size: 14px; transition: border-color 0.3s; margin-top: 5px;"
-                                onfocus="this.style.borderColor='#007BFF';" onblur="this.style.borderColor='#ccc';">
-                        </div>
-                        <div class="form-group">
-                            <label>Short Description:</label>
-                            <textarea id="productShortDescription" placeholder="Short description" rows="3"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label>Full Description:</label>
-                            <textarea id="productFullDescription" placeholder="Full description"></textarea>
-                        </div>
-                        <div class="form-group" style="display: flex; gap: 20px; align-items: center;">
-                            <div>
-                                <input type="checkbox" id="productPaidVersion">
-                                <label for="productPaidVersion" style="display:inline; margin-bottom:0;">Paid
-                                    Version</label>
-                            </div>
-                            <div>
-                                <input type="checkbox" id="productShowDownload" checked>
-                                <label for="productShowDownload" style="display:inline; margin-bottom:0;">Show Download
-                                    Button</label>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Downloaded Count:</label>
-                            <input type="number" id="productDownloaded" placeholder="0" value="0">
-                        </div>
-                        <div class="form-group">
-                            <label>Product Image/Icon:</label>
-                            <input type="file" id="productImage" accept="image/*">
-                        </div>
-                        <div class="form-group">
-                            <label>Product Image URL:</label>
-                            <input type="text" id="productImageUrl" placeholder="Or paste image URL">
-                        </div>
-                        <div class="form-group">
-                            <label>Attach Upload File 1:</label>
-                            <input type="file" id="productAttachFile1">
-                            <small>Upload file 1 or provide URL below</small>
-                            <input type="text" id="productAttachUrl1" placeholder="File 1 URL (optional)"
-                                style="margin-top: 5px;">
-                        </div>
-                        <div class="form-group">
-                            <label>Attach Upload File 2:</label>
-                            <input type="file" id="productAttachFile2">
-                            <small>Upload file 2 or provide URL below</small>
-                            <input type="text" id="productAttachUrl2" placeholder="File 2 URL (optional)"
-                                style="margin-top: 5px;">
-                        </div>
-                        <div class="button-group">
-                            <button type="submit" class="btn-primary">Save Product</button>
-                            <button type="button" class="btn-secondary" onclick="hideProductForm()">Cancel</button>
-                        </div>
-                        <p id="productFormMessage"></p>
-                    </form>
-                </div>
-
-                <div id="productsList" class="items-list">
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Product Name</th>
-                                <th>Category</th>
-                                <th>Created</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="productsTableBody">
-                            <tr>
-                                <td colspan="4" class="no-data">No results found</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <div id="productsPagination" class="pagination-controls"></div>
-                </div>
-            </section>
-
-            <!-- Website Content Section -->
-            <section id="contents" class="content-section">
-                <div class="section-header">
-                    <h2>Website Content Management</h2>
-                </div>
-                <div class="content-tabs">
-                    <button class="tab-btn active" onclick="showContentTab('homepage', this)">Home Page</button>
-                    <button class="tab-btn" onclick="showContentTab('about', this)">About Page</button>
-                    <button class="tab-btn" onclick="showContentTab('apps', this)">Apps Page</button>
-                    <button class="tab-btn" onclick="showContentTab('blog', this)">Blog Page</button>
-                    <button class="tab-btn" onclick="showContentTab('contact', this)">Contact Page</button>
-                </div>
-
-                <form id="contentFormElement" class="form-container">
-                    <div class="form-group">
-                        <label>Page Title:</label>
-                        <input type="text" id="contentTitle" placeholder="Page title" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Page Content:</label>
-                        <textarea id="contentEditor" placeholder="Page content"></textarea>
-                    </div>
-                    <div class="button-group">
-                        <button type="submit" class="btn-primary">Save Content</button>
-                    </div>
-                    <p id="contentFormMessage"></p>
-                </form>
             </section>
 
             <!-- Messages Section -->
@@ -450,13 +286,11 @@
     <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-storage-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-analytics-compat.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.8.3/tinymce.min.js"></script>
     <script src="firebase-config.js"></script>
+    <script src="js/table-toolkit.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/analytics.js"></script>
-    <script src="js/blogs.js"></script>
-    <script src="js/products.js"></script>
-    <script src="js/contents.js"></script>
+    <script src="js/app-users.js"></script>
     <script src="js/messages.js"></script>
     <script src="js/admin.js"></script>
 
