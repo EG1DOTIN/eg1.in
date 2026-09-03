@@ -67,26 +67,43 @@ function initializeComponents() {
         decodeLogoByline();
 
         // Fetch about content from DataCache (data/website_content.json, 0 Firestore reads)
+        const FOOTER_ABOUT_MAX_LENGTH = 135;
         var footerAboutRetries = 0;
+
         async function fetchFooterAbout() {
             if (typeof DataCache !== 'undefined' && typeof DataCache.getPageContent === 'function') {
                 try {
                     const aboutPage = await DataCache.getPageContent('about');
                     if (aboutPage && (aboutPage.title || aboutPage.content)) {
                         const tempDiv = document.createElement('div');
-                        tempDiv.innerHTML = aboutPage.title || aboutPage.content;
-                        const text = (tempDiv.textContent || tempDiv.innerText || '').trim();
 
-                        const targetString = 'A personal hobb';
-                        const startIndex = text.indexOf(targetString);
-                        let snippet = '';
-                        if (startIndex !== -1) {
-                            snippet = text.substring(startIndex, startIndex + 146);
-                        } else if (text.length > 0) {
-                            snippet = text.substring(0, 146);
+                        // Helper function to extract text while stripping heading elements (h1-h6) and normalizing whitespace
+                        function extractCleanText(htmlContent) {
+                            if (!htmlContent) return '';
+                            tempDiv.innerHTML = htmlContent;
+                            tempDiv.querySelectorAll('h1, h2, h3, h4, h5, h6').forEach(function (h) {
+                                h.remove();
+                            });
+                            return (tempDiv.textContent || tempDiv.innerText || '')
+                                .replace(/\s+/g, ' ')
+                                .replace(/^ABOUT\s*EG1\s*[:-]?\s*/i, '')
+                                .trim();
                         }
-                        if (snippet) {
-                            if (text.length > 146) snippet += '...';
+
+                        // Try title first, fallback to content if title had only heading tags
+                        let cleanText = extractCleanText(aboutPage.title);
+                        if (!cleanText && aboutPage.content) {
+                            cleanText = extractCleanText(aboutPage.content);
+                        }
+
+                        if (cleanText) {
+                            let snippet = cleanText;
+                            if (cleanText.length > FOOTER_ABOUT_MAX_LENGTH) {
+                                const truncated = cleanText.slice(0, FOOTER_ABOUT_MAX_LENGTH);
+                                const lastSpace = truncated.lastIndexOf(' ');
+                                snippet = (lastSpace > 0 ? truncated.slice(0, lastSpace) : truncated).trim() + '...';
+                            }
+
                             const aboutTextEl = document.getElementById('footer-about-text');
                             if (aboutTextEl) {
                                 aboutTextEl.textContent = snippet;

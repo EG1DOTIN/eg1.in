@@ -76,8 +76,8 @@ html[data-theme="light-gray"] {
     --logo-script-color: #000000;
     --logo-domain-color: rgba(0, 0, 0, 0.08);
     --logo-domain-hover: rgba(0, 0, 0, 0.45);
-    --logo-byline-color: rgba(0, 0, 0, 0.06);
-    --logo-byline-hover: rgba(0, 0, 0, 0.12);
+    --logo-byline-color: rgba(0, 0, 0, 0.02);
+    --logo-byline-hover: rgba(0, 0, 0, 0.06);
 
     /* Header toggle switch control */
     --toggle-track-bg: #e2e8f0;
@@ -159,8 +159,8 @@ html[data-theme="dark-gray"] {
     --logo-script-color: #ffffff;
     --logo-domain-color: rgba(255, 255, 255, 0.18);
     --logo-domain-hover: rgba(255, 255, 255, 0.75);
-    --logo-byline-color: rgba(255, 255, 255, 0.08);
-    --logo-byline-hover: rgba(255, 255, 255, 0.16);
+    --logo-byline-color: rgba(255, 255, 255, 0.025);
+    --logo-byline-hover: rgba(255, 255, 255, 0.07);
 
     /* Header toggle switch control */
     --toggle-track-bg: #2c323e;
@@ -268,11 +268,13 @@ html[data-theme="dark-gray"] .topbar .eg1-logo-badge:hover .eg1-logo-domain {
     color: var(--logo-domain-hover) !important;
 }
 
-html[data-theme="dark-gray"] .topbar .eg1-logo-byline {
+.topbar .eg1-logo-byline,
+.footer .eg1-logo-byline {
     color: var(--logo-byline-color) !important;
 }
 
-html[data-theme="dark-gray"] .topbar .eg1-logo-badge:hover .eg1-logo-byline {
+.topbar .eg1-logo-badge:hover .eg1-logo-byline,
+.footer .eg1-logo-badge:hover .eg1-logo-byline {
     color: var(--logo-byline-hover) !important;
 }
 
@@ -1668,8 +1670,8 @@ html:not([data-theme="dark-gray"]) .nav>li.hover>a {
 .blog-content-body,
 #blog-detail-content {
     color: var(--text-primary) !important;
-    font-size: clamp(1.05rem, 0.95rem + 0.4vw, 1.15rem) !important;
-    line-height: 1.85 !important;
+    font-size: clamp(1.12rem, 1.04rem + 0.45vw, 1.25rem) !important;
+    line-height: 1.72 !important;
     letter-spacing: 0.01em;
 }
 
@@ -1677,8 +1679,21 @@ html:not([data-theme="dark-gray"]) .nav>li.hover>a {
 .blog-content-body p {
     color: var(--text-primary) !important;
     font-size: inherit !important;
-    line-height: 1.85 !important;
-    margin-bottom: 1.35em !important;
+    line-height: 1.72 !important;
+    margin-bottom: 0.9em !important;
+}
+
+.ai-blog-content p:last-child,
+.blog-content-body p:last-child {
+    margin-bottom: 0 !important;
+}
+
+.ai-blog-content p:empty {
+    display: none !important;
+}
+
+.ai-blog-content br + br {
+    display: none !important;
 }
 
 .ai-blog-content h1,
@@ -1693,62 +1708,60 @@ html:not([data-theme="dark-gray"]) .nav>li.hover>a {
 }
 
 .ai-blog-content h1 {
-    font-size: clamp(1.65rem, 3.2vw, 2.15rem) !important;
+    font-size: clamp(1.8rem, 3.4vw, 2.35rem) !important;
     line-height: 1.35 !important;
-    margin-top: 1.8em !important;
-    margin-bottom: 0.8em !important;
+    margin-top: 1.25em !important;
+    margin-bottom: 0.5em !important;
 }
 
 .ai-blog-content h2 {
-    font-size: clamp(1.45rem, 2.5vw, 1.85rem) !important;
+    font-size: clamp(1.55rem, 2.7vw, 2.05rem) !important;
     line-height: 1.38 !important;
-    margin-top: 1.7em !important;
-    margin-bottom: 0.7em !important;
+    margin-top: 1.15em !important;
+    margin-bottom: 0.45em !important;
 }
 
 .ai-blog-content h3 {
-    font-size: clamp(1.25rem, 1.8vw, 1.55rem) !important;
+    font-size: clamp(1.35rem, 2vw, 1.7rem) !important;
     line-height: 1.4 !important;
-    margin-top: 1.5em !important;
-    margin-bottom: 0.6em !important;
+    margin-top: 1.0em !important;
+    margin-bottom: 0.35em !important;
     font-weight: 650 !important;
 }
 
 .ai-blog-content h4 {
-    font-size: clamp(1.12rem, 1.3vw, 1.32rem) !important;
+    font-size: clamp(1.22rem, 1.4vw, 1.45rem) !important;
     line-height: 1.45 !important;
-    margin-top: 1.3em !important;
-    margin-bottom: 0.5em !important;
+    margin-top: 0.85em !important;
+    margin-bottom: 0.3em !important;
 }
 
 .ai-blog-content h5 {
-    font-size: 1.15rem !important;
+    font-size: 1.22rem !important;
     line-height: 1.5 !important;
-    margin-top: 1.2em !important;
-    margin-bottom: 0.5em !important;
+    margin-top: 0.8em !important;
+    margin-bottom: 0.3em !important;
 }
 
 .ai-blog-content h6 {
-    font-size: 1.05rem !important;
+    font-size: 1.12rem !important;
     line-height: 1.5 !important;
-    margin-top: 1.1em !important;
-    margin-bottom: 0.5em !important;
+    margin-top: 0.75em !important;
+    margin-bottom: 0.3em !important;
 }
 
 .ai-blog-content ul,
 .ai-blog-content ol {
     color: var(--text-primary) !important;
-    margin-left: 24px;
-    margin-bottom: 1.35em !important;
     font-size: inherit !important;
-    line-height: 1.8 !important;
+    line-height: 1.72 !important;
+    margin: 14px 0 16px 28px !important;
 }
 
 .ai-blog-content li {
     color: var(--text-primary) !important;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
     font-size: inherit !important;
-    line-height: 1.8 !important;
 }
 
 .ai-blog-content a {
@@ -1767,11 +1780,11 @@ html:not([data-theme="dark-gray"]) .nav>li.hover>a {
     border-left: 4px solid var(--accent-color) !important;
     color: var(--text-secondary) !important;
     padding: 14px 22px !important;
-    margin: 22px 0 !important;
+    margin: 20px 0 !important;
     border-radius: 0 8px 8px 0 !important;
     font-style: italic;
-    font-size: clamp(1.05rem, 0.95rem + 0.35vw, 1.15rem) !important;
-    line-height: 1.8 !important;
+    font-size: clamp(1.1rem, 1.02rem + 0.4vw, 1.22rem) !important;
+    line-height: 1.75 !important;
 }
 
 .ai-blog-content code {
@@ -2165,7 +2178,8 @@ input[type="submit"].btn-primary:hover {
 
 .footer p,
 .footer span,
-.footer-about-wrapper p {
+.footer-about-wrapper p,
+.footer-about-p {
     color: var(--footer-text) !important;
 }
 

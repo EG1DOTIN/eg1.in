@@ -737,6 +737,28 @@ var RenderHelpers = {
     }
   },
 
+  getBlogSlug: function (blog) {
+    if (!blog) return 'article';
+    if (blog.slug) return blog.slug;
+    const title = String(blog.heading || blog.title || ('article-' + (blog.id || ''))).trim();
+    const s = title
+      .replace(/c\+\+/gi, 'cpp')
+      .replace(/c#/gi, 'csharp')
+      .replace(/f#/gi, 'fsharp')
+      .replace(/\.net\b/gi, 'dotnet')
+      .replace(/&/g, ' and ')
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9\s-]/g, '')
+      .replace(/[\s-]+/g, '-');
+    return s || ('article-' + (blog.id || ''));
+  },
+
+  getBlogUrl: function (blog) {
+    const slug = this.getBlogSlug(blog);
+    return 'blog/' + slug + '.html';
+  },
+
   renderBlogCard: function (blog) {
     const imageUrl = blog.output_image || blog.imageUrl || DEFAULT_PLACEHOLDER_ICON;
     const title = blog.heading || blog.title || "Untitled";
@@ -745,6 +767,7 @@ var RenderHelpers = {
     const description = blog.short_description || blog.description || "";
     const content = blog.full_description || blog.content || "";
     const endDescription = blog.end_description || "";
+    const blogUrl = this.getBlogUrl(blog);
 
     return `
             <div class="row">
@@ -757,7 +780,7 @@ var RenderHelpers = {
                                         <img src="${imageUrl}" alt="${title}" loading="lazy" style="width: 100%;" />
                                     </div>
                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 left">
-                                        <h3 class="text-blue"><a href="blog.html?id=${blog.id}">${title}</a></h3>
+                                        <h3 class="text-blue"><a href="${blogUrl}">${title}</a></h3>
                                         <p>
                                             <i class="icon icon-list-alt"></i>&nbsp;${category}
                                             | <i class="icon icon-user"></i>&nbsp;${author}
@@ -802,6 +825,7 @@ var RenderHelpers = {
     const category = blog.category || (blog.tags && blog.tags.length > 0 ? blog.tags[0] : "Uncategorized");
     const author = blog.author || "Admin";
     const rawDesc = blog.short_description || blog.description || "";
+    const blogUrl = this.getBlogUrl(blog);
 
     // Strip HTML tags BEFORE truncating — cutting through an open tag like
     // "<h3>What is C</h3><p>C is a computer..." leaves unclosed tags in the
@@ -811,16 +835,16 @@ var RenderHelpers = {
 
     return `
             <div class="col-md-4 margin-bottom blog-item-container">
-                <div class="our-product blogs blog-grid-card" data-url="blog.html?id=${blog.id}" role="link" tabindex="0" style="cursor:pointer;">
+                <div class="our-product blogs blog-grid-card" data-url="${blogUrl}" role="link" tabindex="0" style="cursor:pointer;">
                     <div class="row">
                         <div class="col-md-12 left">
                             <div class="blogimg">
-                                <a href="blog.html?id=${blog.id}">
+                                <a href="${blogUrl}">
                                     <img src="${imageUrl}" alt="${title}" loading="lazy" style="width: 100%; height: 200px; object-fit: cover;" />
                                 </a>
                             </div>
                             <div class="blogbody">
-                                <a href="blog.html?id=${blog.id}">
+                                <a href="${blogUrl}">
                                     <h3 class="blogs-title">${title}</h3>
                                     <p>
                                       <small>
@@ -848,9 +872,10 @@ var RenderHelpers = {
     const shortDesc = description.length > 150
       ? description.substring(0, 150) + '...'
       : description;
+    const blogUrl = this.getBlogUrl(blog);
 
     return `
-      <a href="blog.html?id=${blog.id}" class="blog-list-card">
+      <a href="${blogUrl}" class="blog-list-card">
         <div class="blog-list-image">
           <img src="${imageUrl}" alt="${title}" loading="lazy" />
         </div>

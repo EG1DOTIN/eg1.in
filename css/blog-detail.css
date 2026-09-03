@@ -84,7 +84,7 @@
 }
 
 .blog-detail-title {
-    font-size: clamp(1.6rem, 3vw + 0.6rem, 2.25rem);
+    font-size: clamp(1.75rem, 3.2vw + 0.6rem, 2.45rem);
     font-weight: 700;
     color: #090449;
     margin-top: 10px;
@@ -107,7 +107,7 @@
     display: inline-flex;
     align-items: center;
     color: #64748b;
-    font-size: clamp(13px, 0.9vw + 10px, 14.5px);
+    font-size: clamp(13.5px, 0.9vw + 10px, 15px);
     font-weight: 500;
 }
 
@@ -117,9 +117,9 @@
 }
 
 .blog-description {
-    font-size: clamp(1.05rem, 0.92rem + 0.45vw, 1.18rem);
+    font-size: clamp(1.12rem, 1.04rem + 0.45vw, 1.25rem);
     color: #060129;
-    line-height: 1.8;
+    line-height: 1.72;
     margin-bottom: 20px;
 }
 
@@ -385,15 +385,15 @@
 .blog-tags-detail {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
-    margin: 20px 0;
+    gap: 8px;
+    margin: 12px 0 0 0;
 }
 
 .tag-link {
     display: inline-block;
     background: rgba(60, 141, 188, 0.1);
     color: #3c8dbc;
-    padding: 6px 14px;
+    padding: 5px 12px;
     border-radius: 20px;
     text-decoration: none;
     font-size: 13px;
@@ -409,16 +409,17 @@
 }
 
 /* Back Button */
-.mrgin-top30 {
-    margin-top: 30px;
-    padding-top: 20px;
-    border-top: 2px solid #f0f0f0;
+.mrgin-top30,
+.blog-back-section {
+    margin-top: 18px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border-color, #f0f0f0);
 }
 
 .btn-primary {
     background-color: #000000;
     color: white;
-    padding: 12px 24px;
+    padding: 10px 20px;
     text-decoration: none;
     border: none;
     border-radius: 6px;
@@ -623,4 +624,71 @@
     .ai-blog-content h3 {
         font-size: 16px;
     }
+}
+
+/* ==========================================================================
+   Article Share Button (Bottom of Center Block)
+   ========================================================================== */
+.blog-share-action-bar {
+    margin-top: 14px;
+    margin-bottom: 0;
+    display: flex;
+    align-items: center;
+}
+
+.btn-share-single {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 8px 18px;
+    border-radius: 6px;
+    font-size: 0.92rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    background: var(--btn-primary-bg, #2d3748);
+    color: var(--btn-primary-text, #ffffff) !important;
+    border: 1px solid var(--btn-primary-border, #2d3748);
+    box-shadow: var(--btn-primary-shadow, 0 2px 6px rgba(0, 0, 0, 0.18));
+}
+
+.btn-share-single:hover {
+    background: var(--btn-primary-hover, #1a202c);
+    border-color: var(--btn-primary-hover, #1a202c);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    color: #ffffff !important;
+}
+
+.btn-share-single:active {
+    transform: translateY(0);
+}
+
+.btn-share-single i {
+    font-size: 0.95rem;
+}
+
+/* Toast notification for link copied */
+.share-copy-toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: #10b981;
+    color: #ffffff;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    z-index: 999999;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.share-copy-toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
 }
