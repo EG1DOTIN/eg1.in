@@ -2,39 +2,54 @@
 <html lang="en">
 
 <head>
+    <base href="../">
     <script>(function(){try{var t=localStorage.getItem('eg1_theme')||'light-gray';document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','light-gray');}})();</script>
-                <title>EG1 Blog - Technical Articles, Tutorials & Code</title>
+    <title>Getting Started with Python AsyncIO - EG1 Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2, user-scalable=no" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta charset="UTF-8" />
-    <meta name="title" content="EG1 Blog - Technical Articles, Tutorials & Code" />
-    <meta name="description" content="Technical articles, tutorials, source code, algorithms, and practical programming write-ups across various topics." />
-    <link rel="canonical" href="https://www.eg1.in/blog.html" />
+    <meta name="title" content="Getting Started with Python AsyncIO - EG1 Blog" />
+    <meta name="description" content="Learn how to use async/await in Python to build high-concurrency applications." />
+    <meta name="author" content="EG1" />
+    <link rel="canonical" href="https://www.eg1.in/blog/getting-started-with-python-asyncio.html" />
 
     <!-- Open Graph / Facebook / WhatsApp -->
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content="article" />
     <meta property="og:site_name" content="EG1" />
-    <meta property="og:url" content="https://www.eg1.in/blog.html" />
-    <meta property="og:title" content="EG1 Blog - Technical Articles, Tutorials & Code" />
-    <meta property="og:description" content="Technical articles, tutorials, source code, algorithms, and practical programming write-ups across various topics." />
-    <meta property="og:image" content="https://www.eg1.in/img/eg1-social-preview.webp" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
+    <meta property="og:url" content="https://www.eg1.in/blog/getting-started-with-python-asyncio.html" />
+    <meta property="og:title" content="Getting Started with Python AsyncIO" />
+    <meta property="og:description" content="Learn how to use async/await in Python to build high-concurrency applications." />
+    <meta property="og:image" content="https://www.eg1.in/cblog/id70.webp" />
+    <meta property="og:image:alt" content="Getting Started with Python AsyncIO" />
 
     <!-- Twitter / X -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:url" content="https://www.eg1.in/blog.html" />
-    <meta name="twitter:title" content="EG1 Blog - Technical Articles, Tutorials & Code" />
-    <meta name="twitter:description" content="Technical articles, tutorials, source code, algorithms, and practical programming write-ups across various topics." />
-    <meta name="twitter:image" content="https://www.eg1.in/img/eg1-social-preview.webp" />
+    <meta name="twitter:url" content="https://www.eg1.in/blog/getting-started-with-python-asyncio.html" />
+    <meta name="twitter:title" content="Getting Started with Python AsyncIO" />
+    <meta name="twitter:description" content="Learn how to use async/await in Python to build high-concurrency applications." />
+    <meta name="twitter:image" content="https://www.eg1.in/cblog/id70.webp" />
 
-
-
-
-
-
-
-
+    <!-- Schema.org Article Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "headline": "Getting Started with Python AsyncIO",
+      "description": "Learn how to use async/await in Python to build high-concurrency applications.",
+      "image": "https://www.eg1.in/cblog/id70.webp",
+      "url": "https://www.eg1.in/blog/getting-started-with-python-asyncio.html",
+      "datePublished": "2026-08-30",
+      "author": {
+        "@type": "Person",
+        "name": "EG1"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "EG1",
+        "url": "https://www.eg1.in"
+      }
+    }
+    </script>
 
     <!-- Stylesheets -->
     <link href="css/main.css" rel="stylesheet" type="text/css" />
@@ -52,40 +67,38 @@
     <link href="css/blog-detail.css" rel="stylesheet" type="text/css" />
     <link href="css/blog-grid.css" rel="stylesheet" type="text/css" />
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'><circle cx='60' cy='60' r='58' fill='%23000000'/><circle cx='60' cy='60' r='54' fill='none' stroke='%23ffffff' stroke-width='4'/><text x='50%25' y='68%25' font-family='Great Vibes, Georgia, serif' font-style='italic' font-weight='bold' font-size='50' fill='%23ffffff' text-anchor='middle'>EG1</text></svg>" />
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css">
+
+    <!-- Active Article Context -->
+    <script>
+        window.ACTIVE_BLOG_ID = "70";
+        window.ACTIVE_BLOG_SLUG = "getting-started-with-python-asyncio";
+    </script>
 
     <!-- Scripts -->
     <script src="js/jquery-2.1.1.min.js" type="text/javascript"></script>
     <script src="js/include-components.js" type="text/javascript"></script>
-
 </head>
 
 <body>
     <center>
         <div>
-            <!-- Header will be loaded by include-components.js -->
+            <!-- Header loaded by include-components.js -->
             <div id="header-placeholder"></div>
 
-            <!-- Main Content -->
+            <!-- Main Content Header -->
             <div class="box-100 bg-E3 main-master">
                 <div id="Content3Header" class="col-md-12">
-                    <h1 id="blogTitle"><span id="blogPageTitleText">Blog</span></h1>
+                    <h1 id="blogTitle"><span id="blogPageTitleText">Getting Started with Python AsyncIO</span></h1>
                 </div>
-                <!-- <div class="row body"></div> -->
             </div>
 
-            <!-- Blog Page Content from Firestore (currently not required it) -->
-            <!-- <div id="blogPageContentText" class="box-90 content" style="text-align:left;"></div> -->
-
-            <!-- Content shell for either the detail view or the paginated grid. -->
+            <!-- Content shell for detail view and sidebar -->
             <div class="box-90 content">
-
                 <div class="row">
                     <div class="col-md-8" id="blogContainer">
-                        <!-- Blog list or blog detail will be loaded here -->
                         <div class="loading-message">
-                            <span class="loader"></span> Loading blog...
+                            <span class="loader"></span> Loading article...
                         </div>
                     </div>
                     <div class="col-md-4" id="sidebarColumn">
@@ -119,23 +132,20 @@
                             <div id="previousTopics" class="sidebar-section">
                                 <!-- Previous topics will be loaded here -->
                             </div>
-                            <div id="relatedBlogsGrid" class="sidebar-section mrgin-top20">
-                                <!-- Related topics will be loaded here -->
-                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Footer will be loaded by include-components.js -->
+            <!-- Footer loaded by include-components.js -->
             <div id="footer-placeholder"></div>
         </div>
     </center>
 
-    <!-- Scripts -->
-    <script src="js/slick.min.js" type="text/javascript"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/11.1.1/marked.min.js"></script>
+    <!-- Highlight.js and Marked.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.3.0/marked.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+    <script src="js/slick.min.js" type="text/javascript"></script>
     <script src="js/app.js" type="text/javascript"></script>
     <script src="js/blog-page.js" type="text/javascript"></script>
 </body>

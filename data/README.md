@@ -9,9 +9,9 @@ This directory houses the structured, static JSON datasets utilized by the **EG1
 | File | Description | Primary Consumers |
 | :--- | :--- | :--- |
 | [`apps.json`](apps.json) | Software & Web Application catalog with metadata, versioning, links, and status. | [`apps.html`](../apps.html), [`js/app.js`](../js/app.js) |
-| [`website_content.json`](website_content.json) | Static page copy, hero text, and structured section content (`pages` doc: `homepage`, `about`, `contact`, `blog`, `apps`). | [`index.html`](../index.html), [`about.html`](../about.html), [`js/about.js`](../js/about.js), [`js/blog-content.js`](../js/blog-content.js) |
+| [`website_content.json`](website_content.json) | Static page copy, hero text, and single source of truth for `"seo"` tags (titles, descriptions, Open Graph, Twitter cards, canonical URLs, and `img/eg1-social-preview.webp`). | Root HTML pages via [`automation-scripts/sync_seo_tags.py`](../automation-scripts/sync_seo_tags.py), [`index.html`](../index.html), [`about.html`](../about.html), [`js/about.js`](../js/about.js) |
 | [`updates.json`](updates.json) | Release notes, changelog history, version badges, and notification center items. | [`updates.html`](../updates.html), [`js/updates.js`](../js/updates.js), [`js/include-components.js`](../js/include-components.js) |
-| [`blog/*.md`](blog/) | Pure Markdown blog articles with YAML frontmatter (47+ articles). | [`blog.html`](../blog.html), [`js/blog-page.js`](../js/blog-page.js) |
+| [`blog/*.md`](blog/) | Pure Markdown blog articles with YAML frontmatter (47+ articles). | [`blog.html`](../blog.html), [`js/blog-page.js`](../js/blog-page.js), [`automation-scripts/generate_blog_pages.py`](../automation-scripts/generate_blog_pages.py) |
 
 ---
 

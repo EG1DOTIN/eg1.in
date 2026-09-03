@@ -79,6 +79,28 @@
         return isNaN(parsed.getTime()) ? 'N/A' : parsed.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
     }
 
+    function getBlogSlug(blog) {
+        if (!blog) return 'article';
+        if (blog.slug) return blog.slug;
+        var title = String(blog.heading || blog.title || ('article-' + (blog.id || ''))).trim();
+        var s = title
+            .replace(/c\+\+/gi, 'cpp')
+            .replace(/c#/gi, 'csharp')
+            .replace(/f#/gi, 'fsharp')
+            .replace(/\.net\b/gi, 'dotnet')
+            .replace(/&/g, ' and ')
+            .toLowerCase()
+            .trim()
+            .replace(/[^a-z0-9\s-]/g, '')
+            .replace(/[\s-]+/g, '-');
+        return s || ('article-' + (blog.id || ''));
+    }
+
+    function getBlogUrl(blog) {
+        var slug = getBlogSlug(blog);
+        return 'blog/' + slug + '.html';
+    }
+
     // ── Pure JavaScript YAML Frontmatter Parser ────────────────────────────────
 
     function parseFrontmatterAndMarkdown(rawText) {
@@ -301,19 +323,20 @@
         var rawDesc = blog.short_description || blog.description || '';
         var plainDesc = rawDesc.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
         var shortDesc = plainDesc.length > 120 ? plainDesc.substring(0, 120) + '...' : plainDesc;
+        var blogUrl = getBlogUrl(blog);
 
         return [
             '<div class="col-md-4 margin-bottom blog-item-container">',
-            '    <div class="our-product blogs blog-grid-card" data-url="blog.html?id=' + encodeURIComponent(blog.id) + '" role="link" tabindex="0" style="cursor:pointer;">',
+            '    <div class="our-product blogs blog-grid-card" data-url="' + escapeHtml(blogUrl) + '" role="link" tabindex="0" style="cursor:pointer;">',
             '        <div class="row">',
             '            <div class="col-md-12 left">',
             '                <div class="blogimg">',
-            '                    <a href="blog.html?id=' + encodeURIComponent(blog.id) + '">',
+            '                    <a href="' + escapeHtml(blogUrl) + '">',
             '                        <img src="' + imageUrl + '" alt="' + title + '" loading="lazy" style="width: 100%; height: 200px; object-fit: cover;" />',
             '                    </a>',
             '                </div>',
             '                <div class="blogbody">',
-            '                    <a href="blog.html?id=' + encodeURIComponent(blog.id) + '">',
+            '                    <a href="' + escapeHtml(blogUrl) + '">',
             '                        <h3 class="blogs-title">' + title + '</h3>',
             '                        <p>',
             '                          <small>',
@@ -440,17 +463,33 @@
         }
 
         if (blog.tags && blog.tags.length > 0) {
-            blogHtml.push('  <div class="row mrgin-top20"><div class="col-md-12"><div class="blog-tags-detail">');
+            blogHtml.push('  <div class="row mrgin-top15"><div class="col-md-12"><div class="blog-tags-detail">');
             blog.tags.forEach(function (tag) {
                 blogHtml.push('<a href="blog.html?cat=' + encodeURIComponent(tag) + '" class="tag-link">#' + escapeHtml(tag) + '</a>');
             });
             blogHtml.push('</div></div></div>');
         }
 
+        // ── Single Minimalist Share Button (Bottom of Center Article Block) ─
+        var shareSlug = window.ACTIVE_BLOG_SLUG || getBlogSlug(blog);
+        var canonicalUrl = 'https://www.eg1.in/blog/' + shareSlug + '.html';
+
         blogHtml.push(
-            '  <div class="row mrgin-top30">',
+            '  <div class="row mrgin-top15">',
             '    <div class="col-md-12">',
-            '      <a href="blog.html" class="btn btn-primary">← Back to Blog</a>',
+            '      <div class="blog-share-action-bar">',
+            '        <button type="button" class="btn btn-share-single" id="btnShareArticle" data-url="' + escapeHtml(canonicalUrl) + '" title="Share this tutorial"><i class="fa fa-share-alt"></i> <span id="shareBtnLabel">Share</span></button>',
+            '      </div>',
+            '    </div>',
+            '  </div>'
+        );
+
+        blogHtml.push(
+            '  <div class="row mrgin-top15">',
+            '    <div class="col-md-12">',
+            '      <div class="blog-back-section">',
+            '        <a href="blog.html" class="btn btn-primary">← Back to Blog</a>',
+            '      </div>',
             '    </div>',
             '  </div>',
             '</div>'
@@ -461,9 +500,70 @@
         $('#sidebarColumn, #sidebarContainer, #previousTopics, #relatedBlogsGrid').show();
 
         initializeCodeBlocks();
+        initializeShareButtons(blog, canonicalUrl);
 
         // Load sidebar topics in background
         loadSidebarTopics(blog);
+    }
+
+    // ── Interactive Share Button Event Handlers ─────────────────────────────────
+
+    function initializeShareButtons(blog, canonicalUrl) {
+        var shareTitle = blog.heading || blog.title || 'EG1 Tutorial';
+        var shareText = 'Check out this tutorial on EG1: ' + shareTitle;
+
+        $('#btnShareArticle').off('click').on('click', async function (e) {
+            e.preventDefault();
+            var $label = $('#shareBtnLabel');
+
+            function showCopyFeedback() {
+                var $toast = $('.share-copy-toast');
+                if (!$toast.length) {
+                    $toast = $('<div class="share-copy-toast"><i class="fa fa-check-circle"></i> Link copied to clipboard!</div>');
+                    $('body').append($toast);
+                }
+                $toast.addClass('show');
+                $label.text('Copied!');
+                setTimeout(function () {
+                    $toast.removeClass('show');
+                    $label.text('Share');
+                }, 2500);
+            }
+
+            if (navigator.share) {
+                try {
+                    await navigator.share({
+                        title: shareTitle,
+                        text: shareText,
+                        url: canonicalUrl
+                    });
+                } catch (err) {
+                    if (err && err.name !== 'AbortError') {
+                        fallbackCopy(canonicalUrl, showCopyFeedback);
+                    }
+                }
+            } else if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(canonicalUrl).then(showCopyFeedback).catch(function () {
+                    fallbackCopy(canonicalUrl, showCopyFeedback);
+                });
+            } else {
+                fallbackCopy(canonicalUrl, showCopyFeedback);
+            }
+        });
+
+        function fallbackCopy(text, callback) {
+            var temp = document.createElement('textarea');
+            temp.value = text;
+            temp.style.position = 'fixed';
+            temp.style.opacity = '0';
+            document.body.appendChild(temp);
+            temp.select();
+            try {
+                document.execCommand('copy');
+                if (callback) callback();
+            } catch (err) {}
+            document.body.removeChild(temp);
+        }
     }
 
     // ── Sidebar Topics ─────────────────────────────────────────────────────────
@@ -480,7 +580,8 @@
         previous.forEach(function (b) {
             var title = escapeHtml(b.heading || b.title || 'Untitled');
             var category = escapeHtml(b.category || 'tutorials');
-            prevHtml += '<li><a href="blog.html?id=' + encodeURIComponent(b.id) + '"><span class="topic-badge"><i class="fa fa-list-alt"></i> ' + category + '</span> ' + title + '</a></li>';
+            var bUrl = getBlogUrl(b);
+            prevHtml += '<li><a href="' + escapeHtml(bUrl) + '"><span class="topic-badge"><i class="fa fa-list-alt"></i> ' + category + '</span> ' + title + '</a></li>';
         });
         prevHtml += '</ul></div>';
 
@@ -502,7 +603,8 @@
         relatedBlogs.forEach(function (b) {
             var title = escapeHtml(b.heading || b.title || 'Untitled');
             var category = escapeHtml(b.category || 'tutorials');
-            relHtml += '<li><a href="blog.html?id=' + encodeURIComponent(b.id) + '"><span class="topic-badge"><i class="fa fa-list-alt"></i> ' + category + '</span> ' + title + '</a></li>';
+            var bUrl = getBlogUrl(b);
+            relHtml += '<li><a href="' + escapeHtml(bUrl) + '"><span class="topic-badge"><i class="fa fa-list-alt"></i> ' + category + '</span> ' + title + '</a></li>';
         });
         relHtml += '</ul></div>';
 
@@ -596,7 +698,8 @@
             previous.forEach(function (b) {
                 var titleText = escapeHtml(b.heading || b.title || 'Untitled');
                 var categoryText = escapeHtml(b.category || 'tutorials');
-                prevHtml += '<li><a href="blog.html?id=' + encodeURIComponent(b.id) + '"><span class="topic-badge"><i class="fa fa-list-alt"></i> ' + categoryText + '</span> ' + titleText + '</a></li>';
+                var bUrl = getBlogUrl(b);
+                prevHtml += '<li><a href="' + escapeHtml(bUrl) + '"><span class="topic-badge"><i class="fa fa-list-alt"></i> ' + categoryText + '</span> ' + titleText + '</a></li>';
             });
             prevHtml += '</ul></div>';
             $('#previousTopics').html(prevHtml).show();
@@ -648,23 +751,29 @@
 
         var limitPerPage = blogsPerPage || 18;
         var totalPages = Math.ceil(blogs.length / limitPerPage);
-        var start = (currentPage - 1) * limitPerPage;
-        var pageBlogs = blogs.slice(start, start + limitPerPage);
 
-        var html = '<div class="row">';
-        pageBlogs.forEach(function (blog) {
-            html += renderBlogCardGrid(blog);
+        // Calculate slice
+        var startIdx = (currentPage - 1) * limitPerPage;
+        var endIdx = startIdx + limitPerPage;
+        var paginatedBlogs = blogs.slice(startIdx, endIdx);
+
+        var html = '<div class="row mrgin-top10">';
+        paginatedBlogs.forEach(function (b) {
+            html += renderBlogCardGrid(b);
         });
         html += '</div>';
 
+        // Render pagination controls
         if (totalPages > 1) {
             var prevDisabled = currentPage === 1 ? 'disabled' : '';
-            var nextDisabled = currentPage >= totalPages ? 'disabled' : '';
+            var nextDisabled = currentPage === totalPages ? 'disabled' : '';
+
             html += '<div id="pagination-controls" class="row blog-item-container" style="margin-top: 20px;">';
             html += '<div class="col-md-12"><div class="text-center"><div class="btn-group">';
             html += '<button class="btn btn-default bg-pager" data-action="prev" ' + prevDisabled + '>&laquo; Previous</button>';
-            var pageNumbers = buildPaginationRange(currentPage, totalPages, 5);
-            pageNumbers.forEach(function (pageNumber) {
+
+            var paginationRange = buildPaginationRange(currentPage, totalPages, 5);
+            paginationRange.forEach(function (pageNumber) {
                 if (pageNumber === 'ellipsis') {
                     html += '<span class="btn btn-default bg-pager disabled">…</span>';
                     return;
@@ -693,8 +802,21 @@
 
     async function init() {
         try {
-            // Check if viewing a specific blog detail directly
+            // Check if viewing a static blog page (window.ACTIVE_BLOG_ID is set in HTML)
+            if (window.ACTIVE_BLOG_ID) {
+                $('#Content3Header').hide();
+                await loadBlogDetail(window.ACTIVE_BLOG_ID);
+                return;
+            }
+
+            // If someone opened blog.html?id=... on legacy entry point, redirect to static URL
             if (blogIdParam) {
+                var targetBlog = await MarkdownStore.fetchSingleBlog(blogIdParam);
+                if (targetBlog) {
+                    var targetUrl = getBlogUrl(targetBlog);
+                    window.location.replace(targetUrl);
+                    return;
+                }
                 $('#Content3Header').hide();
                 await loadBlogDetail(blogIdParam);
                 return;

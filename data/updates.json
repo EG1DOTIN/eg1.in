@@ -1,5 +1,17 @@
 [
     {
+        "id": "update-2026-09-03-v3-2-0",
+        "type": "website",
+        "version": "3.2.0",
+        "title": "Static Blog SEO Engine, Unified Web Share & Content-Driven Metadata",
+        "date": "Sep 03, 2026",
+        "category": "FEATURE",
+        "icon": "spark",
+        "badge": "New",
+        "description": "Introduced pre-rendered static blog articles with programming language slugs (C++ to cpp), unified Web Share API with modal fallback, fluid clamp typography, centralized content-driven SEO metadata, and space-optimized 3D WebP social banner.",
+        "link": "blog.html"
+    },
+    {
         "id": "update-2026-08-31-v3-1-3",
         "type": "website",
         "version": "3.1.3",

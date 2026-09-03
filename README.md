@@ -1,10 +1,10 @@
 # EG1 - Official Website & Digital Platform
 
 [![Website](https://img.shields.io/badge/Website-eg1.in-0284c7?style=flat-square&logo=google-chrome&logoColor=white)](https://www.eg1.in)
-[![Version](https://img.shields.io/badge/Version-3.1.3-10b981?style=flat-square)](data/updates.json)
+[![Version](https://img.shields.io/badge/Version-3.2.0-10b981?style=flat-square)](data/updates.json)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
 
-**EG1** ([eg1.in](https://www.eg1.in)) is a personal hobby platform for open source and creative digital projects, presenting practical engineering software/tools, interactive web applications for real-world use and technical articles/blog posts.
+**EG1** ([eg1.in](https://www.eg1.in)) is a hobby platform for open source and creative digital projects, presenting practical software/tools, interactive web applications for real-world use and technical articles/blog posts.
 
 ---
 
@@ -12,6 +12,9 @@
 
 | Feature | Description |
 | :--- | :--- |
+| **🌐 Static Blog SEO & Slugs** | Pre-rendered static articles (`blog/<slug>.html`) with programming language terms (`C++` &rarr; `cpp`), Open Graph, Twitter cards, and JSON-LD schemas. |
+| **🔗 Unified Minimalist Share** | Single-button native sharing via Web Share API (`navigator.share`) with theme-styled modal clipboard link copier. |
+| **🔍 Content-Driven SEO Sync** | Centralized metadata in `data/website_content.json` with dual-mode sync and validation automation (`sync_seo_tags.py`). |
 | **📝 Pure Markdown Blog Engine** | Direct client-side Markdown (.md) rendering with zero Firestore reads, YAML frontmatter parser, and 1-click code copying. |
 | **🛠️ Admin TableToolkit Engine** | Standalone modular table engine with natural alphanumeric (`Intl.Collator`), datetime, numeric sorting, and universal pagination. |
 | **👥 App Users Workspace** | Interactive management grid with multi-app filtering, status toggling, search, and 16-field visitor telemetry inspection. |

@@ -103,6 +103,10 @@ p {
     margin-top: 10px;
 }
 
+.mrgin-top15 {
+    margin-top: 15px;
+}
+
 .margin-bot10 {
     margin-bottom: 5px;
 }
@@ -786,11 +790,23 @@ p {
     margin-top: 2px;
 }
 
-.footer-about-wrapper p {
+.footer-about-wrapper p,
+.footer-about-p {
     color: #a0a5b1;
     font-size: 0.86rem;
-    line-height: 1.35;
+    line-height: 1.4;
     margin-bottom: 2px;
+    text-align: justify;
+    text-justify: inter-word;
+    overflow-wrap: break-word;
+}
+
+.footer-readmore-link {
+    display: inline-block;
+    white-space: nowrap;
+    margin-left: 4px;
+    vertical-align: baseline;
+    padding: 2px 0;
 }
 
 .color-yellow {
@@ -1240,8 +1256,8 @@ p {
 
 /* TinyMCE / AI blog content rendering fix */
 .ai-blog-content {
-    line-height: 1.85;
-    font-size: clamp(1.05rem, 0.95rem + 0.4vw, 1.15rem);
+    line-height: 1.72;
+    font-size: clamp(1.12rem, 1.04rem + 0.45vw, 1.25rem);
     letter-spacing: 0.01em;
 }
 
@@ -1251,15 +1267,27 @@ p {
 .ai-blog-content h4,
 .ai-blog-content h5,
 .ai-blog-content h6 {
-    margin: 1.5em 0 0.6em;
+    margin: 1.1em 0 0.4em;
     font-weight: 700;
     letter-spacing: -0.01em;
 }
 
 .ai-blog-content p {
-    margin: 0 0 1.35em;
+    margin: 0 0 0.9em;
     font-size: inherit;
-    line-height: 1.85;
+    line-height: 1.72;
+}
+
+.ai-blog-content p:last-child {
+    margin-bottom: 0;
+}
+
+.ai-blog-content p:empty {
+    display: none;
+}
+
+.ai-blog-content br + br {
+    display: none;
 }
 
 .ai-blog-content ul,
@@ -1489,7 +1517,7 @@ p {
     font-size: 0.38rem;
     font-weight: 300 !important;
     font-style: italic;
-    color: rgba(255, 255, 255, 0.05) !important;
+    color: var(--logo-byline-color, rgba(255, 255, 255, 0.025)) !important;
     /* Very dim opacity for subtle zoom visibility */
     letter-spacing: 0.3px;
     pointer-events: none;
@@ -1499,7 +1527,7 @@ p {
 }
 
 .eg1-logo-badge:hover .eg1-logo-byline {
-    color: rgba(255, 255, 255, 0.08) !important;
+    color: var(--logo-byline-hover, rgba(255, 255, 255, 0.07)) !important;
     /* Kept very dim on hover */
 }
 
@@ -1546,12 +1574,12 @@ p {
 }
 
 .eg1-logo-badge.theme-light .eg1-logo-byline {
-    color: rgba(0, 0, 0, 0.05) !important;
+    color: var(--logo-byline-color, rgba(0, 0, 0, 0.02)) !important;
     /* Ultra-dim gray on white by default */
 }
 
 .eg1-logo-badge.theme-light:hover .eg1-logo-byline {
-    color: rgba(0, 0, 0, 0.08) !important;
+    color: var(--logo-byline-hover, rgba(0, 0, 0, 0.06)) !important;
     /* Kept very dim on hover */
 }
 

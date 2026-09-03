@@ -17,13 +17,176 @@
     },
     "about": {
       "updateAt": "2026-07-19T11:54:08+00:00",
-      "title": "    <h1>ABOUT EG1</h1>\n    <p style=\"font-size: 20px; text-align: center;\"> \n        A personal hobby platform for open-source and creative digital projects,<br />\n         featuring practical engineering software/tools, interactive web <br />\n        applications and technical articles. <br />\n    </p>",
-      "content": "<p style=\"font-size: 18px; \">\n    This website is a personal space for creating and sharing helpful, open-source digital projects built for real-world use.\n    <br />\n    <br />\n    It features two main sections: an Apps section, showcasing custom webapps, and software/tools made for practical application; and a Blog section, featuring technical articles, tutorials, and engineering write-ups. Driven by an open-source approach, everything here is built with simplicity, functionality, and open access for curious minds who love building and tinkering from the ground up.\n</p>"
+      "title": "    <h1>ABOUT EG1</h1>\n    <p style=\"font-size: 20px; text-align: center;\"> \n        A hobby platform for open-source and creative digital projects,<br />\n         featuring practical apps/tools, interactive web applications <br />\n        and technical articles. <br />\n    </p>",
+      "content": "<p style=\"font-size: 18px; \">\n    This website is a hobby playground for creating, experimenting and sharing helpful, open-source digital projects built for real-world use.\n    <br />\n    <br />\n    It features two main sections: an Apps section, showcasing custom webapps, and software/tools made for practical application; and a Blog section, featuring technical articles, tutorials, and engineering write-ups. Driven by an open-source approach, everything here is built with simplicity, functionality, and open access for curious minds who love building and tinkering from the ground up.\n</p>"
     },
     "homepage": {
       "title": "Welcome to EG1",
       "content": "",
       "updatedAt": "2026-07-29T16:15:23.417000+00:00"
+    }
+  },
+  "seo": {
+    "index.html": {
+      "title": "EG1 - A hobby platform for open-source and creative digital projects",
+      "metaTitle": "EG1 - A hobby platform for open-source and creative digital projects",
+      "description": "A hobby platform for open-source and creative digital projects, featuring practical software/tools, interactive web applications, and technical articles.",
+      "canonical": "https://www.eg1.in/",
+      "og": {
+        "type": "website",
+        "site_name": "EG1",
+        "url": "https://www.eg1.in/",
+        "title": "EG1 - A hobby platform for open-source and creative digital projects",
+        "description": "A hobby platform for open-source and creative digital projects, featuring practical software/tools, interactive web applications, and technical articles.",
+        "image": "https://www.eg1.in/img/eg1-social-preview.webp",
+        "image_width": "1200",
+        "image_height": "630"
+      },
+      "twitter": {
+        "card": "summary_large_image",
+        "url": "https://www.eg1.in/",
+        "title": "EG1 - A hobby platform for open-source and creative digital projects",
+        "description": "A hobby platform for open-source and creative digital projects, featuring practical software/tools, interactive web applications, and technical articles.",
+        "image": "https://www.eg1.in/img/eg1-social-preview.webp"
+      }
+    },
+    "apps.html": {
+      "title": "EG1 Apps - Practical Software, Tools & Web Applications",
+      "metaTitle": "EG1 Apps - Practical Software, Tools & Web Applications",
+      "description": "A collection of practical open-source applications, desktop software, utilities, and interactive web tools built for real-world use.",
+      "canonical": "https://www.eg1.in/apps.html",
+      "og": {
+        "type": "website",
+        "site_name": "EG1",
+        "url": "https://www.eg1.in/apps.html",
+        "title": "EG1 Apps - Practical Software, Tools & Web Applications",
+        "description": "A collection of practical open-source applications, desktop software, utilities, and interactive web tools built for real-world use.",
+        "image": "https://www.eg1.in/img/eg1-social-preview.webp",
+        "image_width": "1200",
+        "image_height": "630"
+      },
+      "twitter": {
+        "card": "summary_large_image",
+        "url": "https://www.eg1.in/apps.html",
+        "title": "EG1 Apps - Practical Software, Tools & Web Applications",
+        "description": "A collection of practical open-source applications, desktop software, utilities, and interactive web tools built for real-world use.",
+        "image": "https://www.eg1.in/img/eg1-social-preview.webp"
+      }
+    },
+    "blog.html": {
+      "title": "EG1 Blog - Technical Articles, Tutorials & Code",
+      "metaTitle": "EG1 Blog - Technical Articles, Tutorials & Code",
+      "description": "Technical articles, tutorials, source code, algorithms, and practical programming write-ups across various topics.",
+      "canonical": "https://www.eg1.in/blog.html",
+      "og": {
+        "type": "website",
+        "site_name": "EG1",
+        "url": "https://www.eg1.in/blog.html",
+        "title": "EG1 Blog - Technical Articles, Tutorials & Code",
+        "description": "Technical articles, tutorials, source code, algorithms, and practical programming write-ups across various topics.",
+        "image": "https://www.eg1.in/img/eg1-social-preview.webp",
+        "image_width": "1200",
+        "image_height": "630"
+      },
+      "twitter": {
+        "card": "summary_large_image",
+        "url": "https://www.eg1.in/blog.html",
+        "title": "EG1 Blog - Technical Articles, Tutorials & Code",
+        "description": "Technical articles, tutorials, source code, algorithms, and practical programming write-ups across various topics.",
+        "image": "https://www.eg1.in/img/eg1-social-preview.webp"
+      }
+    },
+    "about.html": {
+      "title": "About EG1 - Open Source Software & Creative Projects",
+      "metaTitle": "About EG1 - Open Source Software & Creative Projects",
+      "description": "About EG1, a hobby platform for creating, experimenting, and sharing helpful open-source digital projects, practical tools, and tutorials.",
+      "canonical": "https://www.eg1.in/about.html",
+      "og": {
+        "type": "website",
+        "site_name": "EG1",
+        "url": "https://www.eg1.in/about.html",
+        "title": "About EG1 - Open Source Software & Creative Projects",
+        "description": "About EG1, a hobby platform for creating, experimenting, and sharing helpful open-source digital projects, practical tools, and tutorials.",
+        "image": "https://www.eg1.in/img/eg1-social-preview.webp",
+        "image_width": "1200",
+        "image_height": "630"
+      },
+      "twitter": {
+        "card": "summary_large_image",
+        "url": "https://www.eg1.in/about.html",
+        "title": "About EG1 - Open Source Software & Creative Projects",
+        "description": "About EG1, a hobby platform for creating, experimenting, and sharing helpful open-source digital projects, practical tools, and tutorials.",
+        "image": "https://www.eg1.in/img/eg1-social-preview.webp"
+      }
+    },
+    "contact.html": {
+      "title": "Contact EG1 - Feedback & Inquiries",
+      "metaTitle": "Contact EG1 - Feedback & Inquiries",
+      "description": "Contact details, feedback form, and inquiry channels for the EG1 platform and projects.",
+      "canonical": "https://www.eg1.in/contact.html",
+      "og": {
+        "type": "website",
+        "site_name": "EG1",
+        "url": "https://www.eg1.in/contact.html",
+        "title": "Contact EG1 - Feedback & Inquiries",
+        "description": "Contact details, feedback form, and inquiry channels for the EG1 platform and projects.",
+        "image": "https://www.eg1.in/img/eg1-social-preview.webp",
+        "image_width": "1200",
+        "image_height": "630"
+      },
+      "twitter": {
+        "card": "summary_large_image",
+        "url": "https://www.eg1.in/contact.html",
+        "title": "Contact EG1 - Feedback & Inquiries",
+        "description": "Contact details, feedback form, and inquiry channels for the EG1 platform and projects.",
+        "image": "https://www.eg1.in/img/eg1-social-preview.webp"
+      }
+    },
+    "updates.html": {
+      "title": "Updates - EG1 Platform Changelog & Releases",
+      "metaTitle": "Updates - EG1 Platform Changelog & Releases",
+      "description": "Changelog, release history, and latest development updates for EG1 apps, tools, and website features.",
+      "canonical": "https://www.eg1.in/updates.html",
+      "og": {
+        "type": "website",
+        "site_name": "EG1",
+        "url": "https://www.eg1.in/updates.html",
+        "title": "Updates - EG1 Platform Changelog & Releases",
+        "description": "Changelog, release history, and latest development updates for EG1 apps, tools, and website features.",
+        "image": "https://www.eg1.in/img/eg1-social-preview.webp",
+        "image_width": "1200",
+        "image_height": "630"
+      },
+      "twitter": {
+        "card": "summary_large_image",
+        "url": "https://www.eg1.in/updates.html",
+        "title": "Updates - EG1 Platform Changelog & Releases",
+        "description": "Changelog, release history, and latest development updates for EG1 apps, tools, and website features.",
+        "image": "https://www.eg1.in/img/eg1-social-preview.webp"
+      }
+    },
+    "privacypolicy.html": {
+      "title": "Privacy Policy - EG1",
+      "metaTitle": "Privacy Policy - EG1",
+      "description": "Privacy policy and data protection details for the EG1 website and applications.",
+      "canonical": "https://www.eg1.in/privacypolicy.html",
+      "og": {
+        "type": "website",
+        "site_name": "EG1",
+        "url": "https://www.eg1.in/privacypolicy.html",
+        "title": "Privacy Policy - EG1",
+        "description": "Privacy policy and data protection details for the EG1 website and applications.",
+        "image": "https://www.eg1.in/img/eg1-social-preview.webp",
+        "image_width": "1200",
+        "image_height": "630"
+      },
+      "twitter": {
+        "card": "summary_large_image",
+        "url": "https://www.eg1.in/privacypolicy.html",
+        "title": "Privacy Policy - EG1",
+        "description": "Privacy policy and data protection details for the EG1 website and applications.",
+        "image": "https://www.eg1.in/img/eg1-social-preview.webp"
+      }
     }
   }
 }
