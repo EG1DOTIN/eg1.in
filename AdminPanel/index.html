@@ -70,9 +70,6 @@
                     <li><a href="#" onclick="showSection('analytics')" class="nav-link">
                             <i class="fas fa-users"></i> Analytics
                         </a></li>
-                    <li><a href="#" onclick="showSection('appUsers')" class="nav-link">
-                            <i class="fas fa-users-cog"></i> App Users
-                        </a></li>
                     <li><a href="#" onclick="showSection('messages')" class="nav-link">
                             <i class="fas fa-envelope"></i> Messages
                         </a></li>
@@ -118,17 +115,10 @@
                         </div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-icon"><i class="fas fa-calendar-today"></i></div>
+                        <div class="stat-icon"><i class="fas fa-calendar-day"></i></div>
                         <div class="stat-content">
                             <h3>Today's Visitors</h3>
                             <p class="stat-value" id="todayVisitors">0</p>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon"><i class="fas fa-users-cog"></i></div>
-                        <div class="stat-content">
-                            <h3>Total App Users</h3>
-                            <p class="stat-value" id="totalAppUsers">0</p>
                         </div>
                     </div>
                 </div>
@@ -200,57 +190,6 @@
                 </div>
             </section>
 
-            <!-- App Users Section -->
-            <section id="appUsers" class="content-section">
-                <div class="section-header">
-                    <h2>App Users Management</h2>
-                    <button class="btn-primary" style="width: auto; margin-top: 0;" onclick="loadAppUsersData();"><i class="fas fa-sync-alt"></i> Refresh Users</button>
-                </div>
-
-                <div class="items-list">
-                    <div class="filter-section" style="margin-bottom: 20px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
-                        <label for="appUserFilter"><strong>Filter by App:</strong></label>
-                        <select id="appUserFilter" style="padding: 8px 12px; border-radius: 5px; border: 1px solid var(--border-color);" onchange="filterAppUsers()">
-                            <option value="all">All Apps / Products</option>
-                            <option value="Marwadi Chess" selected>Marwadi Chess (MChess)</option>
-                            <option value="EGClamNetAntivirus">EGClamNetAntivirus</option>
-                            <option value="EG1 Platform">EG1 Platform</option>
-                        </select>
-
-                        <label for="appUserStatusFilter" style="margin-left: 5px;"><strong>Status:</strong></label>
-                        <select id="appUserStatusFilter" style="padding: 8px 12px; border-radius: 5px; border: 1px solid var(--border-color);" onchange="filterAppUsers()">
-                            <option value="all">All Statuses</option>
-                            <option value="active">Active Only</option>
-                            <option value="inactive">Inactive Only</option>
-                        </select>
-
-                        <label for="appUserSearchInput" style="margin-left: 5px;"><strong>Search:</strong></label>
-                        <input type="text" id="appUserSearchInput" placeholder="Search by name, email, ID, country..." style="padding: 8px 12px; border-radius: 5px; border: 1px solid var(--border-color); min-width: 220px;" onkeyup="if(event.key==='Enter') filterAppUsers()">
-                        <button class="btn-primary" style="width: auto; margin-top: 0;" onclick="filterAppUsers()"><i class="fas fa-search"></i> Filter</button>
-                    </div>
-
-                    <table class="data-table" id="appUsersTable">
-                        <thead>
-                            <tr>
-                                <th class="sortable" data-sort-key="userId" data-sort-type="alphanumeric">User ID <span class="sort-icon"><i class="fas fa-sort"></i></span></th>
-                                <th class="sortable" data-sort-key="name" data-sort-type="string">Name / Location <span class="sort-icon"><i class="fas fa-sort"></i></span></th>
-                                <th class="sortable" data-sort-key="email" data-sort-type="string">Email <span class="sort-icon"><i class="fas fa-sort"></i></span></th>
-                                <th class="sortable" data-sort-key="appName" data-sort-type="string">Application <span class="sort-icon"><i class="fas fa-sort"></i></span></th>
-                                <th class="sortable" data-sort-key="registeredAt" data-sort-type="date">Registered <span class="sort-icon"><i class="fas fa-sort"></i></span></th>
-                                <th class="sortable" data-sort-key="status" data-sort-type="string">Status <span class="sort-icon"><i class="fas fa-sort"></i></span></th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="appUsersTableBody">
-                            <tr>
-                                <td colspan="7" class="no-data">Loading registered users...</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <div id="appUsersPagination" class="pagination-controls"></div>
-                </div>
-            </section>
-
             <!-- Messages Section -->
             <section id="messages" class="content-section">
                 <div class="section-header">
@@ -284,13 +223,10 @@
     <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-storage-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-analytics-compat.js"></script>
     <script src="firebase-config.js"></script>
     <script src="js/table-toolkit.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/analytics.js"></script>
-    <script src="js/app-users.js"></script>
     <script src="js/messages.js"></script>
     <script src="js/admin.js"></script>
 

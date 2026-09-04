@@ -471,7 +471,11 @@ function showSection(sectionId) {
     var secEl = document.getElementById(sectionId);
     if (secEl) secEl.classList.add('active');
     
-    if (window.event && window.event.target) {
+    // Activate matching sidebar navigation link
+    var targetNav = document.querySelector('.nav-link[onclick*="' + sectionId + '"]');
+    if (targetNav) {
+        targetNav.classList.add('active');
+    } else if (typeof window !== 'undefined' && window.event && window.event.target) {
         var linkEl = window.event.target.closest('.nav-link');
         if (linkEl) linkEl.classList.add('active');
     }
@@ -480,9 +484,6 @@ function showSection(sectionId) {
     if (sectionId === 'analytics') {
         if (typeof loadAnalyticsData === 'function') loadAnalyticsData();
         if (typeof updateVisitorStats === 'function') updateVisitorStats();
-    }
-    else if (sectionId === 'appUsers') {
-        if (typeof loadAppUsersData === 'function') loadAppUsersData();
     }
     else if (sectionId === 'messages') {
         if (typeof loadMessagesList === 'function') loadMessagesList();

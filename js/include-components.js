@@ -52,6 +52,7 @@ function initializeComponents() {
         decodeLogoByline();
         initializeThemeToggle();
         initializeNotificationBell();
+        initializeCacheRefresh();
 
         // Initialize responsive menu and navigation after header is loaded
         setTimeout(function () {
@@ -235,11 +236,15 @@ function initializeNavigation() {
 
     // Set active link based on current URL
     var currentPath = window.location.pathname.split('/').pop() || 'index.html';
+    var isBlogSection = window.location.pathname.indexOf('/blog/') !== -1 || currentPath === 'blog.html';
+
     $(".nav a").each(function () {
         var href = this.getAttribute('href') || '';
         if (href === '#' || href.startsWith('javascript:')) return;
         var linkPath = href.split('/').pop();
-        if (linkPath && (linkPath === currentPath || (currentPath === '' && linkPath === 'index.html'))) {
+        if (isBlogSection && (href.indexOf('blog/') !== -1 || href === 'blog.html')) {
+            $(this).parents("li").addClass("active");
+        } else if (linkPath && (linkPath === currentPath || (currentPath === '' && linkPath === 'index.html'))) {
             $(this).parents("li").addClass("active");
         }
     });
@@ -444,6 +449,8 @@ function initializeNotificationBell() {
             return '<svg viewBox="0 0 24 24" width="' + iconSize + '" height="' + iconSize + '" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/></svg>';
         } else if (type.indexOf('opt') !== -1 || type.indexOf('data') !== -1 || type === 'database') {
             return '<svg viewBox="0 0 24 24" width="' + iconSize + '" height="' + iconSize + '" fill="currentColor"><path d="M12 3c-4.42 0-8 1.34-8 3v12c0 1.66 3.58 3 8 3s8-1.34 8-3V6c0-1.66-3.58-3-8-3zm0 2c3.87 0 6 1.05 6 1s-2.13 1-6 1-6-1.05-6-1 2.13-1 6-1zm0 5c3.87 0 6 1.05 6 1s-2.13 1-6 1-6-1.05-6-1 2.13-1 6-1zm0 5c3.87 0 6 1.05 6 1s-2.13 1-6 1-6-1.05-6-1 2.13-1 6-1zm0 5c-3.87 0-6-1.05-6-1s2.13-1 6-1 6 1.05 6 1-2.13 1-6 1z"/></svg>';
+        } else if (type.indexOf('app') !== -1 || type.indexOf('mobile') !== -1) {
+            return '<svg viewBox="0 0 24 24" width="' + iconSize + '" height="' + iconSize + '" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>';
         } else {
             return '<svg viewBox="0 0 24 24" width="' + iconSize + '" height="' + iconSize + '" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>';
         }
@@ -563,6 +570,88 @@ $(document).on('click', '#btnReopenConsent', function (e) {
         window.EG1Tracker.showConsentBanner();
     }
 });
+
+/**
+ * Initializes the header cache-refresh button.
+ * Clears localStorage data caches (preserving user theme), sessionStorage,
+ * CacheStorage, resets in-memory DataCache, and forces a clean cache-busting reload.
+ */
+function initializeCacheRefresh() {
+    // Clean up temporary refresh query param from URL bar if present from previous reload
+    try {
+        if (window.location.search && window.location.search.indexOf('refresh=') !== -1) {
+            var url = new URL(window.location.href);
+            url.searchParams.delete('refresh');
+            var cleanSearch = url.searchParams.toString();
+            var cleanPath = url.pathname + (cleanSearch ? '?' + cleanSearch : '') + url.hash;
+            window.history.replaceState({}, document.title, cleanPath);
+        }
+    } catch (e) {}
+
+    $(document).off('click', '#cacheRefreshBtn').on('click', '#cacheRefreshBtn', function (e) {
+        e.preventDefault();
+        var $btn = $(this);
+        $btn.addClass('spinning');
+
+        // 1. Clear application data caches in localStorage while preserving theme preference
+        try {
+            var preservedTheme = localStorage.getItem('eg1_theme');
+            var preservedSeen = localStorage.getItem('eg1_seen_updates');
+
+            var keysToRemove = [];
+            for (var i = 0; i < localStorage.length; i++) {
+                var key = localStorage.key(i);
+                if (key && key !== 'eg1_theme' && key !== 'eg1_seen_updates') {
+                    keysToRemove.push(key);
+                }
+            }
+            keysToRemove.forEach(function (k) {
+                localStorage.removeItem(k);
+            });
+
+            if (preservedTheme) {
+                localStorage.setItem('eg1_theme', preservedTheme);
+            }
+        } catch (err) {
+            console.warn('LocalStorage clear error:', err);
+        }
+
+        // 2. Clear sessionStorage
+        try {
+            sessionStorage.clear();
+        } catch (err) {}
+
+        // 3. Clear CacheStorage (Service Worker / PWA caches if present)
+        if ('caches' in window) {
+            try {
+                caches.keys().then(function (names) {
+                    names.forEach(function (name) {
+                        caches.delete(name);
+                    });
+                });
+            } catch (err) {}
+        }
+
+        // 4. Reset in-memory DataCache
+        if (typeof DataCache !== 'undefined') {
+            DataCache.products = null;
+            DataCache.blogs = null;
+            DataCache.news = null;
+            DataCache.pages = null;
+        }
+
+        // 5. Trigger cache-busting reload
+        setTimeout(function () {
+            try {
+                var targetUrl = new URL(window.location.href);
+                targetUrl.searchParams.set('refresh', Date.now().toString());
+                window.location.href = targetUrl.toString();
+            } catch (err) {
+                window.location.reload(true);
+            }
+        }, 300);
+    });
+}
 
 
 

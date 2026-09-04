@@ -1,5 +1,17 @@
 [
     {
+        "id": "update-2026-09-04-v3-3-0",
+        "type": "website",
+        "version": "3.3.0",
+        "title": "Pure Markdown Apps Engine, Selective Static Generator, Themed Actions & Refresh App Button",
+        "date": "Sep 04, 2026",
+        "category": "FEATURE",
+        "icon": "spark",
+        "badge": "New",
+        "description": "Migrated applications to modular Markdown files (data/apps/*.md) with client YAML parsing, selective static app pages generator (apps/<slug>.html), clean semantic slug routing, header cache-refresh & hard-reload button, dual-theme carousel arrows, themed share button with toast fallback, and consolidated master quality audit runner.",
+        "link": "apps.html"
+    },
+    {
         "id": "update-2026-09-03-v3-2-0",
         "type": "website",
         "version": "3.2.0",

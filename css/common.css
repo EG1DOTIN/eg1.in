@@ -203,7 +203,7 @@ p {
     z-index: 1;
 }
 
-.mainContentHeader > * {
+.mainContentHeader>* {
     position: relative;
     z-index: 2;
 }
@@ -213,15 +213,19 @@ p {
     0% {
         background-position: 0% 50%, 0% 0%, 0% 0%, 0% 50%;
     }
+
     25% {
         background-position: 50% 100%, 50% 50%, 30% 70%, 50% 100%;
     }
+
     50% {
         background-position: 100% 50%, 100% 100%, 70% 30%, 100% 50%;
     }
+
     75% {
         background-position: 50% 0%, 50% 50%, 70% 80%, 50% 0%;
     }
+
     100% {
         background-position: 0% 50%, 0% 0%, 0% 0%, 0% 50%;
     }
@@ -231,9 +235,11 @@ p {
     0% {
         transform: translate(0px, 0px) scale(1);
     }
+
     50% {
         transform: translate(-14px, 8px) scale(1.02);
     }
+
     100% {
         transform: translate(0px, 0px) scale(1);
     }
@@ -242,54 +248,54 @@ p {
 /* 6 Water Flowing Themes: Shaded Black, Dark Gray, Slate Gray & Silver Liquid Waves */
 .mainContentHeader.crystal-theme-1 {
     background: linear-gradient(60deg, rgba(255, 255, 255, 0.10) 0%, transparent 40%, rgba(255, 255, 255, 0.05) 70%),
-                radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.22) 0%, rgba(180, 190, 205, 0.09) 35%, transparent 65%),
-                radial-gradient(circle at 15% 85%, rgba(140, 150, 165, 0.14) 0%, transparent 50%),
-                linear-gradient(135deg, #000000 0%, #0d0f16 30%, #1a1e2a 65%, #2e3546 100%);
+        radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.22) 0%, rgba(180, 190, 205, 0.09) 35%, transparent 65%),
+        radial-gradient(circle at 15% 85%, rgba(140, 150, 165, 0.14) 0%, transparent 50%),
+        linear-gradient(135deg, #000000 0%, #0d0f16 30%, #1a1e2a 65%, #2e3546 100%);
     background-size: 300% 300%, 250% 250%, 200% 200%, 300% 300%;
     animation: crystalFluidFlow 28s infinite ease-in-out;
 }
 
 .mainContentHeader.crystal-theme-2 {
     background: linear-gradient(120deg, transparent 30%, rgba(255, 255, 255, 0.11) 50%, transparent 70%),
-                radial-gradient(circle at 20% 25%, rgba(240, 245, 255, 0.24) 0%, rgba(140, 150, 165, 0.08) 40%, transparent 65%),
-                radial-gradient(circle at 85% 75%, rgba(200, 210, 225, 0.12) 0%, transparent 50%),
-                linear-gradient(135deg, #020204 0%, #13151c 35%, #242936 70%, #3a4255 100%);
+        radial-gradient(circle at 20% 25%, rgba(240, 245, 255, 0.24) 0%, rgba(140, 150, 165, 0.08) 40%, transparent 65%),
+        radial-gradient(circle at 85% 75%, rgba(200, 210, 225, 0.12) 0%, transparent 50%),
+        linear-gradient(135deg, #020204 0%, #13151c 35%, #242936 70%, #3a4255 100%);
     background-size: 300% 300%, 250% 250%, 200% 200%, 300% 300%;
     animation: crystalFluidFlow 32s infinite ease-in-out;
 }
 
 .mainContentHeader.crystal-theme-3 {
     background: linear-gradient(30deg, rgba(255, 255, 255, 0.09) 0%, transparent 35%, rgba(255, 255, 255, 0.07) 65%),
-                radial-gradient(circle at 50% 45%, rgba(255, 255, 255, 0.22) 0%, rgba(160, 170, 185, 0.10) 40%, transparent 70%),
-                radial-gradient(circle at 85% 15%, rgba(140, 150, 165, 0.14) 0%, transparent 45%),
-                linear-gradient(135deg, #000000 0%, #0e1016 40%, #1e222e 75%, #303749 100%);
+        radial-gradient(circle at 50% 45%, rgba(255, 255, 255, 0.22) 0%, rgba(160, 170, 185, 0.10) 40%, transparent 70%),
+        radial-gradient(circle at 85% 15%, rgba(140, 150, 165, 0.14) 0%, transparent 45%),
+        linear-gradient(135deg, #000000 0%, #0e1016 40%, #1e222e 75%, #303749 100%);
     background-size: 300% 300%, 250% 250%, 200% 200%, 300% 300%;
     animation: crystalFluidFlow 25s infinite ease-in-out;
 }
 
 .mainContentHeader.crystal-theme-4 {
     background: linear-gradient(150deg, rgba(255, 255, 255, 0.10) 10%, transparent 45%, rgba(255, 255, 255, 0.06) 80%),
-                radial-gradient(circle at 85% 30%, rgba(255, 255, 255, 0.20) 0%, rgba(170, 180, 195, 0.09) 40%, transparent 65%),
-                radial-gradient(circle at 15% 70%, rgba(150, 160, 175, 0.13) 0%, transparent 50%),
-                linear-gradient(135deg, #040406 0%, #161923 35%, #282e3c 70%, #3f485e 100%);
+        radial-gradient(circle at 85% 30%, rgba(255, 255, 255, 0.20) 0%, rgba(170, 180, 195, 0.09) 40%, transparent 65%),
+        radial-gradient(circle at 15% 70%, rgba(150, 160, 175, 0.13) 0%, transparent 50%),
+        linear-gradient(135deg, #040406 0%, #161923 35%, #282e3c 70%, #3f485e 100%);
     background-size: 300% 300%, 250% 250%, 200% 200%, 300% 300%;
     animation: crystalFluidFlow 30s infinite ease-in-out;
 }
 
 .mainContentHeader.crystal-theme-5 {
     background: linear-gradient(75deg, transparent 25%, rgba(255, 255, 255, 0.12) 48%, transparent 65%),
-                radial-gradient(circle at 35% 75%, rgba(255, 255, 255, 0.24) 0%, rgba(150, 160, 175, 0.10) 40%, transparent 70%),
-                radial-gradient(circle at 70% 20%, rgba(200, 210, 225, 0.12) 0%, transparent 45%),
-                linear-gradient(135deg, #000000 0%, #10121a 40%, #202533 75%, #333a4d 100%);
+        radial-gradient(circle at 35% 75%, rgba(255, 255, 255, 0.24) 0%, rgba(150, 160, 175, 0.10) 40%, transparent 70%),
+        radial-gradient(circle at 70% 20%, rgba(200, 210, 225, 0.12) 0%, transparent 45%),
+        linear-gradient(135deg, #000000 0%, #10121a 40%, #202533 75%, #333a4d 100%);
     background-size: 300% 300%, 250% 250%, 200% 200%, 300% 300%;
     animation: crystalFluidFlow 27s infinite ease-in-out;
 }
 
 .mainContentHeader.crystal-theme-6 {
     background: linear-gradient(105deg, rgba(255, 255, 255, 0.09) 15%, transparent 50%, rgba(255, 255, 255, 0.07) 85%),
-                radial-gradient(circle at 15% 30%, rgba(255, 255, 255, 0.22) 0%, rgba(165, 175, 190, 0.09) 40%, transparent 65%),
-                radial-gradient(circle at 80% 80%, rgba(150, 160, 175, 0.13) 0%, transparent 50%),
-                linear-gradient(135deg, #020204 0%, #12151e 35%, #242937 70%, #384054 100%);
+        radial-gradient(circle at 15% 30%, rgba(255, 255, 255, 0.22) 0%, rgba(165, 175, 190, 0.09) 40%, transparent 65%),
+        radial-gradient(circle at 80% 80%, rgba(150, 160, 175, 0.13) 0%, transparent 50%),
+        linear-gradient(135deg, #020204 0%, #12151e 35%, #242937 70%, #384054 100%);
     background-size: 300% 300%, 250% 250%, 200% 200%, 300% 300%;
     animation: crystalFluidFlow 34s infinite ease-in-out;
 }
@@ -370,9 +376,9 @@ p {
     margin: 0;
     color: #444444;
     font-style: italic;
-    font-weight: 600;
-    font-size: 13px;
-    line-height: 1.45;
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 1.55;
     text-align: center;
     display: -webkit-box;
     -webkit-line-clamp: 4;
@@ -592,17 +598,17 @@ p {
 }
 
 .our-product .btn-read {
-    float: left;
+    float: none;
 }
 
 .our-product .btn-down {
-    float: right;
+    float: none;
 }
 
 .our-product .link-name {
     color: #404041;
     font-weight: bold;
-    float: left;
+    float: none;
     font-size: 19px;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     text-transform: capitalize;
@@ -1286,7 +1292,7 @@ p {
     display: none;
 }
 
-.ai-blog-content br + br {
+.ai-blog-content br+br {
     display: none;
 }
 

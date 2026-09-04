@@ -122,13 +122,10 @@ $(document).ready(function () {
      */
     function showMessage(msg, type) {
         var msgBox = $('#contactMessage');
-        msgBox.removeClass('alert-success alert-danger').show().text(msg);
-
-        if (type === 'success') {
-            msgBox.css({ 'background-color': '#d4edda', 'color': '#155724', 'border': '1px solid #c3e6cb' });
-        } else {
-            msgBox.css({ 'background-color': '#f8d7da', 'color': '#721c24', 'border': '1px solid #f5c6cb' });
-        }
+        msgBox.removeClass('alert alert-success alert-danger')
+            .addClass('alert ' + (type === 'success' ? 'alert-success' : 'alert-danger'))
+            .show()
+            .text(msg);
 
         setTimeout(function () {
             msgBox.fadeOut();

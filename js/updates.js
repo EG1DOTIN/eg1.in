@@ -17,6 +17,9 @@
          * @returns {string} SVG markup string
          */
         function getUpdateIconSvg(iconType, category) {
+            if (typeof window.getUpdateIconSvg === 'function') {
+                return window.getUpdateIconSvg(iconType, category, 24);
+            }
             var type = (iconType || category || '').toLowerCase();
             if (type.indexOf('bug') !== -1 || type.indexOf('fix') !== -1 || type === 'refresh') {
                 return '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/></svg>';
@@ -35,6 +38,9 @@
          * @returns {string} CSS class name
          */
         function getCategoryClass(category) {
+            if (typeof window.getCategoryClass === 'function') {
+                return window.getCategoryClass(category);
+            }
             var cat = (category || '').toLowerCase();
             if (cat.indexOf('bug') !== -1 || cat.indexOf('fix') !== -1) return 'cat-bugfixes';
             if (cat.indexOf('opt') !== -1 || cat.indexOf('data') !== -1) return 'cat-optimization';

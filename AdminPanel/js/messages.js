@@ -7,6 +7,21 @@ let messagesPage     = 1;
 let messagesHasMore  = false;
 // ─────────────────────────────────────────────────────────────────────────────
 
+/**
+ * Safely escapes HTML special characters to prevent Stored XSS.
+ * @param {string} str
+ * @returns {string}
+ */
+function escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
 // Load messages list – server-side paginated
 async function loadMessagesList() {
     const tableBody = document.getElementById('messagesTableBody');
@@ -44,19 +59,19 @@ async function loadMessagesList() {
 
         let html = '';
         pageDocs.forEach(doc => {
-            const data        = doc.data();
+            const data        = doc.data() || {};
             const createdDate = data.createdAt
                 ? new Date(data.createdAt.toDate()).toLocaleString()
                 : 'N/A';
 
             html += '<tr>' +
-                '<td>' + (data.name    || 'N/A') + '</td>' +
-                '<td>' + (data.email   || 'N/A') + '</td>' +
-                '<td>' + (data.contact || 'N/A') + '</td>' +
-                '<td>' + createdDate + '</td>' +
-                '<td><div style="max-height:100px;overflow-y:auto;">' + (data.message || 'N/A') + '</div></td>' +
+                '<td>' + escapeHtml(data.name    || 'N/A') + '</td>' +
+                '<td>' + escapeHtml(data.email   || 'N/A') + '</td>' +
+                '<td>' + escapeHtml(data.contact || 'N/A') + '</td>' +
+                '<td>' + escapeHtml(createdDate) + '</td>' +
+                '<td><div style="max-height:100px;overflow-y:auto;white-space:pre-wrap;word-break:break-word;">' + escapeHtml(data.message || 'N/A') + '</div></td>' +
                 '<td class="action-buttons">' +
-                    '<button class="btn-delete" data-id="' + doc.id + '" data-action="delete-message">Delete</button>' +
+                    '<button class="btn-delete" data-id="' + escapeHtml(doc.id) + '" data-action="delete-message">Delete</button>' +
                 '</td>' +
             '</tr>';
         });
@@ -66,7 +81,7 @@ async function loadMessagesList() {
 
     } catch (error) {
         console.error('Error loading messages:', error);
-        tableBody.innerHTML = '<tr><td colspan="6" class="no-data">Error loading messages: ' + error.message + '</td></tr>';
+        tableBody.innerHTML = '<tr><td colspan="6" class="no-data">Error loading messages: ' + escapeHtml(error.message) + '</td></tr>';
     }
 }
 

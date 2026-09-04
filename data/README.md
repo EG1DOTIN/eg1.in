@@ -8,7 +8,7 @@ This directory houses the structured, static JSON datasets utilized by the **EG1
 
 | File | Description | Primary Consumers |
 | :--- | :--- | :--- |
-| [`apps.json`](apps.json) | Software & Web Application catalog with metadata, versioning, links, and status. | [`apps.html`](../apps.html), [`js/app.js`](../js/app.js) |
+| [`apps/*.md`](apps/) | Pure Markdown applications & web tools catalog with YAML frontmatter, versioning, links, and rich descriptions. | [`apps.html`](../apps.html), [`js/app.js`](../js/app.js) |
 | [`website_content.json`](website_content.json) | Static page copy, hero text, and single source of truth for `"seo"` tags (titles, descriptions, Open Graph, Twitter cards, canonical URLs, and `img/eg1-social-preview.webp`). | Root HTML pages via [`automation-scripts/sync_seo_tags.py`](../automation-scripts/sync_seo_tags.py), [`index.html`](../index.html), [`about.html`](../about.html), [`js/about.js`](../js/about.js) |
 | [`updates.json`](updates.json) | Release notes, changelog history, version badges, and notification center items. | [`updates.html`](../updates.html), [`js/updates.js`](../js/updates.js), [`js/include-components.js`](../js/include-components.js) |
 | [`blog/*.md`](blog/) | Pure Markdown blog articles with YAML frontmatter (47+ articles). | [`blog.html`](../blog.html), [`js/blog-page.js`](../js/blog-page.js), [`automation-scripts/generate_blog_pages.py`](../automation-scripts/generate_blog_pages.py) |
@@ -17,24 +17,24 @@ This directory houses the structured, static JSON datasets utilized by the **EG1
 
 ## 🎛️ Apps Schema & Custom Button Configuration
 
-Each entry in [`apps.json`](apps.json) supports dynamic button configuration (`button1` for left/primary action, `button2` for right/secondary action) and explicit versioning configuration:
+Each file in [`data/apps/*.md`](apps/) supports dynamic button configuration (`button1` for left/primary action, `button2` for right/secondary action) and explicit versioning configuration:
 
-```json
-{
-  "id": "YDLLCZ0ur2gTbkwQtDQV",
-  "product_name": "Marwadi Chess",
-  "version": {
-    "version-string": "3.7.1",
-    "fetch-github": "false"
-  },
-  "active": "1",
-  "icon": "./img/apps/mchess-webapp.webp",
-  "short_description": "<p>...</p>",
-  "button1": {
-    "VIEW DETAILS": "http://mchess.eg1.in/",
-    "sameTab": "false"
-  }
-}
+```yaml
+---
+id: "marwadi-chess"
+name: "Marwadi Chess"
+slug: "marwadi-chess"
+version:
+  version-string: "3.7.1"
+  fetch-github: "false"
+active: "1"
+icon: "./img/apps/mchess-webapp.webp"
+short_description: "MChess is a web-based platform for playing and learning chess."
+button1:
+  LAUNCH: "https://mchess.eg1.in/"
+  sameTab: "false"
+  icon: "icon-external-link"
+---
 ```
 
 - **Key (Button Label)**: Defines the button label text (e.g. `"VIEW DETAILS"`, `"DOWNLOAD"`, `"OPEN APP"`).
@@ -48,17 +48,17 @@ Each entry in [`apps.json`](apps.json) supports dynamic button configuration (`b
 App versioning across cards, catalog views, and detail pages is resolved simply and explicitly:
 1. **`fetch-github: "true"`**: If `product.version["fetch-github"]` is `"true"`, the engine queries GitHub for the latest release/tag and caches it (1-hour TTL). If not yet cached or offline, it uses `version-string`.
 2. **`version-string` (Static)**: If `fetch-github` is `"false"` (or if `version` is a string), it uses `version-string` (e.g., `"3.7.1"`).
-3. **Default Fallback**: If the `version` key is omitted in the JSON, the app automatically defaults to `"1.0.0"`.
+3. **Default Fallback**: If the `version` key is omitted, the app automatically defaults to `"1.0.0"`.
 
 ---
 
 ## 🛡️ License, Project Terms & Branding Notice
 
 ### 1. Data Formats & Schemas (MIT License)
-The data formats, JSON schemas, architecture, and synchronization tooling are open-sourced under the terms of the **[MIT License](LICENSE)**. Anyone is free to adapt, fork, and use these schemas and tools for their own applications.
+The data formats, schemas, architecture, and tooling are open-sourced under the terms of the **[MIT License](LICENSE)**. Anyone is free to adapt, fork, and use these schemas and tools for their own applications.
 
-### 2. Individual Open-Source Projects (`apps.json`)
-The digital products, applications, and tools listed in [`apps.json`](apps.json) (such as **Marwadi Chess / MChess**, **EGClamNetAntivirus**, etc.) are independent open-source projects.
+### 2. Individual Open-Source Projects (`data/apps/`)
+The digital products, applications, and tools listed in [`data/apps/`](apps/) (such as **Marwadi Chess / MChess**, **EGClamNetAntivirus**, etc.) are independent open-source projects.
 - Anyone is free to use, run, fork, and contribute to these projects under their respective open-source licenses and source repositories (e.g., individual project LICENSE files).
 
 ### 3. Trademark & Branding Protection

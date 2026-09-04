@@ -1,7 +1,7 @@
 # EG1 - Official Website & Digital Platform
 
 [![Website](https://img.shields.io/badge/Website-eg1.in-0284c7?style=flat-square&logo=google-chrome&logoColor=white)](https://www.eg1.in)
-[![Version](https://img.shields.io/badge/Version-3.2.0-10b981?style=flat-square)](data/updates.json)
+[![Version](https://img.shields.io/badge/Version-3.3.0-10b981?style=flat-square)](data/updates.json)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
 
 **EG1** ([eg1.in](https://www.eg1.in)) is a hobby platform for open source and creative digital projects, presenting practical software/tools, interactive web applications for real-world use and technical articles/blog posts.
@@ -12,15 +12,16 @@
 
 | Feature | Description |
 | :--- | :--- |
+| **📦 Pure Markdown Apps Engine** | Applications authored as individual files in `data/apps/*.md` with parallel client-side YAML parsing, LocalStorage caching, and zero JSON dependency. |
+| **🌐 Static Application Pages** | Selective compiler (`generate_app_pages.py`) producing pre-rendered `apps/<slug>.html` with Open Graph tags and Schema.org `SoftwareApplication` JSON-LD. |
+| **🔄 Header Cache-Refresh & Reload** | One-click header refresh button with 360° spin micro-interaction that flushes all client caches and triggers a fresh hard reload. |
+| **🎯 Themed Actions & Share Button** | Theme-token styled buttons (`var(--btn-primary-bg)`), native Web Share API (`js/share-app.js`), and animated toast feedback. |
+| **⚡ Consolidated Quality Suite** | Master automation runner (`run_all_checks.py`) executing all 7 repository audits and compilers in a single ~1.2s command. |
 | **🌐 Static Blog SEO & Slugs** | Pre-rendered static articles (`blog/<slug>.html`) with programming language terms (`C++` &rarr; `cpp`), Open Graph, Twitter cards, and JSON-LD schemas. |
-| **🔗 Unified Minimalist Share** | Single-button native sharing via Web Share API (`navigator.share`) with theme-styled modal clipboard link copier. |
-| **🔍 Content-Driven SEO Sync** | Centralized metadata in `data/website_content.json` with dual-mode sync and validation automation (`sync_seo_tags.py`). |
 | **📝 Pure Markdown Blog Engine** | Direct client-side Markdown (.md) rendering with zero Firestore reads, YAML frontmatter parser, and 1-click code copying. |
 | **🛠️ Admin TableToolkit Engine** | Standalone modular table engine with natural alphanumeric (`Intl.Collator`), datetime, numeric sorting, and universal pagination. |
 | **👥 App Users Workspace** | Interactive management grid with multi-app filtering, status toggling, search, and 16-field visitor telemetry inspection. |
-| **🎛️ Dynamic Dual Action Buttons** | Configurable `button1` and `button2` actions supporting custom labels, URLs, tab targets (`sameTab`), and custom icons. |
-| **🏷️ Automated 3-Tier Versioning** | Dynamic version resolution with live GitHub API release integration, persistent caching, and static fallbacks. |
-| **🎨 Dual Theme System** | High-contrast Light Gray and Dark Gray themes with instant zero-flicker loading across website and Admin Panel. |
+| **🎨 Dual Theme System** | High-contrast Light Gray and Dark Gray themes with instant zero-flicker loading across website, carousels, and Admin Panel. |
 | **🔔 Changelog & Notification Center** | Real-time updates dropdown with unread badge tracking, animated alerts, and category filtering. |
 
 ---

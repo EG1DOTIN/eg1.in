@@ -51,9 +51,6 @@ async function loadDashboardStats() {
         if (typeof updateVisitorStats === 'function') {
             await updateVisitorStats();
         }
-        if (typeof loadAppUsersData === 'function') {
-            await loadAppUsersData();
-        }
     } catch (error) {
         console.error('Error loading dashboard stats:', error);
     }
