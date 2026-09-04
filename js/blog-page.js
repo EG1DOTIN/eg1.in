@@ -188,7 +188,7 @@
                             author: meta.author || 'EG1',
                             createdAt: meta.createdAt || meta.release_date || '',
                             release_date: meta.release_date || meta.createdAt || '',
-                            output_image: meta.output_image || meta.imageUrl || ('cblog/id' + cleanId + '.webp'),
+                            output_image: meta.output_image || meta.imageUrl || ('img/blog/id' + cleanId + '.webp'),
                             short_description: meta.short_description || meta.description || '',
                             full_description: bodyHtml,
                             raw_markdown: bodyMd,
@@ -688,9 +688,32 @@
             );
         }
 
+        if (latestBlog.tags && latestBlog.tags.length > 0) {
+            blogHtml.push('  <div class="row mrgin-top15"><div class="col-md-12"><div class="blog-tags-detail">');
+            latestBlog.tags.forEach(function (tag) {
+                blogHtml.push('<a href="blog.html?cat=' + encodeURIComponent(tag) + '" class="tag-link">#' + escapeHtml(tag) + '</a>');
+            });
+            blogHtml.push('</div></div></div>');
+        }
+
+        // ── Single Minimalist Share Button (Bottom of Center Article Block) ─
+        var shareSlug = getBlogSlug(latestBlog);
+        var canonicalUrl = 'https://www.eg1.in/blog/' + shareSlug + '.html';
+
+        blogHtml.push(
+            '  <div class="row mrgin-top15">',
+            '    <div class="col-md-12">',
+            '      <div class="blog-share-action-bar">',
+            '        <button type="button" class="btn btn-share-single" id="btnShareArticle" data-url="' + escapeHtml(canonicalUrl) + '" title="Share this tutorial"><i class="fa fa-share-alt"></i> <span id="shareBtnLabel">Share</span></button>',
+            '      </div>',
+            '    </div>',
+            '  </div>'
+        );
+
         blogHtml.push('</div>');
         $('#blogContainer').html(blogHtml.join(''));
         initializeCodeBlocks();
+        initializeShareButtons(latestBlog, canonicalUrl);
 
         var previous = blogs.slice(1, 11);
         if (previous.length > 0) {
@@ -857,6 +880,11 @@
                 $('#blogPageTitleText').text('Search: "' + searchParam + '"');
                 renderBlogsGrid(filteredBlogs);
             } else {
+                if (allBlogs && allBlogs.length > 0) {
+                    var latestSlug = getBlogSlug(allBlogs[0]);
+                    window.location.replace('blog/' + latestSlug + '.html');
+                    return;
+                }
                 $('#Content3Header').show();
                 $('#blogPageTitleText').text('Blog');
                 await renderLatestBlogView(allBlogs);

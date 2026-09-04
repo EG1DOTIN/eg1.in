@@ -25,53 +25,6 @@ var AppConfig = {
 };
 
 /**
- * Checks if the Firebase SDK and Firestore database instances are initialized.
- * @returns {boolean} True if Firebase is ready, false otherwise.
- */
-function isFirebaseReady() {
-  try {
-    if (typeof firebase === "undefined") {
-      console.log("Waiting for Firebase SDK...");
-      return false;
-    }
-    if (typeof db === "undefined") {
-      console.log("Waiting for Firestore db...");
-      return false;
-    }
-    console.log("✓ Firebase is ready");
-    return true;
-  } catch (e) {
-    console.error("Error checking Firebase readiness:", e);
-    return false;
-  }
-}
-
-/**
- * Waits for Firebase to initialize before executing a callback.
- * Checks readiness recursively with a timeout.
- * @param {Function} callback - The function to execute once Firebase is ready.
- * @param {number} attempts - Current attempt count (default: 0).
- * @param {number} maxAttempts - Maximum attempts before forcing execution (default: 100).
- */
-function waitForFirebase(callback, attempts = 0, maxAttempts = 100) {
-  if (isFirebaseReady()) {
-    callback();
-  } else if (attempts < maxAttempts) {
-    setTimeout(() => waitForFirebase(callback, attempts + 1, maxAttempts), 100);
-  } else {
-    console.error("Firebase failed to initialize after " + (maxAttempts * 100 / 1000) + " seconds");
-    console.warn("Attempting to proceed anyway...");
-    if (typeof db !== "undefined") {
-      console.log("db object is now available, proceeding...");
-      callback();
-    } else {
-      console.error("Cannot proceed - db is still undefined. Check Firebase configuration and network.");
-      callback();
-    }
-  }
-}
-
-/**
  * Cache controller for retrieving and storing application data.
  *
  * This helper centralizes data access for products, news, and blogs.
@@ -129,6 +82,143 @@ var DataCache = {
   },
 
   BLOGS_CACHE_KEY: 'eg1_direct_md_cache_v5',
+  PRODUCTS_CACHE_KEY: 'eg1_apps_md_cache_v2',
+
+  // Known list of Markdown applications in data/apps/
+  KNOWN_APP_SLUGS: [
+    'marwadi-chess',
+    'test1-app',
+    'test2-app'
+  ],
+
+  getRequestedAppSlug: function () {
+    try {
+      if (typeof window !== 'undefined' && window.location && window.location.search) {
+        var params = new URLSearchParams(window.location.search);
+        var title = params.get('title') || params.get('id');
+        if (title) {
+          return title.trim().toLowerCase().replace(/_/g, '-');
+        }
+      }
+    } catch (e) {}
+    return null;
+  },
+
+  parseAppFrontmatterAndMarkdown: function (rawText, defaultSlug) {
+    if (!rawText) return null;
+    var match = rawText.match(/^---\s*[\r\n]+([\s\S]*?)[\r\n]+---\s*[\r\n]*([\s\S]*)$/);
+    if (!match) return null;
+
+    var yamlContent = match[1];
+    var markdownBody = (match[2] || '').trim();
+    var meta = {};
+    var lines = yamlContent.split(/\r?\n/);
+    var currentParentKey = null;
+
+    for (var i = 0; i < lines.length; i++) {
+      var line = lines[i];
+      var trimmed = line.trim();
+      if (!trimmed || trimmed.startsWith('#')) continue;
+
+      var isIndented = /^(\s{2,}|\t)/.test(line);
+      var colonIdx = line.indexOf(':');
+      if (colonIdx === -1) continue;
+
+      var rawKey = line.slice(0, colonIdx).trim();
+      var rawVal = line.slice(colonIdx + 1).trim();
+      var hadQuotes = (rawVal.startsWith('"') && rawVal.endsWith('"')) || (rawVal.startsWith("'") && rawVal.endsWith("'"));
+
+      // Unquote strings
+      if (hadQuotes) {
+        rawVal = rawVal.slice(1, -1);
+      }
+
+      if (isIndented && currentParentKey) {
+        if (!meta[currentParentKey] || typeof meta[currentParentKey] !== 'object') {
+          meta[currentParentKey] = {};
+        }
+        meta[currentParentKey][rawKey] = rawVal;
+      } else {
+        if (rawVal === '' && !hadQuotes) {
+          currentParentKey = rawKey;
+          meta[currentParentKey] = {};
+        } else {
+          currentParentKey = null;
+          meta[rawKey] = rawVal;
+        }
+      }
+    }
+
+    // Convert markdown body to HTML using marked.js if present
+    var bodyHtml = '';
+    if (typeof marked !== 'undefined' && typeof marked.parse === 'function') {
+      try {
+        bodyHtml = marked.parse(markdownBody);
+      } catch (e) {
+        bodyHtml = '<p>' + markdownBody.replace(/\n\n+/g, '</p><p>') + '</p>';
+      }
+    } else if (typeof marked === 'function') {
+      try {
+        bodyHtml = marked(markdownBody);
+      } catch (e) {
+        bodyHtml = '<p>' + markdownBody.replace(/\n\n+/g, '</p><p>') + '</p>';
+      }
+    } else {
+      bodyHtml = '<p>' + markdownBody.replace(/\n\n+/g, '</p><p>') + '</p>';
+    }
+
+    var productName = meta.product_name || meta.name || defaultSlug || 'Unknown App';
+    var slug = meta.slug || (defaultSlug || productName.toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/[\s-]+/g, '-'));
+    var appId = meta.id || slug;
+
+    var versionObj = { 'version-string': '1.0.0', 'fetch-github': 'false' };
+    if (meta.version && typeof meta.version === 'object') {
+      versionObj = {
+        'version-string': String(meta.version['version-string'] || meta.version.versionString || meta.version.version || '1.0.0'),
+        'fetch-github': String(meta.version['fetch-github'] || meta.version.fetchGithub || 'false').toLowerCase()
+      };
+    } else if (typeof meta.version === 'string') {
+      versionObj = {
+        'version-string': meta.version,
+        'fetch-github': 'false'
+      };
+    }
+
+    var defaultBtn1 = (meta.product_type === 'WebApp' && meta.webapp_link)
+      ? { LAUNCH: meta.webapp_link, sameTab: 'false' }
+      : { 'VIEW DETAILS': 'apps.html?title=' + slug, sameTab: 'true' };
+
+    var defaultBtn2 = meta.attach_upload_file_1
+      ? { DOWNLOAD: meta.attach_upload_file_1, sameTab: 'true' }
+      : null;
+
+    return {
+      id: appId,
+      product_name: productName,
+      name: productName,
+      slug: slug,
+      category: meta.category || meta.categories || 'General',
+      categories: meta.categories || meta.category || 'General',
+      product_type: meta.product_type || 'Desktop App',
+      version: versionObj,
+      active: String(meta.active !== undefined ? meta.active : '1'),
+      icon: (typeof meta.icon === 'string' && meta.icon.trim()) || (typeof meta.imageUrl === 'string' && meta.imageUrl.trim()) || '',
+      imageUrl: (typeof meta.imageUrl === 'string' && meta.imageUrl.trim()) || (typeof meta.icon === 'string' && meta.icon.trim()) || '',
+      short_description: meta.short_description || meta.description || '',
+      description: meta.description || meta.short_description || '',
+      full_description: bodyHtml || meta.short_description || meta.description || '',
+      webapp_link: meta.webapp_link || '',
+      attach_upload_file_1: meta.attach_upload_file_1 || '',
+      attach_upload_file_2: meta.attach_upload_file_2 || '',
+      downloaded: meta.downloaded || '0',
+      paid_version: String(meta.paid_version || 'false'),
+      show_download: String(meta.show_download || 'false'),
+      createdAt: meta.createdAt || '',
+      updatedAt: meta.updatedAt || '',
+      button1: meta.button1 || defaultBtn1,
+      button2: meta.button2 || defaultBtn2
+    };
+  },
 
   clearCache: function (type) {
     try {
@@ -145,6 +235,10 @@ var DataCache = {
         this.products = null;
         localStorage.removeItem('eg1_products_cache');
         localStorage.removeItem('eg1_products_cache_time');
+        localStorage.removeItem('eg1_products_cache_v2');
+        localStorage.removeItem('eg1_products_cache_v2_time');
+        localStorage.removeItem(this.PRODUCTS_CACHE_KEY);
+        localStorage.removeItem(this.PRODUCTS_CACHE_KEY + '_time');
       }
       if (!type || type === 'pages') {
         this.pages = null;
@@ -340,8 +434,8 @@ var DataCache = {
     }
 
     if (!forceRefresh) {
-      var cached = this._getPersistentCache('eg1_products_cache');
-      if (cached) {
+      var cached = this._getPersistentCache(this.PRODUCTS_CACHE_KEY);
+      if (cached && Array.isArray(cached) && cached.length > 0) {
         this.products = cached;
         this.lastFetchSource.products = 'localStorage (0 reads)';
         return this.products;
@@ -349,20 +443,37 @@ var DataCache = {
     }
 
     try {
-      console.log("[DataCache] Fetching products/apps from static JSON (data/apps.json, 0 Firestore Reads)...");
-      const response = await fetch("data/apps.json");
-      if (!response.ok) {
-        throw new Error("HTTP " + response.status + " while fetching data/apps.json");
+      console.log("[DataCache] Fetching applications directly from Markdown (.md) in data/apps/ (0 Firestore reads)...");
+      var slugs = this.KNOWN_APP_SLUGS.slice();
+      var requestedSlug = this.getRequestedAppSlug();
+      if (requestedSlug && !slugs.includes(requestedSlug)) {
+        slugs.unshift(requestedSlug);
       }
-      var allProducts = await response.json();
-      this.products = (allProducts || []).filter(function (p) {
+
+      var self = this;
+      var fetchPromises = slugs.map(async function (slug) {
+        try {
+          var res = await fetch('data/apps/' + slug + '.md');
+          if (!res.ok) return null;
+          var text = await res.text();
+          return self.parseAppFrontmatterAndMarkdown(text, slug);
+        } catch (err) {
+          console.warn('[DataCache] Failed to load markdown app for slug:', slug, err);
+          return null;
+        }
+      });
+
+      var loadedApps = await Promise.all(fetchPromises);
+      var validApps = loadedApps.filter(function (a) { return a !== null; });
+
+      this.products = validApps.filter(function (p) {
         return p.active === "1" || p.active === 1 || p.active === true || !p.hasOwnProperty('active');
       });
-      this._setPersistentCache('eg1_products_cache', this.products);
-      this.lastFetchSource.products = 'static JSON (0 Firestore reads)';
+      this._setPersistentCache(this.PRODUCTS_CACHE_KEY, this.products);
+      this.lastFetchSource.products = 'direct markdown (.md, 0 Firestore reads)';
     } catch (e) {
       this.lastError = e;
-      console.error("Error fetching apps from data/apps.json:", e.message);
+      console.error("Error fetching apps from data/apps/*.md:", e.message);
       this.products = [];
     }
     return this.products;
@@ -505,8 +616,10 @@ var DataCache = {
 /**
  * Default SVG data URI placeholder for products and blogs when no image is specified.
  */
-var DEFAULT_PLACEHOLDER_ICON = "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23050814'/><text x='50%' y='62%' font-family='serif' font-size='42' fill='%23ffffff' text-anchor='middle'>EG1</text></svg>";
-window.DEFAULT_PLACEHOLDER_ICON = DEFAULT_PLACEHOLDER_ICON;
+var DEFAULT_APP_ICON = "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='16' fill='%231e293b'/><text x='50%' y='63%' font-family='sans-serif' font-weight='bold' font-size='38' fill='%2338bdf8' text-anchor='middle'>EG1</text></svg>";
+var DEFAULT_PLACEHOLDER_ICON = DEFAULT_APP_ICON;
+window.DEFAULT_APP_ICON = DEFAULT_APP_ICON;
+window.DEFAULT_PLACEHOLDER_ICON = DEFAULT_APP_ICON;
 
 /**
  * Utility functions for rendering dynamic HTML components.
@@ -590,6 +703,10 @@ var RenderHelpers = {
     if (!label && fallbackLabel) label = fallbackLabel;
     if (!url) return null;
 
+    if (typeof url === "string" && url.includes("apps.html?title=")) {
+      url = url.replace(/apps\.html\?title=([^&#]+)/, "apps/$1.html");
+    }
+
     const target = sameTab ? "" : 'target="_blank" rel="noopener noreferrer"';
 
     if (icon) {
@@ -598,6 +715,8 @@ var RenderHelpers = {
         icon = "icon icon-" + icon;
       } else if (!icon.includes(" ") && icon.startsWith("icon-")) {
         icon = "icon " + icon;
+      } else if (!icon.includes(" ") && icon.startsWith("fa-")) {
+        icon = "fa " + icon;
       }
     } else {
       const upperLabel = (label || "").toUpperCase();
@@ -631,7 +750,10 @@ var RenderHelpers = {
   },
 
   renderProductCard: function (product, isHomepage) {
-    const iconUrl = product.icon || product.imageUrl || DEFAULT_PLACEHOLDER_ICON;
+    const DEFAULT_ICON = window.DEFAULT_APP_ICON || "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='16' fill='%231e293b'/><text x='50%' y='63%' font-family='sans-serif' font-weight='bold' font-size='38' fill='%2338bdf8' text-anchor='middle'>EG1</text></svg>";
+    const rawIcon = (product.icon && typeof product.icon === 'string') ? product.icon.trim() : '';
+    const rawImg = (product.imageUrl && typeof product.imageUrl === 'string') ? product.imageUrl.trim() : '';
+    const iconUrl = rawIcon || rawImg || DEFAULT_ICON;
     const productName = product.product_name || product.name || "Unknown Product";
     const version = DataCache.resolveProductVersion(product);
     const shortDesc = product.short_description || product.description || "";
@@ -640,7 +762,8 @@ var RenderHelpers = {
     const webappLink = product.webapp_link || "#";
 
     // Resolve Button 1 (Left / Primary Action)
-    const defaultDetailLink = (productType === "WebApp" && webappLink) ? webappLink : `apps.html?id=${product.id}`;
+    const appSlug = product.slug || (product.product_name || product.name || ('app-' + product.id)).trim().toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/[\s-]+/g, '-');
+    const defaultDetailLink = (productType === "WebApp" && webappLink) ? webappLink : `apps/${appSlug}.html`;
     const defaultDetailSameTab = productType !== "WebApp";
     const btn1 = this.parseButton(
       product.button1,
@@ -657,11 +780,11 @@ var RenderHelpers = {
     if (product.button2 !== undefined) {
       fallbackBtn2Url = null;
     } else if (paidVersion === "true") {
-      fallbackBtn2Url = `get-registration-key.html?id=${product.id}`;
-      fallbackBtn2Label = "Get Key";
+      fallbackBtn2Url = `apps.html?title=${appSlug}`;
+      fallbackBtn2Label = "View App";
       fallbackBtn2Class = "btn btn-primary btn-down";
-    } else if (product.show_download === "true" || product.show_download === undefined) {
-      fallbackBtn2Url = `download.html?id=${product.id}`;
+    } else if (product.show_download === "true" || product.show_download === true) {
+      fallbackBtn2Url = product.attach_upload_file_1 || `apps.html?title=${appSlug}`;
       fallbackBtn2Label = "DOWNLOAD";
       fallbackBtn2Class = "btn btn-success btn-down";
     }
@@ -679,7 +802,7 @@ var RenderHelpers = {
                 <div class="col-md-4 col-sm-4 col-xs-12">
                     <div class="box box-widget home-product-card box-shadow-bottom">
                         <div class="home-product-header">
-                            <img src="${iconUrl}" class="home-product-icon" alt="${productName}" />
+                            <img src="${iconUrl}" onerror="this.onerror=null;this.src=window.DEFAULT_APP_ICON;" class="home-product-icon" alt="${productName}" />
                             <div class="home-product-title-wrap">
                                 <h4 class="home-product-title">${productName}</h4>
                                 <h5 class="home-product-version" data-product-version-id="${product.id}">Version ${version}</h5>
@@ -701,32 +824,22 @@ var RenderHelpers = {
                     <div class="col-md-12 margin-bottom">
                         <div class="our-product">
                             <div class="row">
-                                <div class="col-md-2">
+                                <div class="col-md-2 col-sm-3 col-xs-12">
                                     <div class="product-icon">
-                                        <img src="${iconUrl}" width="55px" />
+                                        <img src="${iconUrl}" onerror="this.onerror=null;this.src=window.DEFAULT_APP_ICON;" width="55px" height="55px" style="object-fit:contain; border-radius:6px;" alt="${productName}" />
                                     </div>
                                 </div>
-                                <div class="col-md-10 border">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <a href="${btn1 ? btn1.url : '#'}" ${btn1 ? btn1.target : ''} class="link-name">${productName}</a>
-                                        </div>
-                                        <div class="col-md-12 left">
-                                            <h5>Version:&nbsp;<span data-product-version-id="${product.id}">${version}</span></h5>
-                                        </div>
+                                <div class="col-md-10 col-sm-9 col-xs-12 border">
+                                    <div class="our-product-header">
+                                        <a href="${btn1 ? btn1.url : '#'}" ${btn1 ? btn1.target : ''} class="link-name">${productName}</a>
+                                        <span class="our-product-version">Version: <span data-product-version-id="${product.id}">${version}</span></span>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-md-12 left" style="text-align: left;">
-                                            <p>${shortDesc}</p>
-                                        </div>
+                                    <div class="our-product-desc-wrap">
+                                        <p class="our-product-desc">${shortDesc}</p>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-md-5">
-                                            ${btn1 ? `<a href="${btn1.url}" ${btn1.target} class="${btn1.btnClass}"><i class="${btn1.icon}"></i>&nbsp;${btn1.label}</a>` : ""}
-                                        </div>
-                                        <div class="col-md-7">
-                                            ${btn2 ? `<a href="${btn2.url}" ${btn2.target} class="${btn2.btnClass} margin-r-5"><i class="${btn2.icon}"></i>&nbsp;${btn2.label}</a>` : ""}
-                                        </div>
+                                    <div class="our-product-actions">
+                                        ${btn1 ? `<a href="${btn1.url}" ${btn1.target} class="${btn1.btnClass}"><i class="${btn1.icon}"></i>&nbsp;${btn1.label}</a>` : ""}
+                                        ${btn2 ? `<a href="${btn2.url}" ${btn2.target} class="${btn2.btnClass}"><i class="${btn2.icon}"></i>&nbsp;${btn2.label}</a>` : ""}
                                     </div>
                                 </div>
                             </div>
@@ -735,293 +848,8 @@ var RenderHelpers = {
                 </div>
             `;
     }
-  },
-
-  getBlogSlug: function (blog) {
-    if (!blog) return 'article';
-    if (blog.slug) return blog.slug;
-    const title = String(blog.heading || blog.title || ('article-' + (blog.id || ''))).trim();
-    const s = title
-      .replace(/c\+\+/gi, 'cpp')
-      .replace(/c#/gi, 'csharp')
-      .replace(/f#/gi, 'fsharp')
-      .replace(/\.net\b/gi, 'dotnet')
-      .replace(/&/g, ' and ')
-      .toLowerCase()
-      .trim()
-      .replace(/[^a-z0-9\s-]/g, '')
-      .replace(/[\s-]+/g, '-');
-    return s || ('article-' + (blog.id || ''));
-  },
-
-  getBlogUrl: function (blog) {
-    const slug = this.getBlogSlug(blog);
-    return 'blog/' + slug + '.html';
-  },
-
-  renderBlogCard: function (blog) {
-    const imageUrl = blog.output_image || blog.imageUrl || DEFAULT_PLACEHOLDER_ICON;
-    const title = blog.heading || blog.title || "Untitled";
-    const category = blog.category || (blog.tags && blog.tags.length > 0 ? blog.tags[0] : "Uncategorized");
-    const author = blog.author || "Admin";
-    const description = blog.short_description || blog.description || "";
-    const content = blog.full_description || blog.content || "";
-    const endDescription = blog.end_description || "";
-    const blogUrl = this.getBlogUrl(blog);
-
-    return `
-            <div class="row">
-                <div class="col-md-12 margin-bottom">
-                    <div class="our-product">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="row">
-                                    <div class="col-lg-10 col-md-10 col-sm-12 col-xs-12">
-                                        <img src="${imageUrl}" alt="${title}" loading="lazy" style="width: 100%;" />
-                                    </div>
-                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 left">
-                                        <h3 class="text-blue"><a href="${blogUrl}">${title}</a></h3>
-                                        <p>
-                                            <i class="icon icon-list-alt"></i>&nbsp;${category}
-                                            | <i class="icon icon-user"></i>&nbsp;${author}
-                                        </p>
-                                    </div>
-                                </div>
-                                <div class="row mrgin-top20">
-                                    <div class="col-md-12 left" style="text-align: left;">
-                                        ${description}
-                                    </div>
-                                </div>
-                                <div class="row mrgin-top20">
-                                    <div class="col-md-12">
-                                        ${content
-        ? `
-                                        <div class='ai-blog-content' style='padding: 12px 10px; background: transparent; text-align: left;'>
-                                            <div style="word-break: break-word; overflow-wrap: break-word;">${content}</div>
-                                        </div>
-                                        `
-        : ""
-      }
-                                    </div>
-                                </div>
-                                ${endDescription ? `
-                                <div class="row mrgin-top20">
-                                    <div class="col-md-12 left" style="text-align: left;">
-                                        ${endDescription}
-                                    </div>
-                                </div>
-                                ` : ''}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `;
-  },
-
-  renderBlogCardGrid: function (blog) {
-    const imageUrl = blog.output_image || blog.imageUrl || DEFAULT_PLACEHOLDER_ICON;
-    const title = blog.heading || blog.title || "Untitled";
-    const category = blog.category || (blog.tags && blog.tags.length > 0 ? blog.tags[0] : "Uncategorized");
-    const author = blog.author || "Admin";
-    const rawDesc = blog.short_description || blog.description || "";
-    const blogUrl = this.getBlogUrl(blog);
-
-    // Strip HTML tags BEFORE truncating — cutting through an open tag like
-    // "<h3>What is C</h3><p>C is a computer..." leaves unclosed tags in the
-    // card which explode the card height and break the grid layout entirely.
-    const plainDesc = rawDesc.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
-    const shortDesc = plainDesc.length > 120 ? plainDesc.substring(0, 120) + '...' : plainDesc;
-
-    return `
-            <div class="col-md-4 margin-bottom blog-item-container">
-                <div class="our-product blogs blog-grid-card" data-url="${blogUrl}" role="link" tabindex="0" style="cursor:pointer;">
-                    <div class="row">
-                        <div class="col-md-12 left">
-                            <div class="blogimg">
-                                <a href="${blogUrl}">
-                                    <img src="${imageUrl}" alt="${title}" loading="lazy" style="width: 100%; height: 200px; object-fit: cover;" />
-                                </a>
-                            </div>
-                            <div class="blogbody">
-                                <a href="${blogUrl}">
-                                    <h3 class="blogs-title">${title}</h3>
-                                    <p>
-                                      <small>
-                                        <i class="icon icon-list-alt"></i>&nbsp;${category}  
-                                        <!-- | <i class="icon icon-user"></i>&nbsp;${author} -->
-                                      </small>
-                                    </p>
-                                    <div class="shortcontent">${shortDesc}</div>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `;
-  },
-  // List-style card matching the reference site (eg1.in/Blogs.aspx)
-  // Used for categories where blogs have content/diagram images (not portrait thumbnails)
-  renderBlogListCard: function (blog) {
-    const imageUrl = blog.output_image || blog.imageUrl || DEFAULT_PLACEHOLDER_ICON;
-    const title = blog.heading || blog.title || 'Untitled';
-    const category = blog.category || (blog.tags && blog.tags.length > 0 ? blog.tags[0] : 'Uncategorized');
-    const author = blog.author || 'Admin';
-    const description = blog.short_description || blog.description || '';
-    const shortDesc = description.length > 150
-      ? description.substring(0, 150) + '...'
-      : description;
-    const blogUrl = this.getBlogUrl(blog);
-
-    return `
-      <a href="${blogUrl}" class="blog-list-card">
-        <div class="blog-list-image">
-          <img src="${imageUrl}" alt="${title}" loading="lazy" />
-        </div>
-        <div class="blog-list-body">
-          <h3 class="blog-list-title">${title}</h3>
-          <p class="blog-list-category">
-            <i class="icon icon-list-alt"></i> ${category}
-          </p>
-          ${shortDesc ? `<p class="blog-list-description">${shortDesc}</p>` : ''}
-          <div class="blog-list-footer">
-            <span class="blog-list-author"><i class="icon icon-user"></i> ${author}</span>
-          </div>
-        </div>
-      </a>`;
-  },
+  }
 };
-// ---------------------------------------------------------------------------
-// Shared: Code block syntax highlighting + copy button
-// Used by both blog.html
-// ---------------------------------------------------------------------------
-function initializeCodeBlocks() {
-  document.querySelectorAll('.ai-blog-content pre').forEach(pre => {
-    const code = pre.querySelector('code');
-    if (!code) return;
-
-    // Syntax highlighting
-    if (typeof hljs !== 'undefined' && typeof hljs.highlightElement === 'function') {
-      hljs.highlightElement(code);
-    }
-
-    // Prevent duplicate initialization
-    if (pre.parentElement.classList.contains('code-wrapper'))
-      return;
-
-    // Detect language
-    let language = "Code";
-    pre.classList.forEach(cls => {
-      if (cls.startsWith("language-")) {
-        language = cls.replace("language-", "");
-      }
-    });
-
-    // Wrapper
-    const wrapper = document.createElement('div');
-    wrapper.className = 'code-wrapper';
-
-    // Header
-    const header = document.createElement('div');
-    header.className = 'code-header';
-
-    // Language label
-    const lang = document.createElement('span');
-    lang.innerText = language;
-
-    // Copy button
-    const copyBtn = document.createElement('button');
-    copyBtn.innerText = 'Copy';
-    copyBtn.onclick = () => {
-      const text = code.innerText;
-      navigator.clipboard.writeText(text).then(() => {
-        copyBtn.innerText = 'Copied!';
-        setTimeout(() => {
-          copyBtn.innerText = 'Copy';
-        }, 2000);
-      });
-    };
-
-    header.appendChild(lang);
-    header.appendChild(copyBtn);
-    wrapper.appendChild(header);
-    wrapper.appendChild(pre.cloneNode(true));
-    pre.parentElement.replaceChild(wrapper, pre);
-  });
-}
-
-// ---------------------------------------------------------------------------
-// Shared: Category links loader
-// Populates a <ul> element (by id) with category links from Markdown blogs
-// ---------------------------------------------------------------------------
-async function loadCategoryLinks(listElementId) {
-  try {
-    var blogs = await DataCache.getBlogs();
-    var categorySet = new Set();
-    blogs.forEach(function (b) {
-      if (b.category) categorySet.add(b.category);
-    });
-    var categories = Array.from(categorySet).sort();
-    var categoryHtml = '';
-    categories.forEach(function (catName) {
-      categoryHtml +=
-        '<li><a href="blog.html?cat=' +
-        encodeURIComponent(catName) +
-        '" class="category-link">' +
-        catName +
-        '</a></li>';
-    });
-    var el = document.getElementById(listElementId);
-    if (el) el.innerHTML = categoryHtml;
-  } catch (error) {
-    console.error('Error loading categories:', error);
-  }
-}
-
-// ---------------------------------------------------------------------------
-// Shared: Search blogs
-// On blog.html  — filters and re-renders the grid in place.
-// redirects to blog.html with ?search= so the full
-//                     blog list page handles the search properly.
-// ---------------------------------------------------------------------------
-function searchBlogs() {
-  var searchTerm = (document.getElementById('txtSearch') || {}).value || '';
-  searchTerm = searchTerm.trim();
-
-  // redirect to blog.html with the search term
-  if (typeof allBlogs === 'undefined' || typeof renderBlogsGrid === 'undefined') {
-    if (searchTerm) {
-      window.location.href = 'blog.html?search=' + encodeURIComponent(searchTerm);
-    } else {
-      window.location.href = 'blog.html';
-    }
-    return;
-  }
-
-  // blog.html: filter in place (existing behaviour)
-  var term = searchTerm.toLowerCase();
-  if (!term) {
-    filteredBlogs = [...allBlogs];
-  } else {
-    filteredBlogs = allBlogs.filter(function (blog) {
-      return (
-        (blog.title && blog.title.toLowerCase().includes(term)) ||
-        (blog.heading && blog.heading.toLowerCase().includes(term)) ||
-        (blog.description && blog.description.toLowerCase().includes(term)) ||
-        (blog.short_description && blog.short_description.toLowerCase().includes(term)) ||
-        (blog.tags && blog.tags.some(function (tag) {
-          return tag.toLowerCase().includes(term);
-        }))
-      );
-    });
-  }
-  currentPage = 1;
-  if ($('#Content3Header').length) {
-    $('#Content3Header').show();
-  }
-  renderBlogsGrid(filteredBlogs);
-}
 
 $(document).ready(function () {
   // Initialize any page-specific functionality

@@ -63,3 +63,7 @@ under their respective open-source terms:
 6. Firebase Web SDK & Firestore API
    - Copyright (c) Google LLC
    - License: Apache License 2.0 (https://firebase.google.com/)
+
+7. Marked.js
+   - Copyright (c) 2011-2024 Christopher Jeffrey and contributors
+   - License: MIT License (https://github.com/markedjs/marked)

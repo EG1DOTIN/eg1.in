@@ -17,7 +17,7 @@ firebase.initializeApp(firebaseConfig);
 // Initialize Firebase Services
 const db = firebase.firestore();
 const auth = firebase.auth();
-const storage = firebase.storage();
-const analytics = firebase.analytics();
+const storage = typeof firebase.storage === 'function' ? firebase.storage() : null;
+const analytics = typeof firebase.analytics === 'function' ? firebase.analytics() : null;
 
 console.log('Firebase initialized successfully');

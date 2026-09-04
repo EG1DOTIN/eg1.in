@@ -10,7 +10,7 @@
 
     async function initializeApps() {
         try {
-            console.log('apps.html: Loading products from static JSON cache...');
+            console.log('apps.html: Loading products directly from Markdown (.md)...');
             var products = await DataCache.getProducts();
 
             if (!products || products.length === 0) {
@@ -32,11 +32,29 @@
             }
 
             var urlParams = new URLSearchParams(window.location.search);
+            var appTitleParam = urlParams.get("title");
             var productId = urlParams.get("id");
 
-            if (productId) {
+            function getAppSlug(p) {
+                if (p.slug) return p.slug;
+                var name = (p.product_name || p.name || ('app-' + p.id)).trim().toLowerCase();
+                return name.replace(/[^a-z0-9\s-]/g, '').replace(/[\s-]+/g, '-');
+            }
+
+            if (appTitleParam || productId) {
                 var selectedProduct = activeProducts.find(function (product) {
-                    return String(product.id) === String(productId);
+                    if (appTitleParam) {
+                        var slug = getAppSlug(product);
+                        var cleanParam = appTitleParam.toLowerCase().trim();
+                        var normParam = cleanParam.replace(/_/g, '-');
+                        return slug === cleanParam ||
+                               slug === normParam ||
+                               String(product.name || product.product_name || '').toLowerCase() === cleanParam;
+                    }
+                    if (productId) {
+                        return String(product.id) === String(productId);
+                    }
+                    return false;
                 });
 
                 if (!selectedProduct) {
@@ -46,50 +64,92 @@
                     return;
                 }
 
-                var otherApps = activeProducts.filter(function (product) {
-                    return String(product.id) !== String(selectedProduct.id);
-                });
+                // Seamlessly forward legacy query URLs to the canonical static page
+                var targetSlug = getAppSlug(selectedProduct);
+                if (selectedProduct.product_type === "WebApp" && selectedProduct.webapp_link && selectedProduct.webapp_link !== "#") {
+                    window.location.replace(selectedProduct.webapp_link);
+                    return;
+                } else if (targetSlug) {
+                    window.location.replace('apps/' + encodeURIComponent(targetSlug) + '.html');
+                    return;
+                }
 
-                var placeholderIcon = window.DEFAULT_PLACEHOLDER_ICON || "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23050814'/><text x='50%' y='62%' font-family='serif' font-size='42' fill='%23ffffff' text-anchor='middle'>EG1</text></svg>";
+                var defaultAppIcon = window.DEFAULT_APP_ICON || window.DEFAULT_PLACEHOLDER_ICON || "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='16' fill='%231e293b'/><text x='50%' y='63%' font-family='sans-serif' font-weight='bold' font-size='38' fill='%2338bdf8' text-anchor='middle'>EG1</text></svg>";
                 var selectedVersion = (typeof DataCache !== 'undefined' && typeof DataCache.resolveProductVersion === 'function')
                     ? DataCache.resolveProductVersion(selectedProduct)
                     : (selectedProduct.version || '1.0.0');
 
+                var productType = selectedProduct.product_type || "Desktop App";
+                var webappLink = selectedProduct.webapp_link || "#";
+                var defaultDetailLink = (productType === "WebApp" && webappLink) ? webappLink : ('apps.html?title=' + getAppSlug(selectedProduct));
+                var defaultDetailSameTab = productType !== "WebApp";
+                var btn1 = (typeof RenderHelpers !== 'undefined' && typeof RenderHelpers.parseButton === 'function')
+                    ? RenderHelpers.parseButton(
+                        selectedProduct.button1,
+                        productType === "WebApp" ? "LAUNCH" : "VIEW DETAILS",
+                        defaultDetailLink,
+                        defaultDetailSameTab,
+                        "btn btn-theme-primary"
+                    )
+                    : null;
+
+                var btn2 = (typeof RenderHelpers !== 'undefined' && typeof RenderHelpers.parseButton === 'function')
+                    ? RenderHelpers.parseButton(
+                        selectedProduct.button2,
+                        "DOWNLOAD",
+                        selectedProduct.attach_upload_file_1 || null,
+                        true,
+                        "btn btn-theme-secondary"
+                    )
+                    : null;
+
+                // Collect actionable buttons for the detail view
+                // Exclude redundant "VIEW DETAILS" button or self-links because the visitor is already viewing the details!
+                var visibleBtns = [];
+                [btn1, btn2].forEach(function (btn) {
+                    if (!btn) return;
+                    var labelUpper = (btn.label || '').toUpperCase().trim();
+                    var isDetailLabel = labelUpper === 'VIEW DETAILS' || labelUpper === 'DETAILS' || labelUpper === 'VIEW APP';
+                    var normBtnUrl = (btn.url || '').toLowerCase().replace(/_/g, '-');
+                    var normSlug = getAppSlug(selectedProduct).toLowerCase().replace(/_/g, '-');
+                    var isSelfLink = (normBtnUrl.indexOf('apps.html?title=' + normSlug) !== -1) ||
+                                     (btn.url.indexOf('apps.html?id=' + selectedProduct.id) !== -1);
+                    if (isDetailLabel || isSelfLink) {
+                        return; // Omit redundant "View Details" button from detail page
+                    }
+                    visibleBtns.push(btn);
+                });
+
+                var actionsHtml = '';
+                if (visibleBtns.length > 0) {
+                    actionsHtml = '<div class="app-detail-actions">' +
+                        visibleBtns.map(function (b) {
+                            return '<a href="' + b.url + '" ' + b.target + ' class="' + b.btnClass + '"><i class="' + b.icon + '"></i>&nbsp;' + b.label + '</a>';
+                        }).join('') +
+                    '</div>';
+                }
+
+                var fullDesc = selectedProduct.full_description || selectedProduct.description || selectedProduct.short_description || 'No description available.';
+                var rawIcon = (typeof selectedProduct.icon === 'string') ? selectedProduct.icon.trim() : '';
+                var rawImg = (typeof selectedProduct.imageUrl === 'string') ? selectedProduct.imageUrl.trim() : '';
+                var resolvedIcon = rawIcon || rawImg || defaultAppIcon;
+
                 var detailHtml = [
-                    '<div class="row" style="margin-bottom:20px;">',
-                    '<div class="col-md-12 left">',
-                    '<a href="apps.html" class="btn btn-default">&larr; Back to all apps</a>',
-                    '</div>',
-                    '</div>',
-                    '<div class="row">',
-                    '<div class="col-md-2">',
-                    '<img src="' + (selectedProduct.icon || selectedProduct.imageUrl || placeholderIcon) + '" style="width:100%; max-width:140px;" alt="' + (selectedProduct.product_name || selectedProduct.name || 'Product Icon') + '" />',
-                    '</div>',
-                    '<div class="col-md-10 left">',
-                    '<h2 class="color-lightblack">' + (selectedProduct.product_name || selectedProduct.name || 'Unknown Product') + '</h2>',
-                    '<p><strong>Version:</strong> <span data-product-version-id="' + selectedProduct.id + '">' + selectedVersion + '</span></p>',
-                    '<p>' + (selectedProduct.full_description || selectedProduct.description || 'No description available.') + '</p>',
-                    '</div>',
-                    '</div>',
-                    '<hr />',
-                    '<div class="row">',
-                    '<div class="col-md-12 left">',
-                    '<h3>Other apps</h3>',
-                    '</div>',
+                    '<div class="app-detail-card">',
+                    '  <div class="app-detail-header">',
+                    '    <img src="' + resolvedIcon + '" onerror="this.onerror=null;this.src=window.DEFAULT_APP_ICON||window.DEFAULT_PLACEHOLDER_ICON;" class="app-detail-icon" alt="' + (selectedProduct.product_name || selectedProduct.name || 'Product Icon') + '" />',
+                    '    <div class="app-detail-info">',
+                    '      <h2 class="app-detail-title">' + (selectedProduct.product_name || selectedProduct.name || 'Unknown Product') + '</h2>',
+                    '      <div class="app-detail-version"><strong>Version:</strong> <span data-product-version-id="' + selectedProduct.id + '">' + selectedVersion + '</span></div>',
+                    '      <div class="app-detail-description">' + fullDesc + '</div>',
+                    '      ' + actionsHtml,
+                    '    </div>',
+                    '  </div>',
+                    '  <div class="app-detail-footer">',
+                    '    <a href="apps.html" class="btn btn-back-apps">&larr; Back to all apps</a>',
+                    '  </div>',
                     '</div>'
                 ];
-
-                if (otherApps.length > 0) {
-                    otherApps.forEach(function (product) {
-                        detailHtml.push(
-                            '<div class="row margin-bottom">',
-                            '<div class="col-md-12">',
-                            '<a href="apps.html?id=' + product.id + '" class="link-name">' + (product.product_name || product.name || 'Unknown Product') + '</a>',
-                            '</div>',
-                            '</div>'
-                        );
-                    });
-                }
 
                 $("#productContainer").html(detailHtml.join(""));
 

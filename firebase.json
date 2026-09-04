@@ -6,10 +6,12 @@
       "**/.*",
       "**/node_modules/**",
       "docs/**",
+      "automation-scripts/**",
       "unused-old-files/**",
-      "FireStore/*.py",
+      "FireStore/**",
       "test.html",
       "test-blog-debug.html",
+      "test-svg-logo.html",
       "logo-test.html"
     ],
     "cleanUrls": true,

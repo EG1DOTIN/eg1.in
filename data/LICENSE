@@ -24,8 +24,8 @@ SOFTWARE.
 PROJECT LICENSES, TRADEMARKS & CONTENT NOTICE
 ===============================================================================
 
-1. INDIVIDUAL OPEN-SOURCE PROJECTS (apps.json):
-   The digital products, applications, and tools listed in "apps.json" 
+1. INDIVIDUAL OPEN-SOURCE PROJECTS (data/apps/*.md):
+   The digital products, applications, and tools documented in "data/apps/" 
    (such as Marwadi Chess / MChess, EGClamNetAntivirus, etc.) are open-source 
    projects. Anyone is welcome to use, run, fork, and contribute to these projects 
    in accordance with their own respective open-source licenses and repository 
