@@ -227,21 +227,29 @@ firebase.auth().onAuthStateChanged((user) => {
         // Verify the signed-in user is the authorized admin
         if (user.email !== ALLOWED_ADMIN_EMAIL) {
             console.warn('Unauthorized Google account detected:', user.email);
+            sessionStorage.removeItem('eg1_admin_pin_verified_uid');
+            isPinVerified = false;
             firebase.auth().signOut();
             return;
         }
 
         currentUser = user;
 
-        if (isPinVerified) {
+        // Check if PIN was verified for this specific authenticated user session
+        const sessionUid = sessionStorage.getItem('eg1_admin_pin_verified_uid');
+        if (isPinVerified || (sessionUid && sessionUid === user.uid)) {
+            isPinVerified = true;
             showAdminPanel();
             document.getElementById('userName').textContent = user.email;
         } else {
+            isPinVerified = false;
+            sessionStorage.removeItem('eg1_admin_pin_verified_uid');
             showPinPage();
         }
     } else {
         currentUser = null;
         isPinVerified = false;
+        sessionStorage.removeItem('eg1_admin_pin_verified_uid');
         showLoginPage();
     }
 });
@@ -253,6 +261,10 @@ firebase.auth().onAuthStateChanged((user) => {
  * Opens Google popup, verifies the email is the authorized admin, and proceeds to PIN.
  */
 document.getElementById('googleSignInBtn').addEventListener('click', async () => {
+    // Clear any previous PIN session token so a fresh login requires PIN verification
+    sessionStorage.removeItem('eg1_admin_pin_verified_uid');
+    isPinVerified = false;
+
     const errorElement = document.getElementById('loginError');
     errorElement.textContent = '';
     errorElement.classList.remove('show');
@@ -375,6 +387,7 @@ document.getElementById('firestorePinForm').addEventListener('submit', async (e)
         if (docSnap.exists && docSnap.data().pinHash === enteredHash) {
             // ✅ PIN correct — grant access and log successful login
             isPinVerified = true;
+            sessionStorage.setItem('eg1_admin_pin_verified_uid', currentUser.uid);
             errorElement.textContent = '';
 
             await logLoginAttempt({
@@ -389,6 +402,7 @@ document.getElementById('firestorePinForm').addEventListener('submit', async (e)
             document.getElementById('userName').textContent = currentUser.email;
         } else {
             // ❌ PIN wrong — record failure and possibly lock out
+            sessionStorage.removeItem('eg1_admin_pin_verified_uid');
             errorElement.textContent = 'Incorrect PIN.';
             errorElement.classList.add('show');
             await recordFailedAttempt(ip, currentUser.email, 'fail_pin');
@@ -403,11 +417,14 @@ document.getElementById('firestorePinForm').addEventListener('submit', async (e)
 
 /**
  * Signs out current user from Firebase Auth (Google session) and resets local PIN state.
+ * @param {Event} [e] - Optional event to prevent default link navigation.
  */
-function logout() {
+function logout(e) {
+    if (e && typeof e.preventDefault === 'function') e.preventDefault();
+    sessionStorage.removeItem('eg1_admin_pin_verified_uid');
+    isPinVerified = false;
     firebase.auth().signOut().then(() => {
         currentUser = null;
-        isPinVerified = false;
         showLoginPage();
     }).catch((error) => {
         alert('Error logging out: ' + error.message);
@@ -463,8 +480,12 @@ function showAdminPanel() {
 /**
  * Navigates between Admin CMS section tabs (Analytics, App Users, Messages, Dashboard).
  * @param {string} sectionId - Target section container element ID.
+ * @param {Event} [e] - Optional click event to prevent default link navigation.
  */
-function showSection(sectionId) {
+function showSection(sectionId, e) {
+    if (e && typeof e.preventDefault === 'function') {
+        e.preventDefault();
+    }
     document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
     document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
 
@@ -475,6 +496,9 @@ function showSection(sectionId) {
     var targetNav = document.querySelector('.nav-link[onclick*="' + sectionId + '"]');
     if (targetNav) {
         targetNav.classList.add('active');
+    } else if (e && e.target) {
+        var linkEl = e.target.closest('.nav-link');
+        if (linkEl) linkEl.classList.add('active');
     } else if (typeof window !== 'undefined' && window.event && window.event.target) {
         var linkEl = window.event.target.closest('.nav-link');
         if (linkEl) linkEl.classList.add('active');
@@ -520,6 +544,7 @@ function startIdleTimer() {
     idleInterval = setInterval(() => {
         idleTime++;
         if (idleTime >= 10 && currentUser && isPinVerified) {
+            sessionStorage.removeItem('eg1_admin_pin_verified_uid');
             logout();
             alert('You have been logged out due to 10 minutes of inactivity.');
         }
