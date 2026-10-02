@@ -1,5 +1,17 @@
 [
     {
+        "id": "update-2026-10-02-v3-4-0",
+        "type": "website",
+        "version": "3.4.0",
+        "title": "CI/CD Quality Pipeline, Developer Workspace Separation & Notification Top 5",
+        "date": "Oct 02, 2026",
+        "category": "FEATURE",
+        "icon": "spark",
+        "badge": "New",
+        "description": "Structured repository with clean developer workspace separation, automated CI/CD quality assurance pipeline in GitHub Actions, and streamlined header notification dropdown to display the top 5 latest updates.",
+        "link": "updates.html"
+    },
+    {
         "id": "update-2026-09-04-v3-3-0",
         "type": "website",
         "version": "3.3.0",

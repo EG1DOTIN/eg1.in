@@ -5,14 +5,9 @@
       "firebase.json",
       "**/.*",
       "**/node_modules/**",
+      "gitignore/**",
       "docs/**",
-      "automation-scripts/**",
-      "unused-old-files/**",
-      "FireStore/**",
-      "test.html",
-      "test-blog-debug.html",
-      "test-svg-logo.html",
-      "logo-test.html"
+      "automation-scripts/**"
     ],
     "cleanUrls": true,
     "trailingSlash": false,
@@ -38,6 +33,6 @@
     ]
   },
   "firestore": {
-    "rules": "FireStore/firestore.rules"
+    "rules": "gitignore/FireStore/firestore.rules"
   }
 }

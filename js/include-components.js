@@ -379,7 +379,7 @@ function initializeNotificationBell() {
         }
 
         updatesData = data;
-        renderUpdates(updatesData);
+        renderUpdates(updatesData.slice(0, 5));
         updateUnreadBadge(updatesData);
     }).fail(function (err) {
         console.warn('Could not load data/updates.json:', err);
@@ -472,10 +472,16 @@ function initializeNotificationBell() {
     window.getCategoryClass = getCategoryClass;
 
     function renderUpdates(updates) {
+        var displayUpdates = (updates || []).slice(0, 5);
+        if (displayUpdates.length === 0) {
+            $list.html('<div class="updates-empty">No updates available at this moment.</div>');
+            return;
+        }
+
         var seenIds = getSeenUpdates();
         var html = '';
 
-        updates.forEach(function (update) {
+        displayUpdates.forEach(function (update) {
             var isUnread = seenIds.indexOf(update.id) === -1;
             var categoryText = (update.category || update.badge || 'UPDATE').toUpperCase();
             var catClass = getCategoryClass(update.category || update.badge);
