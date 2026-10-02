@@ -17,7 +17,8 @@ docs/
     ├── details-contact.md             # Contact form & anti-spam CAPTCHA (contact.html)
     ├── details-updates.md             # Updates & release log timeline (updates.html)
     ├── details-download.md            # Software download portal (download.html)
-    └── details-privacy.md             # Privacy policy & consent controls (privacypolicy.html)
+    ├── details-privacy.md             # Privacy policy & consent controls (privacypolicy.html)
+    └── details-admin-panel.md         # Admin console & multi-tier security model (AdminPanel/index.html)
 ```
 
 ---
@@ -32,6 +33,7 @@ docs/
 - 🔔 **[Updates Timeline (updates.html)](pages/details-updates.md)**: Version 3.0.0 release log, JSON data schema, and notification bell popover synchronization.
 - 📥 **[Downloads Portal (download.html)](pages/details-download.md)**: Installer download resolution and dynamic back-button routing.
 - 🔒 **[Privacy Policy (privacypolicy.html)](pages/details-privacy.md)**: Telemetry opt-out consent banner controls and anonymous telemetry policies.
+- 🛡️ **[Admin Panel & Security (AdminPanel/index.html)](pages/details-admin-panel.md)**: Multi-tier defense-in-depth model, Google OAuth, 16-digit PIN verification, 24-hour IP lockout, and TableToolkit analytics grid.
 
 ---
 
