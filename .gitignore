@@ -1,28 +1,16 @@
-# ─── Internal documentation and scripts ─────────────────────────────────
-docs/
-automation-scripts/
+# ─── Gitignore Managed Directory ─────────────────────────
+gitignore/
 
 # ─── Old/unused files ─────────────────────────────────
-unused-old-files/
 *_previous.*
 *.bak
-
-# ─── Backend & Firestore ─────────────────────────────────
-FireStore/
-
-# inprogress, Test & debug files
-test.html
-test-blog-debug.html
-logo-test.html
-test-svg-logo.html
-get-registration-key.html
-download.html
 
 # ─── IDE & Editor Configurations ─────────────────────────
 .vscode/
 .idea/
 *.swp
 *.swo
+pyrefly.toml
 
 # ─── OS Specific Files ───────────────────────────────────
 .DS_Store

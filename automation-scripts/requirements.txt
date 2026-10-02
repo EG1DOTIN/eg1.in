@@ -1,0 +1,3 @@
+# Build & static compilation dependencies for EG1 CI/CD automation pipeline
+pyyaml>=6.0
+markdown>=3.4
