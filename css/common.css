@@ -165,7 +165,7 @@ p {
     box-shadow: inset 0 0 80px #000000, 0px 6px 25px rgba(0, 0, 0, 0.85);
     z-index: 100;
     width: 100%;
-    height: 320px;
+    height: 275px;
     background-color: #000000;
     transition: background 1.5s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 1.5s ease-in-out;
     position: relative;
@@ -301,9 +301,22 @@ p {
 }
 
 .mainContentHeader .overflow {
-    overflow-y: no-display;
-    overflow-x: hidden;
-    height: 270px;
+    overflow: hidden;
+    height: 235px;
+}
+
+@media (max-width: 768px) {
+    .mainContentHeader {
+        height: auto;
+        min-height: 230px;
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
+
+    .mainContentHeader .overflow {
+        height: auto;
+        min-height: 190px;
+    }
 }
 
 .main-master .body {
