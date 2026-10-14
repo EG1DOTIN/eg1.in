@@ -1,5 +1,17 @@
 [
     {
+        "id": "update-2026-10-14-v3-5-0",
+        "type": "website",
+        "version": "3.5.0",
+        "title": "Header Quick Actions, Menu Navigation Icons, Compact Banner & Admin Specification",
+        "date": "Oct 14, 2026",
+        "category": "FEATURE",
+        "icon": "spark",
+        "badge": "New",
+        "description": "Integrated topbar GitHub quick action button, modernized navigation and dropdowns with iconography, streamlined header banner dimensions, and documented comprehensive Admin Panel technical specification and 4-tier security architecture.",
+        "link": "updates.html"
+    },
+    {
         "id": "update-2026-10-02-v3-4-0",
         "type": "website",
         "version": "3.4.0",
