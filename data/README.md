@@ -8,10 +8,10 @@ This directory houses the structured, static JSON datasets utilized by the **EG1
 
 | File | Description | Primary Consumers |
 | :--- | :--- | :--- |
-| [`apps/*.md`](apps/) | Pure Markdown applications & web tools catalog with YAML frontmatter, versioning, links, and rich descriptions. | [`apps.html`](../apps.html), [`js/app.js`](../js/app.js) |
-| [`website_content.json`](website_content.json) | Static page copy, hero text, and single source of truth for `"seo"` tags (titles, descriptions, Open Graph, Twitter cards, canonical URLs, and `img/eg1-social-preview.webp`). | Root HTML pages, [`index.html`](../index.html), [`about.html`](../about.html), [`js/about.js`](../js/about.js) |
-| [`updates.json`](updates.json) | Release notes, changelog history, version badges, and notification center items. | [`updates.html`](../updates.html), [`js/updates.js`](../js/updates.js), [`js/include-components.js`](../js/include-components.js) |
-| [`blog/*.md`](blog/) | Pure Markdown blog articles with YAML frontmatter (47+ articles). | [`blog.html`](../blog.html), [`js/blog-page.js`](../js/blog-page.js) |
+| [`apps/*.md`](apps/) | Pure Markdown applications & web tools catalog with YAML frontmatter, versioning, links, and rich descriptions. | [`apps.html`](../apps.html), [`js/app.js`](../assets/js/core/app.js) |
+| [`website_content.json`](website_content.json) | Static page copy, hero text, and single source of truth for `"seo"` tags (titles, descriptions, Open Graph, Twitter cards, canonical URLs, and `img/eg1-social-preview.webp`). | Root HTML pages, [`index.html`](../index.html), [`about.html`](../about.html), [`js/about.js`](../assets/js/modules/about.js) |
+| [`updates.json`](updates.json) | Release notes, changelog history, version badges, and notification center items. | [`updates.html`](../updates.html), [`js/updates.js`](../assets/js/modules/updates.js), [`js/include-components.js`](../assets/js/core/include-components.js) |
+| [`blog/*.md`](blog/) | Pure Markdown blog articles with YAML frontmatter (47+ articles). | [`blog.html`](../blog.html), [`js/blog-page.js`](../assets/js/modules/blog-page.js) |
 
 ---
 
@@ -28,7 +28,7 @@ version:
   version-string: "3.7.1"
   fetch-github: "false"
 active: "1"
-icon: "./img/apps/mchess-webapp.webp"
+icon: "./assets/img/apps/mchess-webapp.webp"
 short_description: "MChess is a web-based platform for playing and learning chess."
 button1:
   LAUNCH: "https://mchess.eg1.in/"

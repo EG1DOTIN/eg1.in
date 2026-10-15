@@ -157,14 +157,14 @@ def main():
             name="7. JavaScript Syntax & Parsing Audit",
             command=[
                 "node", "-c",
-                "js/app.js",
-                "js/apps.js",
-                "js/share-app.js",
-                "js/index.js",
-                "js/blog-page.js",
-                "js/updates.js",
-                "js/include-components.js",
-                "js/contact.js",
+                "assets/js/core/app.js",
+                "assets/js/modules/apps.js",
+                "assets/js/modules/share-app.js",
+                "assets/js/modules/index.js",
+                "assets/js/modules/blog-page.js",
+                "assets/js/modules/updates.js",
+                "assets/js/core/include-components.js",
+                "assets/js/modules/contact.js",
                 "AdminPanel/js/auth.js"
             ],
             description="Verifies clean node parse syntax across all primary frontend scripts"

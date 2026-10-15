@@ -38,7 +38,7 @@
         "url": "https://www.eg1.in/",
         "title": "EG1 - A hobby platform for open-source and creative digital projects",
         "description": "A hobby platform for open-source and creative digital projects, featuring practical software/tools, interactive web applications, and technical articles.",
-        "image": "https://www.eg1.in/img/eg1-social-preview.webp",
+        "image": "https://www.eg1.in/assets/img/eg1-social-preview.webp",
         "image_width": "1200",
         "image_height": "630"
       },
@@ -47,7 +47,7 @@
         "url": "https://www.eg1.in/",
         "title": "EG1 - A hobby platform for open-source and creative digital projects",
         "description": "A hobby platform for open-source and creative digital projects, featuring practical software/tools, interactive web applications, and technical articles.",
-        "image": "https://www.eg1.in/img/eg1-social-preview.webp"
+        "image": "https://www.eg1.in/assets/img/eg1-social-preview.webp"
       }
     },
     "apps.html": {
@@ -61,7 +61,7 @@
         "url": "https://www.eg1.in/apps.html",
         "title": "EG1 Apps - Practical Software, Tools & Web Applications",
         "description": "A collection of practical open-source applications, desktop software, utilities, and interactive web tools built for real-world use.",
-        "image": "https://www.eg1.in/img/eg1-social-preview.webp",
+        "image": "https://www.eg1.in/assets/img/eg1-social-preview.webp",
         "image_width": "1200",
         "image_height": "630"
       },
@@ -70,7 +70,7 @@
         "url": "https://www.eg1.in/apps.html",
         "title": "EG1 Apps - Practical Software, Tools & Web Applications",
         "description": "A collection of practical open-source applications, desktop software, utilities, and interactive web tools built for real-world use.",
-        "image": "https://www.eg1.in/img/eg1-social-preview.webp"
+        "image": "https://www.eg1.in/assets/img/eg1-social-preview.webp"
       }
     },
     "blog.html": {
@@ -84,7 +84,7 @@
         "url": "https://www.eg1.in/blog.html",
         "title": "EG1 Blog - Technical Articles, Tutorials & Code",
         "description": "Technical articles, tutorials, source code, algorithms, and practical programming write-ups across various topics.",
-        "image": "https://www.eg1.in/img/eg1-social-preview.webp",
+        "image": "https://www.eg1.in/assets/img/eg1-social-preview.webp",
         "image_width": "1200",
         "image_height": "630"
       },
@@ -93,7 +93,7 @@
         "url": "https://www.eg1.in/blog.html",
         "title": "EG1 Blog - Technical Articles, Tutorials & Code",
         "description": "Technical articles, tutorials, source code, algorithms, and practical programming write-ups across various topics.",
-        "image": "https://www.eg1.in/img/eg1-social-preview.webp"
+        "image": "https://www.eg1.in/assets/img/eg1-social-preview.webp"
       }
     },
     "about.html": {
@@ -107,7 +107,7 @@
         "url": "https://www.eg1.in/about.html",
         "title": "About EG1 - Open Source Software & Creative Projects",
         "description": "About EG1, a hobby platform for creating, experimenting, and sharing helpful open-source digital projects, practical tools, and tutorials.",
-        "image": "https://www.eg1.in/img/eg1-social-preview.webp",
+        "image": "https://www.eg1.in/assets/img/eg1-social-preview.webp",
         "image_width": "1200",
         "image_height": "630"
       },
@@ -116,7 +116,7 @@
         "url": "https://www.eg1.in/about.html",
         "title": "About EG1 - Open Source Software & Creative Projects",
         "description": "About EG1, a hobby platform for creating, experimenting, and sharing helpful open-source digital projects, practical tools, and tutorials.",
-        "image": "https://www.eg1.in/img/eg1-social-preview.webp"
+        "image": "https://www.eg1.in/assets/img/eg1-social-preview.webp"
       }
     },
     "contact.html": {
@@ -130,7 +130,7 @@
         "url": "https://www.eg1.in/contact.html",
         "title": "Contact EG1 - Feedback & Inquiries",
         "description": "Contact details, feedback form, and inquiry channels for the EG1 platform and projects.",
-        "image": "https://www.eg1.in/img/eg1-social-preview.webp",
+        "image": "https://www.eg1.in/assets/img/eg1-social-preview.webp",
         "image_width": "1200",
         "image_height": "630"
       },
@@ -139,7 +139,7 @@
         "url": "https://www.eg1.in/contact.html",
         "title": "Contact EG1 - Feedback & Inquiries",
         "description": "Contact details, feedback form, and inquiry channels for the EG1 platform and projects.",
-        "image": "https://www.eg1.in/img/eg1-social-preview.webp"
+        "image": "https://www.eg1.in/assets/img/eg1-social-preview.webp"
       }
     },
     "updates.html": {
@@ -153,7 +153,7 @@
         "url": "https://www.eg1.in/updates.html",
         "title": "Updates - EG1 Platform Changelog & Releases",
         "description": "Changelog, release history, and latest development updates for EG1 apps, tools, and website features.",
-        "image": "https://www.eg1.in/img/eg1-social-preview.webp",
+        "image": "https://www.eg1.in/assets/img/eg1-social-preview.webp",
         "image_width": "1200",
         "image_height": "630"
       },
@@ -162,7 +162,7 @@
         "url": "https://www.eg1.in/updates.html",
         "title": "Updates - EG1 Platform Changelog & Releases",
         "description": "Changelog, release history, and latest development updates for EG1 apps, tools, and website features.",
-        "image": "https://www.eg1.in/img/eg1-social-preview.webp"
+        "image": "https://www.eg1.in/assets/img/eg1-social-preview.webp"
       }
     },
     "privacypolicy.html": {
@@ -176,7 +176,7 @@
         "url": "https://www.eg1.in/privacypolicy.html",
         "title": "Privacy Policy - EG1",
         "description": "Privacy policy and data protection details for the EG1 website and applications.",
-        "image": "https://www.eg1.in/img/eg1-social-preview.webp",
+        "image": "https://www.eg1.in/assets/img/eg1-social-preview.webp",
         "image_width": "1200",
         "image_height": "630"
       },
@@ -185,7 +185,7 @@
         "url": "https://www.eg1.in/privacypolicy.html",
         "title": "Privacy Policy - EG1",
         "description": "Privacy policy and data protection details for the EG1 website and applications.",
-        "image": "https://www.eg1.in/img/eg1-social-preview.webp"
+        "image": "https://www.eg1.in/assets/img/eg1-social-preview.webp"
       }
     }
   }

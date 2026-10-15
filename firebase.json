@@ -11,6 +11,88 @@
     ],
     "cleanUrls": true,
     "trailingSlash": false,
+    "redirects": [
+      {
+        "source": "/img/:path*",
+        "destination": "/assets/img/:path*",
+        "type": 301
+      },
+      {
+        "source": "/fonts/:path*",
+        "destination": "/assets/fonts/:path*",
+        "type": 301
+      },
+      {
+        "source": "/css/vendor/:path*",
+        "destination": "/assets/css/vendor/:path*",
+        "type": 301
+      },
+      {
+        "source": "/css/font-awesome.css",
+        "destination": "/assets/css/vendor/font-awesome.css",
+        "type": 301
+      },
+      {
+        "source": "/css/slick.css",
+        "destination": "/assets/css/vendor/slick.css",
+        "type": 301
+      },
+      {
+        "source": "/css/slick-theme.css",
+        "destination": "/assets/css/vendor/slick-theme.css",
+        "type": 301
+      },
+      {
+        "source": "/css/blog-detail.css",
+        "destination": "/assets/css/pages/blog-detail.css",
+        "type": 301
+      },
+      {
+        "source": "/css/blog-grid.css",
+        "destination": "/assets/css/pages/blog-grid.css",
+        "type": 301
+      },
+      {
+        "source": "/css/:path*",
+        "destination": "/assets/css/core/:path*",
+        "type": 301
+      },
+      {
+        "source": "/js/vendor/:path*",
+        "destination": "/assets/js/vendor/:path*",
+        "type": 301
+      },
+      {
+        "source": "/js/jquery-2.1.1.min.js",
+        "destination": "/assets/js/vendor/jquery-2.1.1.min.js",
+        "type": 301
+      },
+      {
+        "source": "/js/slick.min.js",
+        "destination": "/assets/js/vendor/slick.min.js",
+        "type": 301
+      },
+      {
+        "source": "/js/app.js",
+        "destination": "/assets/js/core/app.js",
+        "type": 301
+      },
+      {
+        "source": "/js/include-components.js",
+        "destination": "/assets/js/core/include-components.js",
+        "type": 301
+      },
+      {
+        "source": "/js/firebase-config.js",
+        "destination": "/assets/js/core/firebase-config.js",
+        "type": 301
+      },
+      {
+        "source": "/js/:path*",
+        "destination": "/assets/js/modules/:path*",
+        "type": 301
+      }
+    ],
     "headers": [
       {
         "source": "**/*.@(jpg|jpeg|gif|png|svg|webp|woff2|woff|ttf|eot)",

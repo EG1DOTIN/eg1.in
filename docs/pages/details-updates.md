@@ -7,13 +7,13 @@ Technical code architecture, JSON data schema, execution logic, algorithm specif
 ## 🔗 Associated Code Files
 
 - **HTML Template**: [updates.html](../../updates.html)
-- **Controller Logic**: [js/updates.js](../../js/updates.js)
+- **Controller Logic**: [js/updates.js](../../assets/js/modules/updates.js)
 - **Data Source**: [data/updates.json](../../data/updates.json)
 - **Shell & Navigation Components**: 
   - Header: [components/header.html](../../components/header.html)
   - Footer: [components/footer.html](../../components/footer.html)
-  - Navigation Component Script: [js/include-components.js](../../js/include-components.js)
-- **Stylesheets**: [css/theme.css](../../css/theme.css), [css/common.css](../../css/common.css), [css/menuCss.css](../../css/menuCss.css), [css/responsive.css](../../css/responsive.css)
+  - Navigation Component Script: [js/include-components.js](../../assets/js/core/include-components.js)
+- **Stylesheets**: [css/theme.css](../../assets/css/core/theme.css), [css/common.css](../../assets/css/core/common.css), [css/menuCss.css](../../assets/css/core/menuCss.css), [css/responsive.css](../../assets/css/core/responsive.css)
 
 ---
 
@@ -130,7 +130,7 @@ The updates log is managed through a structured client-side JSON repository:
 
 ## 🔔 Header Notification Bell & Popover Integration
 
-The notification bell icon (`#notificationBellBtn`) in [components/header.html](../../components/header.html) is managed dynamically by [js/include-components.js](../../js/include-components.js):
+The notification bell icon (`#notificationBellBtn`) in [components/header.html](../../components/header.html) is managed dynamically by [js/include-components.js](../../assets/js/core/include-components.js):
 
 1. **Unread Badge Calculation**:
    - Reads `localStorage.getItem("eg1_seen_updates_v1")`.
@@ -145,6 +145,6 @@ The notification bell icon (`#notificationBellBtn`) in [components/header.html](
 
 ## 🔒 Security & Code Standards
 
-- **Strict Separation of Concerns**: All timeline rendering, filtering, and icon generators reside in [js/updates.js](../../js/updates.js). No inline scripts or inline event handlers are embedded in [updates.html](../../updates.html).
+- **Strict Separation of Concerns**: All timeline rendering, filtering, and icon generators reside in [js/updates.js](../../assets/js/modules/updates.js). No inline scripts or inline event handlers are embedded in [updates.html](../../updates.html).
 - **XSS Prevention**: All strings from `updates.json` are sanitized via `escapeHtml()` and DOM text nodes before being rendered into the DOM.
 - **Automated Validation**: Verified 100% compliant with [automation-scripts/audits/audit_code_standards.py](../../automation-scripts/audits/audit_code_standards.py) and [automation-scripts/audits/validate_theme_assets.py](../../automation-scripts/audits/validate_theme_assets.py).

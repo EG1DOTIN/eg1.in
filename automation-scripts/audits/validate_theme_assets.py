@@ -101,11 +101,11 @@ def main():
         os.path.dirname(os.path.abspath(__file__))))
     print(f"Auditing Theme System in: {base_dir}\n")
 
-    css_theme = os.path.join(base_dir, "css", "theme.css")
-    css_common = os.path.join(base_dir, "css", "common.css")
+    css_theme = os.path.join(base_dir, "assets", "css", "core", "theme.css")
+    css_common = os.path.join(base_dir, "assets", "css", "core", "common.css")
     css_admin = os.path.join(base_dir, "AdminPanel", "css", "admin-style.css")
     header_comp = os.path.join(base_dir, "components", "header.html")
-    include_js = os.path.join(base_dir, "js", "include-components.js")
+    include_js = os.path.join(base_dir, "assets", "js", "core", "include-components.js")
 
     html_pages = [
         os.path.join(base_dir, "index.html"),

@@ -231,7 +231,7 @@
         background-position: 95% 50% !important;
     }
     .nav li li .parent {
-        background-image: url("img/downArrow.png");
+        background-image: url("../../img/downArrow.png");
         background-repeat: no-repeat;
         background-position: 95% 50%;
     }

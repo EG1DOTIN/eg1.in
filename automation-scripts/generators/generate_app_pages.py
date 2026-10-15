@@ -23,7 +23,10 @@ import sys
 import re
 import json
 import html
-import yaml
+try:
+    import yaml
+except ImportError:
+    yaml = None
 from pathlib import Path
 from typing import Any, Dict, Tuple, Optional
 
@@ -59,11 +62,29 @@ def parse_frontmatter(file_path: Path) -> Tuple[Dict[str, Any], str]:
     if match:
         yaml_str = match.group(1)
         body = match.group(2)
-        try:
-            meta = yaml.safe_load(yaml_str) or {}
-        except Exception as e:
-            print(f"⚠️ Error parsing YAML in {file_path.name}: {e}")
-            meta = {}
+        if yaml is not None:
+            try:
+                meta = yaml.safe_load(yaml_str) or {}
+                return meta, body
+            except Exception as e:
+                print(f"⚠️ Error parsing YAML in {file_path.name}: {e}")
+        # Standard library fallback parser for simple frontmatter
+        meta = {}
+        for line in yaml_str.splitlines():
+            line = line.strip()
+            if not line or line.startswith("#"):
+                continue
+            if ":" in line:
+                k, v = line.split(":", 1)
+                k = k.strip()
+                v = v.strip()
+                if v.startswith('"') and v.endswith('"') and len(v) >= 2:
+                    v = v[1:-1].replace('\\"', '"')
+                elif v.startswith("'") and v.endswith("'") and len(v) >= 2:
+                    v = v[1:-1].replace("\\'", "'")
+                elif v.startswith("[") and v.endswith("]"):
+                    v = [x.strip().strip('"\'') for x in v[1:-1].split(",") if x.strip()]
+                meta[k] = v
         return meta, body
     return {}, content
 
@@ -240,8 +261,11 @@ def generate_app_html(meta: Dict[str, Any], body: str, slug: str, app_id: str) -
 
     # Canonical & Social URLs
     page_url = f"https://www.eg1.in/apps/{slug}"
-    image_url = f"https://www.eg1.in/{raw_icon}" if (raw_icon and not raw_icon.startswith(
-        "data:") and not raw_icon.startswith("http")) else "https://www.eg1.in/img/eg1-social-banner.png"
+    raw_icon_clean = raw_icon.lstrip("./")
+    if raw_icon_clean.startswith("img/"):
+        raw_icon_clean = "assets/" + raw_icon_clean
+    image_url = f"https://www.eg1.in/{raw_icon_clean}" if (raw_icon and not raw_icon.startswith(
+        "data:") and not raw_icon.startswith("http")) else "https://www.eg1.in/assets/img/eg1-social-preview.webp"
 
     # Action buttons: exclude redundant "View Details" buttons since user is already on the details page
     btn1 = parse_action_button(meta.get("button1"), "LAUNCH", meta.get(
@@ -319,16 +343,16 @@ def generate_app_html(meta: Dict[str, Any], body: str, slug: str, app_id: str) -
     </script>
 
     <!-- Stylesheets -->
-    <link href="css/main.css" rel="stylesheet" type="text/css" />
-    <link href="css/responsive.css" rel="stylesheet" type="text/css" />
-    <link href="css/font-awesome.css" rel="stylesheet" type="text/css" />
+    <link href="assets/css/core/main.css" rel="stylesheet" type="text/css" />
+    <link href="assets/css/core/responsive.css" rel="stylesheet" type="text/css" />
+    <link href="assets/css/vendor/font-awesome.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="css/fonts.css" rel="stylesheet" type="text/css" />
-    <link href="css/common.css" rel="stylesheet" type="text/css" />
-    <link href="css/menuCss.css" rel="stylesheet" type="text/css" />
-    <link href="css/theme.css" rel="stylesheet" type="text/css" />
-    <link href="css/scrollbar.css" rel="stylesheet" type="text/css" />
-    <link href="css/socialbuttons.css" rel="stylesheet" type="text/css" />
+    <link href="assets/css/core/fonts.css" rel="stylesheet" type="text/css" />
+    <link href="assets/css/core/common.css" rel="stylesheet" type="text/css" />
+    <link href="assets/css/core/menuCss.css" rel="stylesheet" type="text/css" />
+    <link href="assets/css/core/theme.css" rel="stylesheet" type="text/css" />
+    <link href="assets/css/core/scrollbar.css" rel="stylesheet" type="text/css" />
+    <link href="assets/css/core/socialbuttons.css" rel="stylesheet" type="text/css" />
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'><circle cx='60' cy='60' r='58' fill='%23000000'/><circle cx='60' cy='60' r='54' fill='none' stroke='%23ffffff' stroke-width='4'/><text x='50%25' y='68%25' font-family='Great Vibes, Georgia, serif' font-style='italic' font-weight='bold' font-size='50' fill='%23ffffff' text-anchor='middle'>EG1</text></svg>" />
 
     <!-- Application Context -->
@@ -338,8 +362,8 @@ def generate_app_html(meta: Dict[str, Any], body: str, slug: str, app_id: str) -
     </script>
 
     <!-- Scripts -->
-    <script src="js/jquery-2.1.1.min.js" type="text/javascript"></script>
-    <script src="js/include-components.js" type="text/javascript"></script>
+    <script src="assets/js/vendor/jquery-2.1.1.min.js" type="text/javascript"></script>
+    <script src="assets/js/core/include-components.js" type="text/javascript"></script>
 </head>
 
 <body>
@@ -388,8 +412,8 @@ def generate_app_html(meta: Dict[str, Any], body: str, slug: str, app_id: str) -
     </center>
 
     <!-- Shared Application Scripts -->
-    <script src="js/app.js" type="text/javascript"></script>
-    <script src="js/share-app.js" type="text/javascript"></script>
+    <script src="assets/js/core/app.js" type="text/javascript"></script>
+    <script src="assets/js/modules/share-app.js" type="text/javascript"></script>
 </body>
 
 </html>

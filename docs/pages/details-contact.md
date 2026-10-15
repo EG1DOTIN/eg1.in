@@ -7,9 +7,9 @@ Technical code architecture, execution logic, algorithm specifications, Mermaid 
 ## 🔗 Associated Code Files
 
 - **HTML Template**: [contact.html](../../contact.html)
-- **Controller Logic**: [js/contact.js](../../js/contact.js)
+- **Controller Logic**: [js/contact.js](../../assets/js/modules/contact.js)
 - **Cloud Security Rules**: Cloud Firestore Security Rules (enforcing schema whitelisting & timestamp constraints)
-- **Stylesheets**: [css/main.css](../../css/main.css), [css/common.css](../../css/common.css)
+- **Stylesheets**: [css/main.css](../../assets/css/core/main.css), [css/common.css](../../assets/css/core/common.css)
 
 ---
 
@@ -73,7 +73,7 @@ sequenceDiagram
 ## 💻 Code-Side Implementation & Algorithm Details
 
 ### 1. Dynamic Arithmetic CAPTCHA Algorithm
-In [js/contact.js](../../js/contact.js), a randomized math problem is generated upon user interaction to prevent bot submissions:
+In [js/contact.js](../../assets/js/modules/contact.js), a randomized math problem is generated upon user interaction to prevent bot submissions:
 
 ```javascript
 // Key Method: generateCaptcha() in js/contact.js

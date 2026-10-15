@@ -16,7 +16,7 @@
 | **📦 Pure Markdown Apps Engine** | Applications authored as individual files in `data/apps/*.md` with parallel client-side YAML parsing, LocalStorage caching, and zero JSON dependency. |
 | **🌐 Static Application Pages** | Selective compiler (`generate_app_pages.py`) producing pre-rendered `apps/<slug>.html` with Open Graph tags and Schema.org `SoftwareApplication` JSON-LD. |
 | **🔄 Header Cache-Refresh & Reload** | One-click header refresh button with 360° spin micro-interaction that flushes all client caches and triggers a fresh hard reload. |
-| **🎯 Themed Actions & Share Button** | Theme-token styled buttons (`var(--btn-primary-bg)`), native Web Share API (`js/share-app.js`), and animated toast feedback. |
+| **🎯 Themed Actions & Share Button** | Theme-token styled buttons (`var(--btn-primary-bg)`), native Web Share API (`assets/js/modules/share-app.js`), and animated toast feedback. |
 | **⚡ Consolidated Quality Suite** | Master automation runner (`run_all_checks.py`) executing all 7 repository audits and compilers in a single ~1.2s command. |
 | **🌐 Static Blog SEO & Slugs** | Pre-rendered static articles (`blog/<slug>.html`) with programming language terms (`C++` &rarr; `cpp`), Open Graph, Twitter cards, and JSON-LD schemas. |
 | **📝 Pure Markdown Blog Engine** | Direct client-side Markdown (.md) rendering with zero Firestore reads, YAML frontmatter parser, and 1-click code copying. |

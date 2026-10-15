@@ -131,8 +131,9 @@
 
                 var fullDesc = selectedProduct.full_description || selectedProduct.description || selectedProduct.short_description || 'No description available.';
                 var rawIcon = (typeof selectedProduct.icon === 'string') ? selectedProduct.icon.trim() : '';
-                var rawImg = (typeof selectedProduct.imageUrl === 'string') ? selectedProduct.imageUrl.trim() : '';
                 var resolvedIcon = rawIcon || rawImg || defaultAppIcon;
+                if (resolvedIcon.startsWith('./img/')) resolvedIcon = './assets/' + resolvedIcon.slice(2);
+                else if (resolvedIcon.startsWith('img/')) resolvedIcon = 'assets/' + resolvedIcon;
 
                 var detailHtml = [
                     '<div class="app-detail-card">',

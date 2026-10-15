@@ -8,7 +8,7 @@ Technical code architecture, execution logic, algorithm specifications, Mermaid 
 
 - **Application Catalog**: [apps.html](../../apps.html)
 - **Controller Logic (Archived)**: ../../unused-old-files/js/download.js *(archived)*
-- **Data Engine**: [js/app.js](../../js/app.js)
+- **Data Engine**: [js/app.js](../../assets/js/core/app.js)
 
 ---
 

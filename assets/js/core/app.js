@@ -4,7 +4,7 @@
  */
 var AppConfig = {
   dataPath: "data/",
-  imagePath: "img/",
+  imagePath: "assets/img/",
 
   // Load JSON data asynchronously
   loadData: async function (filename) {
@@ -752,8 +752,9 @@ var RenderHelpers = {
   renderProductCard: function (product, isHomepage) {
     const DEFAULT_ICON = window.DEFAULT_APP_ICON || "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='16' fill='%231e293b'/><text x='50%' y='63%' font-family='sans-serif' font-weight='bold' font-size='38' fill='%2338bdf8' text-anchor='middle'>EG1</text></svg>";
     const rawIcon = (product.icon && typeof product.icon === 'string') ? product.icon.trim() : '';
-    const rawImg = (product.imageUrl && typeof product.imageUrl === 'string') ? product.imageUrl.trim() : '';
-    const iconUrl = rawIcon || rawImg || DEFAULT_ICON;
+    var iconUrl = rawIcon || rawImg || DEFAULT_ICON;
+    if (iconUrl.startsWith('./img/')) iconUrl = './assets/' + iconUrl.slice(2);
+    else if (iconUrl.startsWith('img/')) iconUrl = 'assets/' + iconUrl;
     const productName = product.product_name || product.name || "Unknown Product";
     const version = DataCache.resolveProductVersion(product);
     const shortDesc = product.short_description || product.description || "";

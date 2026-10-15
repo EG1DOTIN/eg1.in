@@ -7,12 +7,12 @@ Technical code architecture, execution logic, algorithm specifications, Mermaid 
 ## 🔗 Associated Code Files
 
 - **HTML Template**: [about.html](../../about.html)
-- **Controller Logic**: [js/about.js](../../js/about.js)
-- **Data Engine**: [js/app.js](../../js/app.js)
+- **Controller Logic**: [js/about.js](../../assets/js/modules/about.js)
+- **Data Engine**: [js/app.js](../../assets/js/core/app.js)
 - **Shell Components**: 
   - Header: [components/header.html](../../components/header.html)
   - Footer: [components/footer.html](../../components/footer.html)
-- **Stylesheets**: [css/main.css](../../css/main.css), [css/common.css](../../css/common.css)
+- **Stylesheets**: [css/main.css](../../assets/css/core/main.css), [css/common.css](../../assets/css/core/common.css)
 
 ---
 
@@ -58,7 +58,7 @@ flowchart TD
 ## 💻 Code-Side Implementation & Algorithm Details
 
 ### Asynchronous Dynamic Content Resolution with Static Fallback
-In [js/about.js](../../js/about.js), content is fetched asynchronously from Firestore via `DataCache`. If network connectivity is unavailable, the function exits cleanly without throwing errors, preserving static HTML fallback copy present in [about.html](../../about.html):
+In [js/about.js](../../assets/js/modules/about.js), content is fetched asynchronously from Firestore via `DataCache`. If network connectivity is unavailable, the function exits cleanly without throwing errors, preserving static HTML fallback copy present in [about.html](../../about.html):
 
 ```javascript
 // Key Method: loadAboutContent() in js/about.js
