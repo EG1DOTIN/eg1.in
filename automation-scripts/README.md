@@ -98,7 +98,7 @@ Single consolidated runner executing the entire suite of repository quality chec
 - **Features**:
   - Generates detail pages for applications featuring a "View Details" action.
   - Pre-renders Schema.org `SoftwareApplication` JSON-LD, Open Graph, Twitter cards, and canonical links.
-  - Injects themed action buttons and the interactive Share Button ([js/share-app.js](../js/share-app.js)).
+  - Injects themed action buttons and the interactive Share Button ([js/share-app.js](../assets/js/modules/share-app.js)).
   - Outputs slug mappings to [automation-scripts/data/app_slugs.json](data/app_slugs.json).
 - **Execution**:
   ```bash

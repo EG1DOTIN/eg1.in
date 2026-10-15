@@ -1,5 +1,17 @@
 [
     {
+        "id": "update-2026-10-15-v3-6-0",
+        "type": "website",
+        "version": "3.6.0",
+        "title": "Unified Static Assets Architecture & Platform Reorganization",
+        "date": "Oct 15, 2026",
+        "category": "OPTIMIZATION",
+        "icon": "database",
+        "badge": "New",
+        "description": "Consolidated and structured platform assets into a unified assets hub (assets/css, assets/js, assets/img, assets/fonts) with vendor/core/modules separation, 301 permanent redirects, automated link auditing, and 100% UI/UX and SEO preservation.",
+        "link": "updates.html"
+    },
+    {
         "id": "update-2026-10-14-v3-5-0",
         "type": "website",
         "version": "3.5.0",

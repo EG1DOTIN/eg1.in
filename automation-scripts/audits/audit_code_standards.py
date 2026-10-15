@@ -71,22 +71,32 @@ def audit_html_file(file_path):
 
 
 def audit_directory_hygiene():
-    """Verifies that all CSS files are in css/ and all JS files are in js/."""
+    """Verifies that all CSS files are in assets/css/ and all JS files are in assets/js/."""
     issues = []
-    js_dir = os.path.join(WORKSPACE_ROOT, "js")
-    css_dir = os.path.join(WORKSPACE_ROOT, "css")
+    js_dir = os.path.join(WORKSPACE_ROOT, "assets", "js")
+    css_dir = os.path.join(WORKSPACE_ROOT, "assets", "css")
+
+    # Check that legacy root js/ and css/ directories no longer exist
+    old_root_js = os.path.join(WORKSPACE_ROOT, "js")
+    old_root_css = os.path.join(WORKSPACE_ROOT, "css")
+    if os.path.exists(old_root_js):
+        issues.append("Legacy root 'js/' directory still exists. Assets must be housed in 'assets/js/'.")
+    if os.path.exists(old_root_css):
+        issues.append("Legacy root 'css/' directory still exists. Assets must be housed in 'assets/css/'.")
 
     if os.path.exists(js_dir):
-        for f in os.listdir(js_dir):
-            if f.endswith(".css"):
-                issues.append(
-                    f"Found CSS file '{f}' inside js/ directory. Must be in css/.")
+        for root, _, files in os.walk(js_dir):
+            for f in files:
+                if f.endswith(".css"):
+                    issues.append(
+                        f"Found CSS file '{f}' inside assets/js/ directory. Must be in assets/css/.")
 
     if os.path.exists(css_dir):
-        for f in os.listdir(css_dir):
-            if f.endswith(".js"):
-                issues.append(
-                    f"Found JS file '{f}' inside css/ directory. Must be in js/.")
+        for root, _, files in os.walk(css_dir):
+            for f in files:
+                if f.endswith(".js"):
+                    issues.append(
+                        f"Found JS file '{f}' inside assets/css/ directory. Must be in assets/js/.")
 
     return issues
 
@@ -104,7 +114,7 @@ def audit_all_pages():
             total_issues += 1
     else:
         print(
-            "[OK] Directory Hygiene: All CSS strictly in css/, all JS strictly in js/.")
+            "[OK] Directory Hygiene: All CSS strictly in assets/css/, all JS strictly in assets/js/.")
 
     # 2. Production Pages Audit
     for page in PRODUCTION_PAGES:

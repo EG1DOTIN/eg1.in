@@ -1,4 +1,4 @@
-﻿@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic);
+@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic);
 
 html,
 body {
@@ -38,7 +38,7 @@ body {
   position: relative;
 }
 .layout-boxed {
-  background: url('../img/boxed-bg.jpg') repeat fixed;
+  background: url('../../img/boxed-bg.jpg') repeat fixed;
 }
 /*
  * Content Wrapper - contains the main content

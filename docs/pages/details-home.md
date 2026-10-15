@@ -7,13 +7,13 @@ Technical code architecture, execution logic, algorithm specifications, Mermaid 
 ## 🔗 Associated Code Files
 
 - **HTML Template**: [index.html](../../index.html)
-- **Controller Logic**: [js/index.js](../../js/index.js)
-- **Data Engine**: [js/app.js](../../js/app.js)
+- **Controller Logic**: [js/index.js](../../assets/js/modules/index.js)
+- **Data Engine**: [js/app.js](../../assets/js/core/app.js)
 - **Shell Components**: 
   - Header: [components/header.html](../../components/header.html)
   - Footer: [components/footer.html](../../components/footer.html)
   - Slider: [components/image_slider.html](../../components/image_slider.html)
-- **Stylesheets**: [css/main.css](../../css/main.css), [css/common.css](../../css/common.css), [css/responsive.css](../../css/responsive.css)
+- **Stylesheets**: [css/main.css](../../assets/css/core/main.css), [css/common.css](../../assets/css/core/common.css), [css/responsive.css](../../assets/css/core/responsive.css)
 
 ---
 
@@ -76,7 +76,7 @@ flowchart TD
 ## 💻 Code-Side Implementation & Algorithm Details
 
 ### 1. Zero-Read Static JSON Caching Algorithm (`DataCache`)
-The home page utilizes the `DataCache` pattern defined in [js/app.js](../../js/app.js). Product catalog entries and announcement copy are served from static JSON files (`data/apps.json`, `data/website_content.json`) with an in-browser `localStorage` cache:
+The home page utilizes the `DataCache` pattern defined in [js/app.js](../../assets/js/core/app.js). Product catalog entries and announcement copy are served from static JSON files (`data/apps.json`, `data/website_content.json`) with an in-browser `localStorage` cache:
 
 ```javascript
 // Key Method: DataCache.getProducts() in js/app.js
@@ -93,10 +93,10 @@ getProducts: async function () {
 ```
 
 ### 2. Dynamic Dual Buttons & Background GitHub Version Sync
-In [js/app.js](../../js/app.js), `RenderHelpers.renderProductCard` dynamically parses `button1` and `button2` objects, and stamps elements with `data-product-version-id` for live background GitHub version resolution via `DataCache.syncGithubVersions()`.
+In [js/app.js](../../assets/js/core/app.js), `RenderHelpers.renderProductCard` dynamically parses `button1` and `button2` objects, and stamps elements with `data-product-version-id` for live background GitHub version resolution via `DataCache.syncGithubVersions()`.
 
 ### 3. Dynamic Slick Carousel Initialization
-In [js/index.js](../../js/index.js), once cards are appended to `.regular`, the Slick carousel library is instantiated with responsive breakpoint rules:
+In [js/index.js](../../assets/js/modules/index.js), once cards are appended to `.regular`, the Slick carousel library is instantiated with responsive breakpoint rules:
 
 ```javascript
 // Key Method: initializeHomePage() in js/index.js

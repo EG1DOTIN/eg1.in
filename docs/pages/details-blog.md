@@ -7,10 +7,10 @@ Technical code architecture, execution logic, algorithm specifications, Mermaid 
 ## 🔗 Associated Code Files
 
 - **HTML Template**: [blog.html](../../blog.html)
-- **Controller Logic**: [js/blog-page.js](../../js/blog-page.js)
+- **Controller Logic**: [js/blog-page.js](../../assets/js/modules/blog-page.js)
 - **Markdown Articles**: [data/blog/](../../data/blog)
-- **Cache & Filter Store**: [js/app.js](../../js/app.js)
-- **Stylesheets**: [css/blog-grid.css](../../css/blog-grid.css), [css/blog-detail.css](../../css/blog-detail.css)
+- **Cache & Filter Store**: [js/app.js](../../assets/js/core/app.js)
+- **Stylesheets**: [css/blog-grid.css](../../assets/css/pages/blog-grid.css), [css/blog-detail.css](../../assets/css/pages/blog-detail.css)
 
 ---
 
@@ -99,13 +99,13 @@ Here is our tutorial body in standard Markdown...
 ```
 
 ### 2. Client-Side YAML Frontmatter & Markdown Parser
-In [js/blog-page.js](../../js/blog-page.js), frontmatter is parsed directly on the client with zero build step:
+In [js/blog-page.js](../../assets/js/modules/blog-page.js), frontmatter is parsed directly on the client with zero build step:
 - Parses metadata delimited by `---`.
 - Parses tags, release dates, images, and descriptions.
 - Renders body text and GFM tables cleanly using `marked.parse()`.
 
 ### 3. Syntax Highlighting & Code Copy Injection
-In [js/blog-page.js](../../js/blog-page.js), code blocks are formatted using `Highlight.js` with floating copy buttons:
+In [js/blog-page.js](../../assets/js/modules/blog-page.js), code blocks are formatted using `Highlight.js` with floating copy buttons:
 
 ```javascript
 function initializeCodeBlocks() {

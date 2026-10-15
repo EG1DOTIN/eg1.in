@@ -1,7 +1,7 @@
 # EG1 - Official Website & Digital Platform
 
 [![Website](https://img.shields.io/badge/Website-eg1.in-0284c7?style=flat-square&logo=google-chrome&logoColor=white)](https://www.eg1.in)
-[![Version](https://img.shields.io/badge/Version-3.5.0-10b981?style=flat-square)](data/updates.json)
+[![Version](https://img.shields.io/badge/Version-3.6.0-10b981?style=flat-square)](data/updates.json)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
 
 **EG1** ([eg1.in](https://www.eg1.in)) is a hobby platform for open source and creative digital projects, presenting practical software/tools, interactive web applications for real-world use and technical articles/blog posts.
@@ -12,11 +12,12 @@
 
 | Feature | Description |
 | :--- | :--- |
+| **📁 Unified Static Assets Architecture** | Consolidated platform static assets into a modular `assets/{css,js,img,fonts}/` hub with vendor/core separation, 301 redirects, automated link auditing, and 100% UI/UX preservation. |
 | **🧭 Modern Navigation & Quick Actions** | Topbar GitHub quick action button, menu iconography across all navigation links, compact header banner, and comprehensive Admin Panel technical specification. |
 | **📦 Pure Markdown Apps Engine** | Applications authored as individual files in `data/apps/*.md` with parallel client-side YAML parsing, LocalStorage caching, and zero JSON dependency. |
 | **🌐 Static Application Pages** | Selective compiler (`generate_app_pages.py`) producing pre-rendered `apps/<slug>.html` with Open Graph tags and Schema.org `SoftwareApplication` JSON-LD. |
 | **🔄 Header Cache-Refresh & Reload** | One-click header refresh button with 360° spin micro-interaction that flushes all client caches and triggers a fresh hard reload. |
-| **🎯 Themed Actions & Share Button** | Theme-token styled buttons (`var(--btn-primary-bg)`), native Web Share API (`js/share-app.js`), and animated toast feedback. |
+| **🎯 Themed Actions & Share Button** | Theme-token styled buttons (`var(--btn-primary-bg)`), native Web Share API (`assets/js/modules/share-app.js`), and animated toast feedback. |
 | **⚡ Consolidated Quality Suite** | Master automation runner (`run_all_checks.py`) executing all 7 repository audits and compilers in a single ~1.2s command. |
 | **🌐 Static Blog SEO & Slugs** | Pre-rendered static articles (`blog/<slug>.html`) with programming language terms (`C++` &rarr; `cpp`), Open Graph, Twitter cards, and JSON-LD schemas. |
 | **📝 Pure Markdown Blog Engine** | Direct client-side Markdown (.md) rendering with zero Firestore reads, YAML frontmatter parser, and 1-click code copying. |

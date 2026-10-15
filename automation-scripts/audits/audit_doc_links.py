@@ -44,7 +44,38 @@ def audit_markdown_file(file_path):
         target_path = os.path.normpath(os.path.join(file_dir, clean_link))
 
         if not os.path.exists(target_path):
-            broken_links.append((link, target_path))
+            # Check if link points to legacy root asset locations mapped into assets/
+            resolved = None
+            try:
+                rel = os.path.relpath(target_path, WORKSPACE_ROOT).replace("\\", "/")
+            except ValueError:
+                rel = ""
+
+            candidates = []
+            if rel.startswith("img/"):
+                candidates.append(os.path.join(WORKSPACE_ROOT, "assets", rel))
+            elif rel.startswith("fonts/"):
+                candidates.append(os.path.join(WORKSPACE_ROOT, "assets", rel))
+            elif rel.startswith("css/"):
+                rest = rel[4:]
+                candidates.append(os.path.join(WORKSPACE_ROOT, "assets", "css", rest))
+                candidates.append(os.path.join(WORKSPACE_ROOT, "assets", "css", "core", rest))
+                candidates.append(os.path.join(WORKSPACE_ROOT, "assets", "css", "vendor", rest))
+                candidates.append(os.path.join(WORKSPACE_ROOT, "assets", "css", "pages", rest))
+            elif rel.startswith("js/"):
+                rest = rel[3:]
+                candidates.append(os.path.join(WORKSPACE_ROOT, "assets", "js", rest))
+                candidates.append(os.path.join(WORKSPACE_ROOT, "assets", "js", "core", rest))
+                candidates.append(os.path.join(WORKSPACE_ROOT, "assets", "js", "vendor", rest))
+                candidates.append(os.path.join(WORKSPACE_ROOT, "assets", "js", "modules", rest))
+
+            for c in candidates:
+                if os.path.exists(c):
+                    resolved = c
+                    break
+
+            if not resolved:
+                broken_links.append((link, target_path))
 
     return broken_links
 

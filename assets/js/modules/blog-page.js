@@ -187,8 +187,10 @@
                             tags: Array.isArray(meta.tags) ? meta.tags : [meta.category || 'General'],
                             author: meta.author || 'EG1',
                             createdAt: meta.createdAt || meta.release_date || '',
-                            release_date: meta.release_date || meta.createdAt || '',
-                            output_image: meta.output_image || meta.imageUrl || ('img/blog/id' + cleanId + '.webp'),
+                            output_image: (function () {
+                                var img = meta.output_image || meta.imageUrl || ('assets/img/blog/id' + cleanId + '.webp');
+                                return img.startsWith('img/') ? ('assets/' + img) : img;
+                            })(),
                             short_description: meta.short_description || meta.description || '',
                             full_description: bodyHtml,
                             raw_markdown: bodyMd,

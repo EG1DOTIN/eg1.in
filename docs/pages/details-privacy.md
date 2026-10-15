@@ -7,8 +7,8 @@ Technical code architecture, execution logic, algorithm specifications, Mermaid 
 ## 🔗 Associated Code Files
 
 - **HTML Template**: [privacypolicy.html](../../privacypolicy.html)
-- **Telemetry Module**: [js/visitor-tracker.js](../../js/visitor-tracker.js)
-- **Stylesheets**: [css/main.css](../../css/main.css), [css/common.css](../../css/common.css)
+- **Telemetry Module**: [js/visitor-tracker.js](../../assets/js/modules/visitor-tracker.js)
+- **Stylesheets**: [css/main.css](../../assets/css/core/main.css), [css/common.css](../../assets/css/core/common.css)
 
 ---
 
@@ -84,7 +84,7 @@ showConsentBanner: function () {
 ```
 
 ### 2. Batched Bucket Telemetry Pattern (Write Optimization)
-In [js/visitor-tracker.js](../../js/visitor-tracker.js), to minimize Firestore write costs, telemetry entries are stored in arrays inside capped bucket documents (50 entries per `page_N` document):
+In [js/visitor-tracker.js](../../assets/js/modules/visitor-tracker.js), to minimize Firestore write costs, telemetry entries are stored in arrays inside capped bucket documents (50 entries per `page_N` document):
 
 ```javascript
 // Key Method: recordTelemetryBucket(data) in js/visitor-tracker.js

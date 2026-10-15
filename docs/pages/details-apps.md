@@ -7,12 +7,12 @@ Technical code architecture, execution logic, algorithm specifications, Mermaid 
 ## 🔗 Associated Code Files
 
 - **Catalog Template**: [apps.html](../../apps.html)
-- **Catalog Controller**: [js/apps.js](../../js/apps.js)
-- **Data Engine & Renderer**: [js/app.js](../../js/app.js)
+- **Catalog Controller**: [js/apps.js](../../assets/js/modules/apps.js)
+- **Data Engine & Renderer**: [js/app.js](../../assets/js/core/app.js)
 - **Static Page Generator**: [automation-scripts/generators/generate_app_pages.py](../../automation-scripts/generators/generate_app_pages.py)
 - **Consolidated Automation Runner**: [automation-scripts/run_all_checks.py](../../automation-scripts/run_all_checks.py)
-- **Interactive Share Logic**: [js/share-app.js](../../js/share-app.js)
-- **Stylesheets**: [css/theme.css](../../css/theme.css), [css/common.css](../../css/common.css), [css/main.css](../../css/main.css)
+- **Interactive Share Logic**: [js/share-app.js](../../assets/js/modules/share-app.js)
+- **Stylesheets**: [css/theme.css](../../assets/css/core/theme.css), [css/common.css](../../assets/css/core/common.css), [css/main.css](../../assets/css/core/main.css)
 
 ---
 

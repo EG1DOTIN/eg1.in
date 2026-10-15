@@ -37,7 +37,7 @@ li {
 .heading {
     border-radius: 4px 4px 0 0;
     background-color: #1b5685;
-    background: url('../img/heading1.png') no-repeat;
+    background: url('../../img/heading1.png') no-repeat;
     color: #fff;
     height: 60px;
     line-height: 35px;
@@ -63,7 +63,7 @@ a {
     text-transform: uppercase;
     color: #404041;
     letter-spacing: 1px;
-    background: url('../img/h1-bg.png') no-repeat center bottom;
+    background: url('../../img/h1-bg.png') no-repeat center bottom;
     padding-bottom: 10px;
     margin-bottom: 1em;
     margin-top: 0.5em;
@@ -1086,7 +1086,7 @@ p {
 
 .newsevent li {
     border-bottom: thin dotted #2e3192;
-    list-style-image: url('../img/libullet.png');
+    list-style-image: url('../../img/libullet.png');
     list-style-position: inside;
     margin-bottom: 8px;
 }
@@ -1238,7 +1238,7 @@ p {
     visibility: hidden;
     width: 92px;
     height: 97px;
-    background-image: url('../img/image_hover.png');
+    background-image: url('../../img/image_hover.png');
     background-position: center center;
     background-repeat: no-repeat;
 }
