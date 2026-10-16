@@ -113,11 +113,8 @@ def main():
         os.path.join(base_dir, "blog.html"),
         os.path.join(base_dir, "about.html"),
         os.path.join(base_dir, "contact.html"),
-        os.path.join(base_dir, "download.html"),
-        os.path.join(base_dir, "get-registration-key.html"),
         os.path.join(base_dir, "privacypolicy.html"),
         os.path.join(base_dir, "updates.html"),
-        os.path.join(base_dir, "test.html"),
         os.path.join(base_dir, "AdminPanel", "index.html")
     ]
 

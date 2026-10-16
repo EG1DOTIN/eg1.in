@@ -32,8 +32,12 @@ ui-debug.log*
 *service_account*.json
 firebase_credentials*.json
 
-# ─── Node & Python Cache ─────────────────────────────────
+# ─── Node & Python Virtual Environments & Cache ─────────
 node_modules/
+.venv/
+venv/
+ENV/
+env/
 __pycache__/
 *.pyc
 *.pyo

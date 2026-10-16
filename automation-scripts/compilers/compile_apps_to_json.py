@@ -7,7 +7,10 @@ and Markdown descriptions, and compiles them into data/apps.json for high-speed,
 zero-database delivery on the frontend.
 
 Usage:
-    E:/ALL/CODE/PYTHON/TestPy/.venv/Scripts/python.exe automation-scripts/compilers/compile_apps_to_json.py
+    # Linux / macOS:
+    .venv/bin/python automation-scripts/compilers/compile_apps_to_json.py
+    # Windows:
+    .venv/Scripts/python.exe automation-scripts/compilers/compile_apps_to_json.py
 """
 
 import sys

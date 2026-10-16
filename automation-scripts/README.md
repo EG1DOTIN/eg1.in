@@ -30,7 +30,20 @@ automation-scripts/
 └── README.md                  # Comprehensive tool documentation and usage manual (this file)
 ```
 
-> **Private Developer Tools**: Sensitive database extraction/seeders and heavy image synthesis tools are maintained in private local tooling (`gitignore/local-tools/`).
+## ⚙️ Environment Setup & Dependencies
+
+All automation scripts must be executed using the dedicated Python virtual environment located at the project root (`.venv/`):
+
+```bash
+# 1. Initialize root virtual environment (if not already created)
+python3 -m venv .venv
+
+# 2. Install public automation pipeline dependencies into .venv
+# Linux / macOS:
+.venv/bin/python -m pip install -r automation-scripts/requirements.txt
+# Windows:
+.venv/Scripts/python.exe -m pip install -r automation-scripts/requirements.txt
+```
 
 ---
 
@@ -50,7 +63,11 @@ Single consolidated runner executing the entire suite of repository quality chec
 
 - **Execution**:
   ```bash
-  E:/ALL/CODE/PYTHON/TestPy/.venv/Scripts/python.exe automation-scripts/run_all_checks.py
+  # Linux / macOS:
+  .venv/bin/python automation-scripts/run_all_checks.py
+
+  # Windows:
+  .venv/Scripts/python.exe automation-scripts/run_all_checks.py
   ```
 
 ---
@@ -61,21 +78,21 @@ Single consolidated runner executing the entire suite of repository quality chec
 - **Purpose**: Audits all production HTML, CSS, and JS files for strict separation of concerns, absence of inline `<style>`/`<script>` blocks, and semantic standards.
 - **Execution**:
   ```bash
-  E:/ALL/CODE/PYTHON/TestPy/.venv/Scripts/python.exe automation-scripts/audits/audit_code_standards.py
+  .venv/bin/python automation-scripts/audits/audit_code_standards.py
   ```
 
 ### 2. `audits/validate_theme_assets.py`
 - **Purpose**: Verifies that the Light Gray / Dark Gray theme system is fully consistent across the codebase (CSS braces, pre-loaders, header switcher, and script bindings).
 - **Execution**:
   ```bash
-  E:/ALL/CODE/PYTHON/TestPy/.venv/Scripts/python.exe automation-scripts/audits/validate_theme_assets.py
+  .venv/bin/python automation-scripts/audits/validate_theme_assets.py
   ```
 
 ### 3. `audits/audit_doc_links.py`
 - **Purpose**: Recursively audits all Markdown documentation files in `docs/` and verifies that 100% of relative links resolve to valid, existing target files on disk.
 - **Execution**:
   ```bash
-  E:/ALL/CODE/PYTHON/TestPy/.venv/Scripts/python.exe automation-scripts/audits/audit_doc_links.py
+  .venv/bin/python automation-scripts/audits/audit_doc_links.py
   ```
 
 ---
@@ -90,7 +107,7 @@ Single consolidated runner executing the entire suite of repository quality chec
   - **Mapping Dataset**: Outputs bidirectional slug mapping dictionary to [automation-scripts/data/blog_slugs.json](data/blog_slugs.json).
 - **Execution**:
   ```bash
-  E:/ALL/CODE/PYTHON/TestPy/.venv/Scripts/python.exe automation-scripts/generators/generate_blog_pages.py
+  .venv/bin/python automation-scripts/generators/generate_blog_pages.py
   ```
 
 ### 5. `generators/generate_app_pages.py`
@@ -102,7 +119,7 @@ Single consolidated runner executing the entire suite of repository quality chec
   - Outputs slug mappings to [automation-scripts/data/app_slugs.json](data/app_slugs.json).
 - **Execution**:
   ```bash
-  E:/ALL/CODE/PYTHON/TestPy/.venv/Scripts/python.exe automation-scripts/generators/generate_app_pages.py
+  .venv/bin/python automation-scripts/generators/generate_app_pages.py
   ```
 
 ### 6. `generators/sync_seo_tags.py`
@@ -110,10 +127,10 @@ Single consolidated runner executing the entire suite of repository quality chec
 - **Execution**:
   ```bash
   # Check / Audit mode (zero edits, returns non-zero exit code if drift detected):
-  E:/ALL/CODE/PYTHON/TestPy/.venv/Scripts/python.exe automation-scripts/generators/sync_seo_tags.py --check
+  .venv/bin/python automation-scripts/generators/sync_seo_tags.py --check
 
   # Sync mode (updates all static HTML files with clean metadata):
-  E:/ALL/CODE/PYTHON/TestPy/.venv/Scripts/python.exe automation-scripts/generators/sync_seo_tags.py
+  .venv/bin/python automation-scripts/generators/sync_seo_tags.py
   ```
 
 ---
@@ -124,14 +141,14 @@ Single consolidated runner executing the entire suite of repository quality chec
 - **Purpose**: Compilation utility to bundle Markdown files in `data/blog/*.md` into a single JSON dataset (`data/blogs.json`).
 - **Execution**:
   ```bash
-  E:/ALL/CODE/PYTHON/TestPy/.venv/Scripts/python.exe automation-scripts/compilers/compile_md_to_json.py
+  .venv/bin/python automation-scripts/compilers/compile_md_to_json.py
   ```
 
 ### 8. `compilers/compile_apps_to_json.py`
 - **Purpose**: Compilation utility to bundle Markdown application files in `data/apps/*.md` into `data/apps.json`.
 - **Execution**:
   ```bash
-  E:/ALL/CODE/PYTHON/TestPy/.venv/Scripts/python.exe automation-scripts/compilers/compile_apps_to_json.py
+  .venv/bin/python automation-scripts/compilers/compile_apps_to_json.py
   ```
 
 ---

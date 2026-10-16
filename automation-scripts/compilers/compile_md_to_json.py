@@ -6,8 +6,10 @@ Reads all Markdown (.md) blog files in data/blog/, parses YAML frontmatter and
 Markdown content into HTML, and compiles data/blogs.json for zero-latency static delivery.
 
 Usage:
-    # Compile all markdown files in data/blog/ into data/blogs.json:
-    E:/ALL/CODE/PYTHON/TestPy/.venv/Scripts/python.exe automation-scripts/compilers/compile_md_to_json.py
+    # Linux / macOS:
+    .venv/bin/python automation-scripts/compilers/compile_md_to_json.py
+    # Windows:
+    .venv/Scripts/python.exe automation-scripts/compilers/compile_md_to_json.py
 """
 
 import sys

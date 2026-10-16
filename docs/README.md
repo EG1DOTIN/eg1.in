@@ -43,5 +43,9 @@ All quality audits, link checkers, and static page compilers live in [`automatio
 
 ```bash
 # Run all pre-deploy audits and page generators in a single command:
-E:/ALL/CODE/PYTHON/TestPy/.venv/Scripts/python.exe automation-scripts/run_all_checks.py
+# Linux / macOS:
+.venv/bin/python automation-scripts/run_all_checks.py
+
+# Windows:
+.venv/Scripts/python.exe automation-scripts/run_all_checks.py
 ```

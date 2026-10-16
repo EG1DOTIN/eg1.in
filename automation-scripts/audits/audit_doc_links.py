@@ -13,8 +13,6 @@ from urllib.parse import unquote
 
 DOCS_DIR = os.path.abspath(os.path.join(
     os.path.dirname(__file__), "..", "..", "docs"))
-GITIGNORE_DOCS_DIR = os.path.abspath(os.path.join(
-    os.path.dirname(__file__), "..", "..", "gitignore", "docs"))
 WORKSPACE_ROOT = os.path.abspath(os.path.join(
     os.path.dirname(__file__), "..", ".."))
 
@@ -81,10 +79,8 @@ def audit_markdown_file(file_path):
 
 
 def fix_common_relative_paths():
-    """Audits markdown links across docs/ and gitignore/docs/"""
+    """Audits markdown links across docs/"""
     target_dirs = [DOCS_DIR]
-    if os.path.exists(GITIGNORE_DOCS_DIR):
-        target_dirs.append(GITIGNORE_DOCS_DIR)
 
     total_broken = 0
 
