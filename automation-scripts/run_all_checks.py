@@ -10,7 +10,10 @@ Preserves all individual scripts in automation-scripts/ while providing a unifie
 CI/CD and pre-commit verification dashboard.
 
 Usage:
-    E:/ALL/CODE/PYTHON/TestPy/.venv/Scripts/python.exe automation-scripts/run_all_checks.py
+    # Linux / macOS:
+    .venv/bin/python automation-scripts/run_all_checks.py
+    # Windows:
+    .venv/Scripts/python.exe automation-scripts/run_all_checks.py
 """
 
 import sys

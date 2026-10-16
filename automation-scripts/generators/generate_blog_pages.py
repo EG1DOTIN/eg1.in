@@ -13,7 +13,10 @@ Each generated page contains:
 4. Auto-generated slug mapping saved to data/blog_slugs.json.
 
 Usage:
-    E:/ALL/CODE/PYTHON/TestPy/.venv/Scripts/python.exe automation-scripts/generators/generate_blog_pages.py
+    # Linux / macOS:
+    .venv/bin/python automation-scripts/generators/generate_blog_pages.py
+    # Windows:
+    .venv/Scripts/python.exe automation-scripts/generators/generate_blog_pages.py
 """
 
 import sys

@@ -7,7 +7,7 @@ Technical code architecture, execution logic, algorithm specifications, Mermaid 
 ## 🔗 Associated Code Files
 
 - **Application Catalog**: [apps.html](../../apps.html)
-- **Controller Logic (Archived)**: ../../unused-old-files/js/download.js *(archived)*
+- **Controller Logic (Archived)**: Historical `download.js` *(retired)*
 - **Data Engine**: [js/app.js](../../assets/js/core/app.js)
 
 ---
@@ -57,7 +57,7 @@ flowchart TD
 ## 💻 Code-Side Implementation & Algorithm Details
 
 ### Dynamic Download Resolver & Routing Link Fix
-In ../../unused-old-files/js/download.js *(archived)*, the selected product parameters were resolved from `DataCache.getProducts()`. The back button was dynamically constructed to route back to `apps.html?id=...`:
+In the historical `download.js` controller, the selected product parameters were resolved from `DataCache.getProducts()`. The back button was dynamically constructed to route back to `apps.html?id=...`:
 
 ```javascript
 // Key Method: Product Resolver in js/download.js

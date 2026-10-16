@@ -16,7 +16,10 @@ Each generated page contains:
 5. Back to all apps navigation link.
 
 Usage:
-    E:/ALL/CODE/PYTHON/TestPy/.venv/Scripts/python.exe automation-scripts/generators/generate_app_pages.py
+    # Linux / macOS:
+    .venv/bin/python automation-scripts/generators/generate_app_pages.py
+    # Windows:
+    .venv/Scripts/python.exe automation-scripts/generators/generate_app_pages.py
 """
 
 import sys
