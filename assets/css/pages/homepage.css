@@ -1,0 +1,472 @@
+/**
+ * EG1 Homepage Modern Enhancement Stylesheet
+ * -------------------------------------------
+ * Designed with modern Vanilla CSS, CSS Custom Properties,
+ * fluid typography, CSS Grid, and responsive mobile-first architecture.
+ * Fully compatible with both Light Gray and Dark Gray themes.
+ */
+
+/* ── 1. Hero & Slider Flexible Heights with Generous Padding ────────────── */
+
+#mainContentHeaderslide {
+    height: auto !important;
+    min-height: 230px !important;
+    padding-top: 20px !important;
+    padding-bottom: 20px !important;
+}
+
+#mainContentHeaderslide .overflow {
+    height: auto !important;
+    min-height: 190px !important;
+    overflow: visible !important;
+}
+
+#Content3Header,
+.eg1-hero-header {
+    text-align: center !important;
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 32px 28px 28px 28px !important;
+    box-sizing: border-box;
+}
+
+#scrlbar #Content3Header h1,
+#scrlbar #homepageHeroTitle,
+.mainContentHeader #homepageHeroTitle,
+#Content3Header h1,
+#homepageHeroTitle,
+.eg1-hero-title,
+#Content3Header h1 *,
+.eg1-hero-title * {
+    text-transform: none !important;
+}
+
+#scrlbar #Content3Header h1,
+#scrlbar #homepageHeroTitle,
+.mainContentHeader #homepageHeroTitle,
+#Content3Header h1,
+#homepageHeroTitle,
+.eg1-hero-title {
+    color: var(--banner-heading-color, var(--theme-accent-highlight, #b8860b)) !important;
+    font-size: clamp(1.2rem, 2.5vw, 1.65rem) !important;
+    font-weight: bold !important;
+    font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif !important;
+    font-style: italic !important;
+    letter-spacing: 0.2px;
+    margin: 0 auto 20px auto !important;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+    line-height: 1.45;
+    text-align: center !important;
+    transition: color 0.25s ease;
+}
+
+#scrlbar #Content3Header h1 *,
+#scrlbar #homepageHeroTitle *,
+.mainContentHeader #homepageHeroTitle *,
+#Content3Header h1 *,
+#homepageHeroTitle *,
+.eg1-hero-title * {
+    font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif !important;
+    font-style: italic !important;
+    font-weight: bold !important;
+    color: inherit !important;
+}
+
+.eg1-hero-version {
+    text-transform: none !important;
+    font-size: 0.64em !important;
+    font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif !important;
+    font-style: normal !important;
+    font-weight: 400 !important;
+    vertical-align: super !important;
+    color: inherit !important;
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    margin: 0 3px 0 2px !important;
+    letter-spacing: normal !important;
+    text-shadow: inherit !important;
+    display: inline !important;
+    line-height: 0 !important;
+    box-shadow: none !important;
+}
+
+html[data-theme="dark-gray"] .eg1-hero-version {
+    color: inherit !important;
+    background: transparent !important;
+    border: none !important;
+}
+
+/* Hero Action CTAs (Centered) */
+.eg1-hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    margin: 0 auto;
+}
+
+.eg1-hero-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 22px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.92rem;
+    text-decoration: none !important;
+    min-height: 44px;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.eg1-hero-btn-primary {
+    background-color: var(--theme-accent-highlight, #b8860b) !important;
+    color: #ffffff !important;
+    border: 1px solid transparent;
+    box-shadow: 0 4px 14px rgba(184, 134, 11, 0.45);
+}
+
+.eg1-hero-btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(184, 134, 11, 0.65);
+    color: #ffffff !important;
+}
+
+.eg1-hero-btn-secondary {
+    background: rgba(255, 255, 255, 0.16) !important;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+.eg1-hero-btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.26) !important;
+    transform: translateY(-2px);
+    border-color: rgba(255, 255, 255, 0.6);
+    color: #ffffff !important;
+}
+
+.eg1-hero-btn-ghost {
+    background: transparent !important;
+    color: rgba(255, 255, 255, 0.92) !important;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.eg1-hero-btn-ghost:hover {
+    background: rgba(255, 255, 255, 0.12) !important;
+    border-color: rgba(255, 255, 255, 0.6);
+    transform: translateY(-2px);
+    color: #ffffff !important;
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+    #mainContentHeaderslide {
+        transition: none !important;
+    }
+
+    #mainContentHeaderslide::before {
+        animation: none !important;
+    }
+}
+
+/* ── 2. Homepage Section Layout & Centered Headers ───────────────────────── */
+
+.eg1-home-section {
+    padding: 44px 0;
+    width: 100%;
+    border-bottom: 1px solid var(--border-light);
+    background-color: var(--bg-body);
+    transition: background-color 0.25s ease, border-color 0.25s ease;
+}
+
+.eg1-home-section.home-product {
+    padding: 44px 0 36px;
+}
+
+.eg1-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 28px;
+}
+
+.eg1-header-center {
+    justify-content: center !important;
+    text-align: center !important;
+    margin-bottom: 30px !important;
+}
+
+.text-center {
+    text-align: center !important;
+}
+
+.eg1-section-title-wrap {
+    flex: 1 1 300px;
+}
+
+.eg1-section-title {
+    font-size: clamp(1.25rem, 2.5vw, 1.65rem) !important;
+    font-weight: 700 !important;
+    color: var(--text-heading) !important;
+    margin: 0 0 8px 0 !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    line-height: 1.35;
+}
+
+.eg1-section-title .icon {
+    color: var(--theme-accent-highlight);
+    font-size: 1.15em;
+}
+
+.eg1-section-subtitle {
+    font-size: 0.94rem;
+    color: var(--text-muted);
+    margin: 0;
+    line-height: 1.55;
+    text-align: center !important;
+}
+
+.eg1-section-more-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--theme-accent-highlight) !important;
+    text-decoration: none !important;
+    padding: 9px 18px;
+    border-radius: 8px;
+    border: 1px solid var(--card-border);
+    background-color: var(--card-bg);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease, color 0.2s ease;
+    min-height: 40px;
+}
+
+.eg1-section-more-link:hover {
+    background-color: var(--bg-surface-secondary);
+    border-color: var(--theme-accent-highlight);
+    transform: translateY(-2px);
+}
+
+/* ── 3. Platform Principles ("Why EG1") Grid (Centered) ─────────────────── */
+
+.eg1-principles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 22px;
+}
+
+.eg1-principle-card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    padding: 26px 22px;
+    box-shadow: var(--card-shadow);
+    text-align: center !important;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.eg1-principle-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--card-shadow-hover);
+    border-color: var(--theme-accent-highlight);
+}
+
+.eg1-principle-icon-wrap {
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+    background-color: rgba(184, 134, 11, 0.12);
+    color: var(--theme-accent-highlight);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.45rem;
+    margin: 0 auto 16px auto !important;
+    border: 1px solid rgba(184, 134, 11, 0.22);
+}
+
+html[data-theme="dark-gray"] .eg1-principle-icon-wrap {
+    background-color: rgba(96, 165, 250, 0.15);
+    color: #60a5fa;
+    border-color: rgba(96, 165, 250, 0.3);
+}
+
+.eg1-principle-name {
+    font-size: 1.08rem;
+    font-weight: 700;
+    color: var(--text-heading);
+    margin: 0 0 10px 0;
+    line-height: 1.4;
+    text-align: center !important;
+}
+
+.eg1-principle-text {
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin: 0;
+    text-align: center !important;
+}
+
+/* ── 4. Community & Contribution Banner (Centered) ───────────────────────── */
+
+#community-cta.eg1-home-section {
+    padding: 24px 0 32px 0;
+}
+
+.eg1-community-banner {
+    margin: 0 auto;
+    border-radius: 12px;
+    padding: 30px 26px 28px 26px;
+    background: linear-gradient(135deg, #1e2229 0%, #101217 100%);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    text-align: center !important;
+    color: #ffffff;
+    position: relative;
+    overflow: hidden;
+}
+
+.eg1-community-banner::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 50% 50%, rgba(184, 134, 11, 0.10) 0%, transparent 60%);
+    pointer-events: none;
+}
+
+.eg1-community-content {
+    position: relative;
+    z-index: 2;
+    max-width: 660px;
+    margin: 0 auto;
+    text-align: center !important;
+}
+
+.eg1-community-icon {
+    font-size: 2.1rem;
+    margin-bottom: 10px;
+    color: var(--theme-accent-highlight, #f59e0b);
+}
+
+.eg1-community-title {
+    font-size: clamp(1.25rem, 2.6vw, 1.65rem) !important;
+    font-weight: 700 !important;
+    color: #ffffff !important;
+    margin: 0 0 10px 0 !important;
+    line-height: 1.35;
+    text-align: center !important;
+}
+
+.eg1-community-desc {
+    font-size: clamp(1rem, 2vw, 1.12rem) !important;
+    color: #e2e8f0 !important;
+    line-height: 1.65 !important;
+    margin: 0 auto 20px auto !important;
+    max-width: 640px;
+    text-align: center !important;
+}
+
+.eg1-community-actions {
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+.eg1-cta-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.92rem;
+    text-decoration: none !important;
+    min-height: 44px;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.eg1-cta-btn-primary {
+    background-color: var(--theme-accent-highlight, #b8860b) !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 15px rgba(184, 134, 11, 0.4);
+}
+
+.eg1-cta-btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 22px rgba(184, 134, 11, 0.65);
+    color: #ffffff !important;
+}
+
+.eg1-cta-btn-outline {
+    background: rgba(255, 255, 255, 0.08) !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.eg1-cta-btn-outline:hover {
+    background: rgba(255, 255, 255, 0.18) !important;
+    transform: translateY(-2px);
+    border-color: rgba(255, 255, 255, 0.55);
+    color: #ffffff !important;
+}
+
+/* ── 5. Mobile Responsiveness Adjustments ─────────────────────────────────── */
+
+@media (max-width: 768px) {
+
+    #Content3Header,
+    .eg1-hero-header {
+        padding: 22px 14px 18px 14px !important;
+    }
+
+    .eg1-home-section {
+        padding: 32px 0;
+    }
+
+    .eg1-section-header {
+        margin-bottom: 20px;
+    }
+
+    .eg1-hero-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .eg1-hero-btn {
+        width: 100%;
+    }
+
+    .eg1-community-banner {
+        padding: 24px 16px 22px 16px;
+    }
+
+    .eg1-community-actions {
+        flex-direction: column;
+    }
+
+    .eg1-cta-btn {
+        width: 100%;
+    }
+}

@@ -651,6 +651,11 @@ html[data-theme="dark-gray"] .bell-icon {
     color: #a855f7;
 }
 
+.update-icon-box.cat-enhancement {
+    background: rgba(14, 165, 233, 0.15);
+    color: #0ea5e9;
+}
+
 /* Right Content Area */
 .update-card-content {
     flex: 1;
@@ -697,6 +702,12 @@ html[data-theme="dark-gray"] .bell-icon {
     color: #c084fc;
     background: rgba(168, 85, 247, 0.12);
     border: 1px solid rgba(168, 85, 247, 0.3);
+}
+
+.update-cat-pill.cat-enhancement {
+    color: #38bdf8;
+    background: rgba(14, 165, 233, 0.12);
+    border: 1px solid rgba(14, 165, 233, 0.3);
 }
 
 .update-ver-pill {
@@ -3086,6 +3097,11 @@ input[type="submit"].btn-primary:hover {
     color: #a855f7;
 }
 
+.updates-timeline-icon.cat-enhancement {
+    background: rgba(14, 165, 233, 0.15);
+    color: #0ea5e9;
+}
+
 .updates-timeline-icon.cat-app {
     background: rgba(14, 165, 233, 0.15);
     color: #0ea5e9;
@@ -3135,6 +3151,12 @@ input[type="submit"].btn-primary:hover {
     color: #c084fc;
     background: rgba(168, 85, 247, 0.12);
     border: 1px solid rgba(168, 85, 247, 0.3);
+}
+
+.updates-card-category.cat-enhancement {
+    color: #38bdf8;
+    background: rgba(14, 165, 233, 0.12);
+    border: 1px solid rgba(14, 165, 233, 0.3);
 }
 
 .updates-card-category.cat-app {

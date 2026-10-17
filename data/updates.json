@@ -1,15 +1,26 @@
 [
     {
         "id": "update-2026-10-17-v3-7-0",
-        "type": "app",
+        "type": "website",
         "version": "3.7.0",
-        "title": "pyEGClamUI, A Desktop GUI for ClamAV",
+        "title": "Homepage Dynamic Hero, Community Streamlining & About Visual Overhaul",
         "date": "Oct 17, 2026",
+        "category": "ENHANCEMENTS",
+        "icon": "sparkles",
+        "badge": "New",
+        "description": "Implemented dynamic hero version badge hydration ({version}), refined homepage community block, introduced About page visual showcase banner with centered justified typography, modernized social preview branding asset, and modularized homepage CSS.",
+        "link": "updates.html"
+    },
+    {
+        "id": "update-2026-10-17-pyEGClamUI",
+        "type": "app",
+        "title": "pyEGClamUI, An open-source desktop gui for clamav",
+        "date": "Oct 16, 2026",
         "category": "APP",
         "icon": "refresh",
         "badge": "Release",
-        "description": "Added pyEGClamUI, a desktop GUI application for ClamAV antivirus engine, implemented automated application slug synchronization and cache busting in build pipeline, updated Marwadi Chess webapp details, and published end-to-end application addition guide.",
-        "link": "apps.html"
+        "description": "Published pyEGClamUI, an open-source desktop GUI application for ClamAV antivirus engine, implemented automated application slug synchronization and cache busting in build pipeline, updated Marwadi Chess webapp details, and published end-to-end application addition guide.",
+        "link": "https://av.eg1.in"
     },
     {
         "id": "update-2026-10-15-v3-6-0",
@@ -102,7 +113,7 @@
         "title": "Notification Read Tracking, Layout Stability & Safety Fixes",
         "date": "Aug 30, 2026",
         "category": "BUGFIXES",
-        "icon": "spark",
+        "icon": "repair",
         "badge": "Bugfix",
         "description": "Fixed individual notification read status persistence, restored filter count badges, resolved initial grid layout reflow on blogs, and added defensive runtime safeguards.",
         "link": "updates.html"
@@ -132,9 +143,9 @@
         "link": "index.html"
     },
     {
-        "id": "update-2026-08-27-mchess-v371",
+        "id": "update-2026-08-27-mchess",
         "type": "app",
-        "title": "Marwadi Chess v3.7.1 Released",
+        "title": " Marwadi Chess - A free and open-source chess webapp",
         "date": "Aug 27, 2026",
         "category": "APP",
         "icon": "refresh",

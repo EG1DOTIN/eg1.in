@@ -13,7 +13,7 @@ Technical code architecture, execution logic, algorithm specifications, Mermaid 
   - Header: [components/header.html](../../components/header.html)
   - Footer: [components/footer.html](../../components/footer.html)
   - Slider: [components/image_slider.html](../../components/image_slider.html)
-- **Stylesheets**: [css/main.css](../../assets/css/core/main.css), [css/common.css](../../assets/css/core/common.css), [css/responsive.css](../../assets/css/core/responsive.css)
+- **Stylesheets**: [css/main.css](../../assets/css/core/main.css), [css/common.css](../../assets/css/core/common.css), [css/responsive.css](../../assets/css/core/responsive.css), [css/homepage.css](../../assets/css/pages/homepage.css)
 
 ---
 
@@ -21,10 +21,10 @@ Technical code architecture, execution logic, algorithm specifications, Mermaid 
 
 ```
 +-------------------------------------------------------------------------+
-| [EG1 Logo]        [Home] [Apps] [Blog] [About] [Contact]  [GitHub Ribbon]|
+| [EG1 Logo]        [Home] [Apps] [Explore v] [About] [Contact] (Bell)[🌓]|
 +-------------------------------------------------------------------------+
 | [=================== Image Slider Header Banner =====================]  |
-| "WELCOME TO EG1 - Solutions, Coding, Innovations & Creative Tools"      |
+| "EG1 ^v3.7.0 - An open-source hub for innovative and creative projects"  |
 +-------------------------------------------------------------------------+
 | ANNOUNCEMENTS / NEWS CONTAINER (#newsContainer)                         |
 | "A platform for solutions, coding, programming, innovations..."        |
@@ -37,6 +37,9 @@ Technical code architecture, execution logic, algorithm specifications, Mermaid 
 | | Short Description |  | Short Description |  | Short Description |     |
 | | [View] [Download] |  | [View] [Download] |  | [View] [Download] |     |
 | +-------------------+  +-------------------+  +-------------------+     |
++-------------------------------------------------------------------------+
+| COMMUNITY JOURNEY BANNER (.eg1-community-banner)                        |
+| "Join the Open-Source Journey" | [★ Star on GitHub]                     |
 +-------------------------------------------------------------------------+
 | FOOTER (Logo Badge, About Snippet, Follow Links, Contact CTA, Copyright)|
 +-------------------------------------------------------------------------+
@@ -112,6 +115,22 @@ $('.regular').slick({
         { breakpoint: 600, settings: { slidesToShow: 1 } }
     ]
 });
+```
+
+### 4. Dynamic Hero Banner Hydration & Release Version Interpolation
+In [js/index.js](../../assets/js/modules/index.js), `loadHeroFromContentAndUpdates()` dynamically resolves the hero template string from `data/website_content.json` and interpolates the active release version from `data/updates.json`:
+
+```javascript
+// Dynamic hero version interpolation
+var updates = await $.getJSON("data/updates.json");
+var versionString = "v3.7.0";
+var latestRelease = updates.find(function (u) {
+    return u.type === 'website' && u.version && typeof u.version === 'string' && u.version.trim().length > 0;
+});
+if (latestRelease && latestRelease.version) {
+    versionString = "v" + latestRelease.version.replace(/^v/i, "");
+}
+var formattedHeading = rawTemplateTitle.replace(/\{version\}/g, versionString);
 ```
 
 ---

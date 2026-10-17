@@ -571,7 +571,7 @@ p {
     color: goldenrod;
     font-size: 32px;
     text-align: left;
-    text-transform: uppercase;
+    text-transform: none;
     margin-bottom: 10px;
     font-weight: 500;
     font-family: Segoe Script;
@@ -586,6 +586,25 @@ p {
 }
 
 /*====================end=======================*/
+
+/* About Page Description Formatting */
+#aboutContentText {
+    display: block;
+    max-width: 840px;
+    margin: 0 auto;
+    text-align: justify;
+    text-justify: inter-word;
+}
+
+#aboutContentText p {
+    font-size: 1.18rem;
+    line-height: 1.8;
+    text-align: justify;
+    text-justify: inter-word;
+    color: var(--text-primary);
+    max-width: 840px;
+    margin: 0 auto 20px auto;
+}
 
 
 /*====================our product=======================*/
