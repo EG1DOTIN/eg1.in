@@ -1,4 +1,14 @@
 {
-  "idToSlug": {},
-  "slugToId": {}
+  "idToSlug": {
+    "YDLLCZ0ur2gTbkwQtDQV": "marwadi-chess",
+    "eg1-pyegclamui": "pyegclamui",
+    "test1-app": "test1-app",
+    "test2-app": "test2-app"
+  },
+  "slugToId": {
+    "marwadi-chess": "YDLLCZ0ur2gTbkwQtDQV",
+    "pyegclamui": "eg1-pyegclamui",
+    "test1-app": "test1-app",
+    "test2-app": "test2-app"
+  }
 }

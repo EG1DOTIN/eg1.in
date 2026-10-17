@@ -57,7 +57,7 @@ Single consolidated runner executing the entire suite of repository quality chec
   2. Theme System & Token Integrity ([audits/validate_theme_assets.py](audits/validate_theme_assets.py))
   3. Markdown Documentation Link Audit ([audits/audit_doc_links.py](audits/audit_doc_links.py))
   4. Static Blog Pages Generator ([generators/generate_blog_pages.py](generators/generate_blog_pages.py))
-  5. Static Applications Pages Generator ([generators/generate_app_pages.py](generators/generate_app_pages.py))
+  5. Static App Pages & Slug Sync ([generators/generate_app_pages.py](generators/generate_app_pages.py))
   6. Static SEO Meta Tags Sync Verification ([generators/sync_seo_tags.py](generators/sync_seo_tags.py))
   7. JavaScript Syntax & Node Parse Verification (`node -c ...`)
 
@@ -111,12 +111,12 @@ Single consolidated runner executing the entire suite of repository quality chec
   ```
 
 ### 5. `generators/generate_app_pages.py`
-- **Purpose**: Generates individual static SEO-optimized HTML pages in [apps/](../apps/) from Markdown files in [data/apps/](../data/apps/).
+- **Purpose**: Automatically discovers applications in `data/apps/*.md`, synchronizes `KNOWN_APP_SLUGS` in `assets/js/core/app.js`, auto-bumps browser cache keys, verifies filename case-consistency on Linux, and generates standalone SEO-optimized static HTML detail pages under [apps/](../apps/).
 - **Features**:
-  - Generates detail pages for applications featuring a "View Details" action.
-  - Pre-renders Schema.org `SoftwareApplication` JSON-LD, Open Graph, Twitter cards, and canonical links.
-  - Injects themed action buttons and the interactive Share Button ([js/share-app.js](../assets/js/modules/share-app.js)).
-  - Outputs slug mappings to [automation-scripts/data/app_slugs.json](data/app_slugs.json).
+  - **Auto-Sync Slugs**: Automatically updates `KNOWN_APP_SLUGS` in `assets/js/core/app.js` with zero manual JS editing.
+  - **Auto-Bumping Cache**: Automatically increments `PRODUCTS_CACHE_KEY` in `app.js` so client browsers fetch fresh app data immediately without serving stale `localStorage`.
+  - **Case-Sensitivity Checks**: Flags mismatched filenames vs slugs to prevent 404 errors on case-sensitive Linux/production hosting.
+  - **Mapping Dataset**: Outputs bidirectional slug mapping dictionary to [automation-scripts/data/app_slugs.json](data/app_slugs.json).
 - **Execution**:
   ```bash
   .venv/bin/python automation-scripts/generators/generate_app_pages.py

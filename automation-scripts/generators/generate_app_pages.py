@@ -426,24 +426,84 @@ def generate_app_html(meta: Dict[str, Any], body: str, slug: str, app_id: str) -
 WORKSPACE_ROOT = Path(__file__).resolve().parents[2]
 
 
+def sync_app_slugs_in_js(discovered_slugs: list) -> bool:
+    """
+    Synchronizes discovered Markdown application slugs into assets/js/core/app.js
+    (KNOWN_APP_SLUGS array) and automatically bumps PRODUCTS_CACHE_KEY if changes occur,
+    ensuring zero-friction app additions without manual JS edits.
+    """
+    app_js_path = WORKSPACE_ROOT / "assets" / "js" / "core" / "app.js"
+    if not app_js_path.exists():
+        print(f"⚠️  Could not find {app_js_path}")
+        return False
+
+    with open(app_js_path, "r", encoding="utf-8") as f:
+        content = f.read()
+
+    slugs_pattern = r"(KNOWN_APP_SLUGS\s*:\s*\[)([\s\S]*?)(\])"
+    match = re.search(slugs_pattern, content)
+    if not match:
+        print("⚠️  Could not find KNOWN_APP_SLUGS in assets/js/core/app.js")
+        return False
+
+    existing_slugs_raw = match.group(2)
+    existing_slugs = [s.strip() for s in re.findall(r"['\"]([^'\"]+)['\"]", existing_slugs_raw)]
+
+    sorted_discovered = sorted(list(set(discovered_slugs)))
+    sorted_existing = sorted(list(set(existing_slugs)))
+
+    if sorted_discovered == sorted_existing:
+        print(f"ℹ️  KNOWN_APP_SLUGS in assets/js/core/app.js is already up-to-date ({len(sorted_discovered)} apps).")
+        return False
+
+    formatted_slugs = ",\n".join(f"    '{s}'" for s in sorted_discovered)
+    content = re.sub(
+        slugs_pattern,
+        f"\\g<1>\n{formatted_slugs}\n  \\g<3>",
+        content,
+        count=1
+    )
+
+    # Automatically increment PRODUCTS_CACHE_KEY so all client browsers reload immediately
+    cache_pattern = r"(PRODUCTS_CACHE_KEY\s*:\s*['\"]eg1_apps_md_cache_v)(\d+)(['\"])"
+    cache_match = re.search(cache_pattern, content)
+    if cache_match:
+        curr_ver = int(cache_match.group(2))
+        new_version_num = curr_ver + 1
+        content = re.sub(
+            cache_pattern,
+            f"\\g<1>{new_version_num}\\g<3>",
+            content,
+            count=1
+        )
+        print(f"🔄 Auto-bumped PRODUCTS_CACHE_KEY in assets/js/core/app.js to 'eg1_apps_md_cache_v{new_version_num}'.")
+
+    with open(app_js_path, "w", encoding="utf-8") as f:
+        f.write(content)
+
+    print(f"✅ Synchronized KNOWN_APP_SLUGS in assets/js/core/app.js ({len(sorted_discovered)} apps: {', '.join(sorted_discovered)}).")
+    return True
+
+
 def main():
     apps_dir = WORKSPACE_ROOT / "data" / "apps"
     out_dir = WORKSPACE_ROOT / "apps"
-    out_dir.mkdir(exist_ok=True)
 
     if not apps_dir.exists():
         print(f"❌ Error: {apps_dir} directory not found.")
         sys.exit(1)
 
-    # Clean out any old generated html files to avoid orphaned filenames
-    for old_file in out_dir.glob("*.html"):
-        try:
-            old_file.unlink()
-        except Exception:
-            pass
+    # Clean out any old generated html files if directory exists
+    if out_dir.exists():
+        for old_file in out_dir.glob("*.html"):
+            try:
+                old_file.unlink()
+            except Exception:
+                pass
 
     slug_map: Dict[str, str] = {}
     id_map: Dict[str, str] = {}
+    all_discovered_slugs = []
     generated_count = 0
     skipped_count = 0
 
@@ -456,30 +516,47 @@ def main():
         app_id = str(meta.get("id") or f.stem).strip()
         slug = str(meta.get("slug") or slugify(meta.get("name")
                    or meta.get("product_name") or f.stem)).strip()
-        active = str(meta.get("active", "1")).strip().lower()
 
+        # Check filename consistency with slug
+        expected_stem = slug.lower()
+        if f.stem.lower() != expected_stem:
+            print(f"  ⚠️  Filename warning: '{f.name}' does not match slug '{slug}'. Lowercase '{expected_stem}.md' is required for case-sensitive web servers.")
+
+        all_discovered_slugs.append(slug)
+        slug_map[slug] = app_id
+        id_map[app_id] = slug
+
+        active = str(meta.get("active", "1")).strip().lower()
         if active in ["0", "false", "no"]:
-            print(f"  ⏭️  Skipping '{f.name}' (active: {active})")
+            print(f"  ⏭️  Skipping static page for '{f.name}' (active: {active})")
             continue
 
         # Check if the app actually needs a detail page
         if not has_details_button(meta, slug):
             print(
-                f"  ⏭️  Skipping '{f.name}' (no View Details button; direct Launch/Source app)")
+                f"  ⏭️  Skipping static page for '{f.name}' (no View Details button; direct Launch/Source app)")
             skipped_count += 1
             continue
 
-        slug_map[slug] = app_id
-        id_map[app_id] = slug
-
         # Generate static HTML page
         html_code = generate_app_html(meta, body, slug, app_id)
+        out_dir.mkdir(exist_ok=True)
         out_file = out_dir / f"{slug}.html"
         with open(out_file, "w", encoding="utf-8") as out_fp:
             out_fp.write(html_code)
 
         print(f"  ✨ Generated: apps/{slug}.html")
         generated_count += 1
+
+    # Clean up out_dir if empty
+    if out_dir.exists() and not any(out_dir.iterdir()):
+        try:
+            out_dir.rmdir()
+        except Exception:
+            pass
+
+    # Synchronize KNOWN_APP_SLUGS in assets/js/core/app.js
+    sync_app_slugs_in_js(all_discovered_slugs)
 
     # Save slug mappings dataset for audit & reference
     data_dir = WORKSPACE_ROOT / "automation-scripts" / "data"
@@ -494,8 +571,10 @@ def main():
         json.dump(map_data, map_fp, indent=2)
 
     print(f"\n==================================================")
-    print(
-        f"✅ Generated {generated_count} static application pages in '{out_dir}/'!")
+    if generated_count > 0:
+        print(f"✅ Generated {generated_count} static application pages in '{out_dir}/'!")
+    else:
+        print(f"✅ Dynamic app detail routing active (apps.html?title=<slug> from data/apps/*.md; 0 static pages generated).")
     print(
         f"ℹ️  Skipped {skipped_count} direct-action application(s) without details view.")
     print(f"✅ Saved application slug mapping to '{map_file}'.")

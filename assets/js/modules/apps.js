@@ -64,15 +64,6 @@
                     return;
                 }
 
-                // Seamlessly forward legacy query URLs to the canonical static page
-                var targetSlug = getAppSlug(selectedProduct);
-                if (selectedProduct.product_type === "WebApp" && selectedProduct.webapp_link && selectedProduct.webapp_link !== "#") {
-                    window.location.replace(selectedProduct.webapp_link);
-                    return;
-                } else if (targetSlug) {
-                    window.location.replace('apps/' + encodeURIComponent(targetSlug) + '.html');
-                    return;
-                }
 
                 var defaultAppIcon = window.DEFAULT_APP_ICON || window.DEFAULT_PLACEHOLDER_ICON || "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='16' fill='%231e293b'/><text x='50%' y='63%' font-family='sans-serif' font-weight='bold' font-size='38' fill='%2338bdf8' text-anchor='middle'>EG1</text></svg>";
                 var selectedVersion = (typeof DataCache !== 'undefined' && typeof DataCache.resolveProductVersion === 'function')

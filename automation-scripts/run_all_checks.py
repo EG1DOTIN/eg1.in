@@ -145,10 +145,10 @@ def main():
             description="Generates standalone SEO-optimized blog articles into blog/<slug>.html"
         ),
         CheckTask(
-            name="5. Static Applications Pages Generator",
+            name="5. Static App Pages & Slug Sync",
             command=[
                 "{PYTHON}", "automation-scripts/generators/generate_app_pages.py"],
-            description="Generates standalone SEO-optimized app detail pages into apps/<slug>.html"
+            description="Synchronizes app slugs in app.js and generates static SEO detail pages"
         ),
         CheckTask(
             name="6. Static SEO Meta Tags Sync Verification",

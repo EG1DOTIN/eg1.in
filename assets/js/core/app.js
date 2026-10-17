@@ -82,11 +82,12 @@ var DataCache = {
   },
 
   BLOGS_CACHE_KEY: 'eg1_direct_md_cache_v5',
-  PRODUCTS_CACHE_KEY: 'eg1_apps_md_cache_v2',
+  PRODUCTS_CACHE_KEY: 'eg1_apps_md_cache_v3',
 
   // Known list of Markdown applications in data/apps/
   KNOWN_APP_SLUGS: [
     'marwadi-chess',
+    'pyegclamui',
     'test1-app',
     'test2-app'
   ],
@@ -237,6 +238,7 @@ var DataCache = {
         localStorage.removeItem('eg1_products_cache_time');
         localStorage.removeItem('eg1_products_cache_v2');
         localStorage.removeItem('eg1_products_cache_v2_time');
+        localStorage.removeItem('eg1_apps_md_cache_v2');
         localStorage.removeItem(this.PRODUCTS_CACHE_KEY);
         localStorage.removeItem(this.PRODUCTS_CACHE_KEY + '_time');
       }
@@ -453,10 +455,23 @@ var DataCache = {
       var self = this;
       var fetchPromises = slugs.map(async function (slug) {
         try {
-          var res = await fetch('data/apps/' + slug + '.md');
-          if (!res.ok) return null;
-          var text = await res.text();
-          return self.parseAppFrontmatterAndMarkdown(text, slug);
+          var cleanSlug = String(slug).trim();
+          var candidates = [
+            'data/apps/' + cleanSlug.toLowerCase() + '.md',
+            'data/apps/' + cleanSlug + '.md'
+          ];
+          var text = null;
+          for (var i = 0; i < candidates.length; i++) {
+            try {
+              var res = await fetch(candidates[i]);
+              if (res.ok) {
+                text = await res.text();
+                break;
+              }
+            } catch (_) {}
+          }
+          if (!text) return null;
+          return self.parseAppFrontmatterAndMarkdown(text, cleanSlug);
         } catch (err) {
           console.warn('[DataCache] Failed to load markdown app for slug:', slug, err);
           return null;
@@ -703,10 +718,6 @@ var RenderHelpers = {
     if (!label && fallbackLabel) label = fallbackLabel;
     if (!url) return null;
 
-    if (typeof url === "string" && url.includes("apps.html?title=")) {
-      url = url.replace(/apps\.html\?title=([^&#]+)/, "apps/$1.html");
-    }
-
     const target = sameTab ? "" : 'target="_blank" rel="noopener noreferrer"';
 
     if (icon) {
@@ -764,7 +775,7 @@ var RenderHelpers = {
 
     // Resolve Button 1 (Left / Primary Action)
     const appSlug = product.slug || (product.product_name || product.name || ('app-' + product.id)).trim().toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/[\s-]+/g, '-');
-    const defaultDetailLink = (productType === "WebApp" && webappLink) ? webappLink : `apps/${appSlug}.html`;
+    const defaultDetailLink = (productType === "WebApp" && webappLink) ? webappLink : `apps.html?title=${appSlug}`;
     const defaultDetailSameTab = productType !== "WebApp";
     const btn1 = this.parseButton(
       product.button1,
