@@ -12,6 +12,9 @@
 
 | Feature | Description |
 | :--- | :--- |
+| **✨ Homepage Dynamic Hero & Version Interpolation** | Dynamic `{version}` badge interpolation reading active release from `data/updates.json`, natural casing, and dynamic accent color tokens. |
+| **🖼️ About Showcase Banner & Editorial Layout** | High-definition brand showcase banner (`assets/img/eg1-social-preview.webp`) with justified, centered typography and increased readability. |
+| **🤝 Streamlined Community Journey** | Refined vertical spacing, streamlined single-action GitHub repository link, and modularized homepage CSS (`assets/css/pages/homepage.css`). |
 | **🛡️ pyEGClamUI Desktop App** | Added open-source cross-platform desktop GUI for ClamAV antivirus engine, built with Python and PySide6 (Qt). |
 | **⚡ Automated App Discovery & Slug Sync** | Automated Markdown application discovery, slug synchronization into `assets/js/core/app.js`, and browser cache-key bumping. |
 | **📁 Unified Static Assets Architecture** | Consolidated platform static assets into a modular `assets/{css,js,img,fonts}/` hub with vendor/core separation, 301 redirects, automated link auditing, and 100% UI/UX preservation. |

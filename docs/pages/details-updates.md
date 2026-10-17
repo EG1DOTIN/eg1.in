@@ -143,6 +143,21 @@ The notification bell icon (`#notificationBellBtn`) in [components/header.html](
 
 ---
 
+## 🎨 Category & Vector Icon Resolver
+
+Both the header notification popover ([js/include-components.js](../../assets/js/core/include-components.js)) and the updates timeline ([js/updates.js](../../assets/js/modules/updates.js)) utilize `getUpdateIconSvg(iconType, category, size)` and `getCategoryClass(category)` to render vector icons and theme-adaptive badge colors:
+
+| Category / Icon Type | Icon Key | Rendered Vector Icon | Theme CSS Class | Visual Accent |
+| :--- | :--- | :--- | :--- | :--- |
+| **Enhancements** | `sparkles` | Lucide double sparkle stars (`✨`) | `.cat-enhancement` | Cyan (`#0ea5e9` / `#38bdf8`) |
+| **Bugfixes & Maintenance** | `repair`, `wrench`, `tool` | Precision wrench tool (`🔧`) | `.cat-bugfixes` | Emerald (`#10b981`) |
+| **Bugfixes & Sync** | `bug`, `fix`, `refresh` | Circular sync/reload arrows (`🔄`) | `.cat-bugfixes` | Emerald (`#10b981`) |
+| **Optimizations** | `database`, `opt`, `data` | Cylindrical database stack | `.cat-optimization` | Blue (`#3b82f6` / `#60a5fa`) |
+| **Applications** | `app`, `mobile` | Mobile device outline | `.cat-app` | Sky-blue (`#0ea5e9` / `#38bdf8`) |
+| **Features & Releases** | `spark`, `feat`, default | 5-pointed star (`★`) | `.cat-feature` / `.cat-release` | Amber (`#f59e0b`) / Purple (`#a855f7`) |
+
+---
+
 ## 🔒 Security & Code Standards
 
 - **Strict Separation of Concerns**: All timeline rendering, filtering, and icon generators reside in [js/updates.js](../../assets/js/modules/updates.js). No inline scripts or inline event handlers are embedded in [updates.html](../../updates.html).

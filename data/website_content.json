@@ -18,12 +18,12 @@
     "about": {
       "updateAt": "2026-07-19T11:54:08+00:00",
       "title": "    <h1>ABOUT EG1</h1>\n    <p style=\"font-size: 20px; text-align: center;\"> \n        A hobby platform for open-source and creative digital projects,<br />\n         featuring practical apps/tools, interactive web applications <br />\n        and technical articles. <br />\n    </p>",
-      "content": "<p style=\"font-size: 18px; \">\n    This website is a hobby playground for creating, experimenting and sharing helpful, open-source digital projects built for real-world use.\n    <br />\n    <br />\n    It features two main sections: an Apps section, showcasing custom webapps, and software/tools made for practical application; and a Blog section, featuring technical articles, tutorials, and engineering write-ups. Driven by an open-source approach, everything here is built with simplicity, functionality, and open access for curious minds who love building and tinkering from the ground up.\n</p>"
+      "content": "<p style=\"font-size: 1.18rem; line-height: 1.8; text-align: justify; text-justify: inter-word; color: var(--text-primary); max-width: 840px; margin: 0 auto 20px auto;\">\n    This website is a hobby playground for creating, experimenting and sharing helpful, open-source digital projects built for real-world use.\n</p>\n<p style=\"font-size: 1.18rem; line-height: 1.8; text-align: justify; text-justify: inter-word; color: var(--text-primary); max-width: 840px; margin: 0 auto;\">\n    It features two main sections: an Apps section, showcasing custom webapps, and software/tools made for practical application; and a Blog section, featuring technical articles, tutorials, and engineering write-ups. Driven by an open-source approach, everything here is built with simplicity, functionality, and open access for curious minds who love building and tinkering from the ground up.\n</p>"
     },
     "homepage": {
-      "title": "Welcome to EG1",
+      "title": "EG1 <sup class=\"eg1-hero-version\">{version}</sup> - An open-source hub for innovative and creative projects",
       "content": "",
-      "updatedAt": "2026-07-29T16:15:23.417000+00:00"
+      "updatedAt": "2026-10-17T16:42:00+00:00"
     }
   },
   "seo": {
