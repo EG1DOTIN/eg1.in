@@ -1,13 +1,13 @@
 [
     {
         "id": "update-2026-10-17-v3-7-0",
-        "type": "website",
+        "type": "app",
         "version": "3.7.0",
-        "title": "pyEGClamUI Integration, Automated App Discovery & Documentation Suite",
+        "title": "pyEGClamUI, A Desktop GUI for ClamAV",
         "date": "Oct 17, 2026",
-        "category": "FEATURE",
-        "icon": "spark",
-        "badge": "New",
+        "category": "APP",
+        "icon": "refresh",
+        "badge": "Release",
         "description": "Added pyEGClamUI, a desktop GUI application for ClamAV antivirus engine, implemented automated application slug synchronization and cache busting in build pipeline, updated Marwadi Chess webapp details, and published end-to-end application addition guide.",
         "link": "apps.html"
     },
