@@ -631,9 +631,9 @@ html[data-theme="dark-gray"] .bell-icon {
     margin-top: 2px;
 }
 
-.update-icon-box.cat-bugfixes {
-    background: rgba(16, 185, 129, 0.15);
-    color: #10b981;
+.update-icon-box.cat-enhancement {
+    background: rgba(14, 165, 233, 0.15);
+    color: #0ea5e9;
 }
 
 .update-icon-box.cat-optimization {
@@ -646,14 +646,29 @@ html[data-theme="dark-gray"] .bell-icon {
     color: #f59e0b;
 }
 
-.update-icon-box.cat-release {
-    background: rgba(168, 85, 247, 0.15);
-    color: #a855f7;
+.update-icon-box.cat-bugfix,
+.update-icon-box.cat-bug-fix,
+.update-icon-box.cat-bugfixes {
+    background: rgba(22, 163, 74, 0.18);
+    color: #16a34a;
 }
 
-.update-icon-box.cat-enhancement {
-    background: rgba(14, 165, 233, 0.15);
-    color: #0ea5e9;
+html[data-theme="light-gray"] .update-icon-box.cat-bugfix,
+html[data-theme="light-gray"] .update-icon-box.cat-bug-fix,
+html[data-theme="light-gray"] .update-icon-box.cat-bugfixes {
+    background: rgba(21, 128, 61, 0.14);
+    color: #15803d;
+}
+
+.update-icon-box.cat-app {
+    background: rgba(139, 92, 246, 0.15);
+    color: #8b5cf6;
+}
+
+.update-icon-box.cat-other,
+.update-icon-box.cat-release {
+    background: rgba(100, 116, 139, 0.15);
+    color: #94a3b8;
 }
 
 /* Right Content Area */
@@ -680,10 +695,10 @@ html[data-theme="dark-gray"] .bell-icon {
     line-height: 1.2;
 }
 
-.update-cat-pill.cat-bugfixes {
-    color: #10b981;
-    background: rgba(16, 185, 129, 0.12);
-    border: 1px solid rgba(16, 185, 129, 0.3);
+.update-cat-pill.cat-enhancement {
+    color: #38bdf8;
+    background: rgba(14, 165, 233, 0.12);
+    border: 1px solid rgba(14, 165, 233, 0.3);
 }
 
 .update-cat-pill.cat-optimization {
@@ -698,16 +713,52 @@ html[data-theme="dark-gray"] .bell-icon {
     border: 1px solid rgba(245, 158, 11, 0.3);
 }
 
-.update-cat-pill.cat-release {
-    color: #c084fc;
-    background: rgba(168, 85, 247, 0.12);
-    border: 1px solid rgba(168, 85, 247, 0.3);
+.update-cat-pill.cat-bugfix,
+.update-cat-pill.cat-bug-fix,
+.update-cat-pill.cat-bugfixes {
+    color: #22c55e;
+    background: rgba(22, 163, 74, 0.14);
+    border: 1px solid rgba(22, 163, 74, 0.35);
 }
 
-.update-cat-pill.cat-enhancement {
-    color: #38bdf8;
-    background: rgba(14, 165, 233, 0.12);
-    border: 1px solid rgba(14, 165, 233, 0.3);
+.update-cat-pill.cat-app {
+    color: #a78bfa;
+    background: rgba(139, 92, 246, 0.12);
+    border: 1px solid rgba(139, 92, 246, 0.3);
+}
+
+.update-cat-pill.cat-other,
+.update-cat-pill.cat-release {
+    color: #94a3b8;
+    background: rgba(100, 116, 139, 0.12);
+    border: 1px solid rgba(100, 116, 139, 0.3);
+}
+
+html[data-theme="light-gray"] .update-cat-pill.cat-enhancement {
+    color: #0284c7;
+}
+
+html[data-theme="light-gray"] .update-cat-pill.cat-optimization {
+    color: #2563eb;
+}
+
+html[data-theme="light-gray"] .update-cat-pill.cat-feature {
+    color: #b45309;
+}
+
+html[data-theme="light-gray"] .update-cat-pill.cat-bugfix,
+html[data-theme="light-gray"] .update-cat-pill.cat-bug-fix,
+html[data-theme="light-gray"] .update-cat-pill.cat-bugfixes {
+    color: #166534;
+}
+
+html[data-theme="light-gray"] .update-cat-pill.cat-app {
+    color: #7c3aed;
+}
+
+html[data-theme="light-gray"] .update-cat-pill.cat-other,
+html[data-theme="light-gray"] .update-cat-pill.cat-release {
+    color: #475569;
 }
 
 .update-ver-pill {
@@ -2765,7 +2816,7 @@ h6,
 #contactTitleText h1 span {
     color: var(--banner-heading-color, goldenrod) !important;
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.75) !important;
-    font-family: Segoe Script, 'Dancing Script', cursive, serif !important;
+    font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif !important;
     font-style: italic !important;
     transition: color 0.25s ease;
 }
@@ -2875,6 +2926,21 @@ input[type="submit"].btn-primary:hover {
     border-color: var(--accent-color) !important;
     transform: translateY(-1px);
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25) !important;
+}
+
+/* Standard Button Typography across all pages and buttons */
+button,
+.btn,
+a.btn,
+.eg1-hero-btn,
+.eg1-cta-btn,
+.updates-card-link-btn,
+.updates-filter-btn,
+input[type="button"],
+input[type="submit"],
+input[type="reset"] {
+    font-family: "PT Sans", "Open Sans", sans-serif !important;
+    font-style: normal !important;
 }
 
 /* ==========================================================================
@@ -3077,9 +3143,9 @@ input[type="submit"].btn-primary:hover {
     margin-top: 2px;
 }
 
-.updates-timeline-icon.cat-bugfixes {
-    background: rgba(16, 185, 129, 0.15);
-    color: #10b981;
+.updates-timeline-icon.cat-enhancement {
+    background: rgba(14, 165, 233, 0.15);
+    color: #0ea5e9;
 }
 
 .updates-timeline-icon.cat-optimization {
@@ -3092,19 +3158,29 @@ input[type="submit"].btn-primary:hover {
     color: #f59e0b;
 }
 
-.updates-timeline-icon.cat-release {
-    background: rgba(168, 85, 247, 0.15);
-    color: #a855f7;
+.updates-timeline-icon.cat-bugfix,
+.updates-timeline-icon.cat-bug-fix,
+.updates-timeline-icon.cat-bugfixes {
+    background: rgba(22, 163, 74, 0.18);
+    color: #16a34a;
 }
 
-.updates-timeline-icon.cat-enhancement {
-    background: rgba(14, 165, 233, 0.15);
-    color: #0ea5e9;
+html[data-theme="light-gray"] .updates-timeline-icon.cat-bugfix,
+html[data-theme="light-gray"] .updates-timeline-icon.cat-bug-fix,
+html[data-theme="light-gray"] .updates-timeline-icon.cat-bugfixes {
+    background: rgba(21, 128, 61, 0.14);
+    color: #15803d;
 }
 
 .updates-timeline-icon.cat-app {
-    background: rgba(14, 165, 233, 0.15);
-    color: #0ea5e9;
+    background: rgba(139, 92, 246, 0.15);
+    color: #8b5cf6;
+}
+
+.updates-timeline-icon.cat-other,
+.updates-timeline-icon.cat-release {
+    background: rgba(100, 116, 139, 0.15);
+    color: #94a3b8;
 }
 
 .updates-card-body {
@@ -3129,10 +3205,10 @@ input[type="submit"].btn-primary:hover {
     letter-spacing: 0.4px;
 }
 
-.updates-card-category.cat-bugfixes {
-    color: #10b981;
-    background: rgba(16, 185, 129, 0.12);
-    border: 1px solid rgba(16, 185, 129, 0.3);
+.updates-card-category.cat-enhancement {
+    color: #38bdf8;
+    background: rgba(14, 165, 233, 0.12);
+    border: 1px solid rgba(14, 165, 233, 0.3);
 }
 
 .updates-card-category.cat-optimization {
@@ -3147,22 +3223,52 @@ input[type="submit"].btn-primary:hover {
     border: 1px solid rgba(245, 158, 11, 0.3);
 }
 
-.updates-card-category.cat-release {
-    color: #c084fc;
-    background: rgba(168, 85, 247, 0.12);
-    border: 1px solid rgba(168, 85, 247, 0.3);
-}
-
-.updates-card-category.cat-enhancement {
-    color: #38bdf8;
-    background: rgba(14, 165, 233, 0.12);
-    border: 1px solid rgba(14, 165, 233, 0.3);
+.updates-card-category.cat-bugfix,
+.updates-card-category.cat-bug-fix,
+.updates-card-category.cat-bugfixes {
+    color: #22c55e;
+    background: rgba(22, 163, 74, 0.14);
+    border: 1px solid rgba(22, 163, 74, 0.35);
 }
 
 .updates-card-category.cat-app {
-    color: #38bdf8;
-    background: rgba(14, 165, 233, 0.12);
-    border: 1px solid rgba(14, 165, 233, 0.3);
+    color: #a78bfa;
+    background: rgba(139, 92, 246, 0.12);
+    border: 1px solid rgba(139, 92, 246, 0.3);
+}
+
+.updates-card-category.cat-other,
+.updates-card-category.cat-release {
+    color: #94a3b8;
+    background: rgba(100, 116, 139, 0.12);
+    border: 1px solid rgba(100, 116, 139, 0.3);
+}
+
+html[data-theme="light-gray"] .updates-card-category.cat-enhancement {
+    color: #0284c7;
+}
+
+html[data-theme="light-gray"] .updates-card-category.cat-optimization {
+    color: #2563eb;
+}
+
+html[data-theme="light-gray"] .updates-card-category.cat-feature {
+    color: #b45309;
+}
+
+html[data-theme="light-gray"] .updates-card-category.cat-bugfix,
+html[data-theme="light-gray"] .updates-card-category.cat-bug-fix,
+html[data-theme="light-gray"] .updates-card-category.cat-bugfixes {
+    color: #166534;
+}
+
+html[data-theme="light-gray"] .updates-card-category.cat-app {
+    color: #7c3aed;
+}
+
+html[data-theme="light-gray"] .updates-card-category.cat-other,
+html[data-theme="light-gray"] .updates-card-category.cat-release {
+    color: #475569;
 }
 
 .updates-card-version {

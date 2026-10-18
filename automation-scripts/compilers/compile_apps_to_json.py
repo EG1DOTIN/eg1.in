@@ -176,6 +176,12 @@ def compile_apps():
 
         apps_list.append(app_item)
 
+    # Sort applications chronologically (latest app on top in list)
+    def parse_app_date(app: Dict[str, Any]) -> str:
+        return str(app.get("createdAt") or app.get("updatedAt") or "")
+
+    apps_list.sort(key=parse_app_date, reverse=True)
+
     # Write output to data/apps.json
     with open(OUTPUT_JSON, "w", encoding="utf-8") as out:
         json.dump(apps_list, out, indent=2, ensure_ascii=False)

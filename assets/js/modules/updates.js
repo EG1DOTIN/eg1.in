@@ -12,6 +12,8 @@
 
         /**
          * Returns appropriate SVG icon based on category or icon type
+         * Always uses fixed, recommended icons for:
+         * ENHANCEMENT, OPTIMIZATION, FEATURE, BUG-FIX, APP, OTHER
          * @param {string} iconType 
          * @param {string} category 
          * @returns {string} SVG markup string
@@ -20,19 +22,25 @@
             if (typeof window.getUpdateIconSvg === 'function') {
                 return window.getUpdateIconSvg(iconType, category, 24);
             }
-            var type = (iconType || category || '').toLowerCase();
-            if (type.indexOf('wrench') !== -1 || type.indexOf('repair') !== -1 || type.indexOf('tool') !== -1) {
-                return '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>';
-            } else if (type.indexOf('bug') !== -1 || type.indexOf('fix') !== -1 || type === 'refresh') {
-                return '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/></svg>';
-            } else if (type.indexOf('opt') !== -1 || type.indexOf('data') !== -1 || type === 'database') {
-                return '<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M12 3c-4.42 0-8 1.34-8 3v12c0 1.66 3.58 3 8 3s8-1.34 8-3V6c0-1.66-3.58-3-8-3zm0 2c3.87 0 6 1.05 6 1s-2.13 1-6 1-6-1.05-6-1 2.13-1 6-1zm0 5c3.87 0 6 1.05 6 1s-2.13 1-6 1-6-1.05-6-1 2.13-1 6-1zm0 5c3.87 0 6 1.05 6 1s-2.13 1-6 1-6-1.05-6-1 2.13-1 6-1zm0 5c-3.87 0-6-1.05-6-1s2.13-1 6-1 6 1.05 6 1-2.13 1-6 1z"/></svg>';
-            } else if (type.indexOf('app') !== -1 || type.indexOf('mobile') !== -1) {
-                return '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>';
-            } else if (type.indexOf('sparkle') !== -1) {
+            var raw = (category || iconType || '').trim().toLowerCase();
+            if (raw.indexOf('enhanc') !== -1) {
+                // Sparkles icon
                 return '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/><path d="M20 3v4"/><path d="M22 5h-4"/><path d="M4 17v2"/><path d="M5 18H3"/></svg>';
+            } else if (raw.indexOf('opt') !== -1) {
+                // Speedometer / Gauge icon
+                return '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/></svg>';
+            } else if (raw.indexOf('feat') !== -1) {
+                // Feature Star icon
+                return '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>';
+            } else if (raw.indexOf('bug') !== -1 || raw.indexOf('fix') !== -1 || raw.indexOf('repair') !== -1) {
+                // Tool / Wrench icon (bug fixed / maintenance)
+                return '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>';
+            } else if (raw.indexOf('app') !== -1) {
+                // App grid icon
+                return '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="3" y="3" rx="1.5"/><rect width="7" height="7" x="14" y="3" rx="1.5"/><rect width="7" height="7" x="14" y="14" rx="1.5"/><rect width="7" height="7" x="3" y="14" rx="1.5"/></svg>';
             } else {
-                return '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>';
+                // Info circle icon
+                return '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>';
             }
         }
 
@@ -45,13 +53,13 @@
             if (typeof window.getCategoryClass === 'function') {
                 return window.getCategoryClass(category);
             }
-            var cat = (category || '').toLowerCase();
-            if (cat.indexOf('bug') !== -1 || cat.indexOf('fix') !== -1 || cat.indexOf('repair') !== -1 || cat.indexOf('wrench') !== -1) return 'cat-bugfixes';
-            if (cat.indexOf('opt') !== -1 || cat.indexOf('data') !== -1) return 'cat-optimization';
+            var cat = (category || '').trim().toLowerCase();
             if (cat.indexOf('enhanc') !== -1) return 'cat-enhancement';
-            if (cat.indexOf('feat') !== -1 || cat.indexOf('new') !== -1) return 'cat-feature';
+            if (cat.indexOf('opt') !== -1) return 'cat-optimization';
+            if (cat.indexOf('feat') !== -1) return 'cat-feature';
+            if (cat.indexOf('bug') !== -1 || cat.indexOf('fix') !== -1 || cat.indexOf('repair') !== -1) return 'cat-bug-fix';
             if (cat.indexOf('app') !== -1) return 'cat-app';
-            return 'cat-release';
+            return 'cat-other';
         }
 
         /**
@@ -78,13 +86,33 @@
             filtered.forEach(function (update) {
                 var catClass = getCategoryClass(update.category || update.badge);
                 var iconSvg = getUpdateIconSvg(update.icon, update.category);
-                var categoryLabel = (update.category || update.badge || 'UPDATE').toUpperCase();
+                var categoryLabel = (typeof window.normalizeUpdateCategory === 'function')
+                    ? window.normalizeUpdateCategory(update.category || update.badge)
+                    : (function(cat) {
+                        var raw = (cat || '').trim().toUpperCase();
+                        if (raw.indexOf('ENHANC') !== -1) return 'ENHANCEMENT';
+                        if (raw.indexOf('OPT') !== -1) return 'OPTIMIZATION';
+                        if (raw.indexOf('FEAT') !== -1) return 'FEATURE';
+                        if (raw.indexOf('BUG') !== -1 || raw.indexOf('FIX') !== -1) return 'BUG-FIX';
+                        if (raw.indexOf('APP') !== -1) return 'APP';
+                        return raw || 'OTHER';
+                    })(update.category || update.badge);
                 var versionHtml = update.version ? '<span class="updates-card-version">v' + $('<div>').text(update.version.replace(/^v/, '')).html() + '</span>' : '';
                 var typeLabel = update.type ? (update.type === 'website' ? 'Core Website' : 'Application') : '';
                 var linkUrl = update.link || '#';
                 var isExternal = linkUrl.startsWith('http');
                 var targetAttr = isExternal ? ' target="_blank" rel="noopener noreferrer"' : '';
-                var btnText = isExternal ? 'Open Application &nearr;' : 'View Details &rarr;';
+                
+                // Requirement: if type is "website", label is "Release Notes"; if "app", label is "Open Application"
+                var updateType = (update.type || '').trim().toLowerCase();
+                var btnText = '';
+                if (updateType === 'app') {
+                    btnText = isExternal ? 'Open Application &nearr;' : 'Open Application &rarr;';
+                } else if (updateType === 'website') {
+                    btnText = 'Release Notes &rarr;';
+                } else {
+                    btnText = isExternal ? 'Open Application &nearr;' : 'Release Notes &rarr;';
+                }
 
                 html += '<article class="updates-timeline-card" data-id="' + $('<div>').text(update.id).html() + '">';
                 html += '  <div class="updates-timeline-icon ' + catClass + '">' + iconSvg + '</div>';

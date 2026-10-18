@@ -82,7 +82,7 @@ var DataCache = {
   },
 
   BLOGS_CACHE_KEY: 'eg1_direct_md_cache_v5',
-  PRODUCTS_CACHE_KEY: 'eg1_apps_md_cache_v3',
+  PRODUCTS_CACHE_KEY: 'eg1_apps_md_cache_v4',
 
   // Known list of Markdown applications in data/apps/
   KNOWN_APP_SLUGS: [
@@ -480,6 +480,16 @@ var DataCache = {
 
       var loadedApps = await Promise.all(fetchPromises);
       var validApps = loadedApps.filter(function (a) { return a !== null; });
+
+      // Sort applications chronologically (latest app on top)
+      validApps.sort(function (a, b) {
+        var timeA = new Date(a.createdAt || a.updatedAt || a.date || 0).getTime();
+        var timeB = new Date(b.createdAt || b.updatedAt || b.date || 0).getTime();
+        if (!isNaN(timeA) && !isNaN(timeB) && timeA !== timeB) {
+          return timeB - timeA;
+        }
+        return String(b.id || '').localeCompare(String(a.id || ''));
+      });
 
       this.products = validApps.filter(function (p) {
         return p.active === "1" || p.active === 1 || p.active === true || !p.hasOwnProperty('active');

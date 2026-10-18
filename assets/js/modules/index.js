@@ -25,7 +25,7 @@ function escapeHtml(value) {
  * Loads and hydrates the hero title and announcements:
  * - Reads template title (with {version} placeholder) from data/website_content.json via DataCache
  * - Resolves the latest version number from data/updates.json
- * - Replaces {version} dynamically with the active release version (e.g. v3.7.0)
+ * - Replaces {version} dynamically with the active release version (e.g. v3.8.0)
  */
 async function loadHeroFromContentAndUpdates() {
     var rawTemplateTitle = "";
@@ -47,7 +47,7 @@ async function loadHeroFromContentAndUpdates() {
     try {
         // 2. Fetch updates to resolve latest release version from updates.json
         var updates = await $.getJSON("data/updates.json");
-        var versionString = "v3.7.0";
+        var versionString = "v3.8.0";
 
         if (Array.isArray(updates)) {
             var latestRelease = updates.find(function (u) {
