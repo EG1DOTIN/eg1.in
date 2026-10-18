@@ -145,16 +145,21 @@ The notification bell icon (`#notificationBellBtn`) in [components/header.html](
 
 ## 🎨 Category & Vector Icon Resolver
 
-Both the header notification popover ([js/include-components.js](../../assets/js/core/include-components.js)) and the updates timeline ([js/updates.js](../../assets/js/modules/updates.js)) utilize `getUpdateIconSvg(iconType, category, size)` and `getCategoryClass(category)` to render vector icons and theme-adaptive badge colors:
+Both the header notification popover ([js/include-components.js](../../assets/js/core/include-components.js)) and the updates timeline ([js/updates.js](../../assets/js/modules/updates.js)) utilize `normalizeUpdateCategory(category)`, `getUpdateIconSvg(iconType, category, size)`, and `getCategoryClass(category)` to render fixed vector icons and theme-adaptive badge colors across 6 standard categories:
 
-| Category / Icon Type | Icon Key | Rendered Vector Icon | Theme CSS Class | Visual Accent |
+| Category | Normalized Key | Rendered Vector Icon | Theme CSS Class | Color Accent |
 | :--- | :--- | :--- | :--- | :--- |
-| **Enhancements** | `sparkles` | Lucide double sparkle stars (`✨`) | `.cat-enhancement` | Cyan (`#0ea5e9` / `#38bdf8`) |
-| **Bugfixes & Maintenance** | `repair`, `wrench`, `tool` | Precision wrench tool (`🔧`) | `.cat-bugfixes` | Emerald (`#10b981`) |
-| **Bugfixes & Sync** | `bug`, `fix`, `refresh` | Circular sync/reload arrows (`🔄`) | `.cat-bugfixes` | Emerald (`#10b981`) |
-| **Optimizations** | `database`, `opt`, `data` | Cylindrical database stack | `.cat-optimization` | Blue (`#3b82f6` / `#60a5fa`) |
-| **Applications** | `app`, `mobile` | Mobile device outline | `.cat-app` | Sky-blue (`#0ea5e9` / `#38bdf8`) |
-| **Features & Releases** | `spark`, `feat`, default | 5-pointed star (`★`) | `.cat-feature` / `.cat-release` | Amber (`#f59e0b`) / Purple (`#a855f7`) |
+| **ENHANCEMENT** | `enhancement` | Lucide double sparkle stars (`✨`) | `.cat-enhancement` | Sky Blue (`#0ea5e9` / `#38bdf8`) |
+| **OPTIMIZATION** | `optimization` | Speedometer gauge | `.cat-optimization` | Royal Blue (`#3b82f6` / `#60a5fa`) |
+| **FEATURE** | `feature` | 5-pointed star (`★`) | `.cat-feature` | Amber Gold (`#f59e0b` / `#fbbf24`) |
+| **BUG-FIX** | `bugfix` | Maintenance wrench tool (`🔧`) | `.cat-bug-fix` | Dark Green (`#16a34a` / `#22c55e` / `#166534`) |
+| **APP** | `app` | 4-tile application grid | `.cat-app` | Purple (`#8b5cf6` / `#a78bfa`) |
+| **OTHER** | `other` | Information circle (`ⓘ`) | `.cat-other` | Slate Gray (`#94a3b8`) |
+
+### Action Button Logic
+Timeline cards dynamically generate contextual call-to-action button labels based on the item's `type`:
+- **`type: "website"`**: Button label renders as **`Release Notes →`**, directly linking to the closed pull requests and release changelogs.
+- **`type: "app"`**: Button label renders as **`Open Application ↗`** (for external URLs) or **`Open Application →`** (for internal links), launching the application.
 
 ---
 

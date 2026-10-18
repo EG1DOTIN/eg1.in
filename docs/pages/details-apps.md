@@ -66,6 +66,7 @@ All application specifications are authored and stored exclusively in [`data/app
 - `apps.html` handles both the catalogue grid and dynamic single-app detail cards through client-side query parameters (`apps.html?title=<slug>`).
 - Direct web applications (such as **Marwadi Chess**) feature direct `LAUNCH` and `SOURCE` actions.
 - Standalone or downloadable applications load full Markdown content into the in-place card view with zero unnecessary HTML file duplicates.
+- **Chronological Catalog Ordering**: Applications in the catalog grid (`apps.html`) and cache layer are automatically sorted in chronological order (latest applications on top based on `createdAt` or `updatedAt` descending), ensuring visitors immediately see the newest software releases.
 
 ### 2. Themed Web Share API & Toast Fallback (`js/share-app.js`)
 Application views include a native Share capability:

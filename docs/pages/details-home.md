@@ -24,7 +24,7 @@ Technical code architecture, execution logic, algorithm specifications, Mermaid 
 | [EG1 Logo]        [Home] [Apps] [Explore v] [About] [Contact] (Bell)[🌓]|
 +-------------------------------------------------------------------------+
 | [=================== Image Slider Header Banner =====================]  |
-| "EG1 ^v3.7.0 - An open-source hub for innovative and creative projects"  |
+| "EG1 ^v3.8.0 - An open-source hub for innovative and creative projects"  |
 +-------------------------------------------------------------------------+
 | ANNOUNCEMENTS / NEWS CONTAINER (#newsContainer)                         |
 | "A platform for solutions, coding, programming, innovations..."        |
@@ -123,7 +123,7 @@ In [js/index.js](../../assets/js/modules/index.js), `loadHeroFromContentAndUpdat
 ```javascript
 // Dynamic hero version interpolation
 var updates = await $.getJSON("data/updates.json");
-var versionString = "v3.7.0";
+var versionString = "v3.8.0";
 var latestRelease = updates.find(function (u) {
     return u.type === 'website' && u.version && typeof u.version === 'string' && u.version.trim().length > 0;
 });

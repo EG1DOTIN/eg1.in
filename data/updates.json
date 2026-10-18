@@ -1,15 +1,27 @@
 [
     {
+        "id": "update-2026-10-18-v3-8-0",
+        "type": "website",
+        "version": "3.8.0",
+        "title": "Standardized Notifications & Updates UI, Category Theming & Apps Chronological Sort",
+        "date": "Oct 18, 2026",
+        "category": "ENHANCEMENT",
+        "icon": "sparkles",
+        "badge": "New",
+        "description": "Standardized update category taxonomy (BUG-FIX, ENHANCEMENT, OPTIMIZATION, FEATURE, APP, OTHER) with fixed dedicated icons and colors, implemented context-aware action buttons ('Release Notes' for websites, 'Open Application' for apps), sorted applications chronologically, and enforced standard button typography and header banner height consistency.",
+        "link": "https://github.com/EG1DOTIN/eg1.in/pulls?q=is%3Apr+state%3Aclosed"
+    },
+    {
         "id": "update-2026-10-17-v3-7-0",
         "type": "website",
         "version": "3.7.0",
         "title": "Homepage Dynamic Hero, Community Streamlining & About Visual Overhaul",
         "date": "Oct 17, 2026",
-        "category": "ENHANCEMENTS",
+        "category": "ENHANCEMENT",
         "icon": "sparkles",
         "badge": "New",
         "description": "Implemented dynamic hero version badge hydration ({version}), refined homepage community block, introduced About page visual showcase banner with centered justified typography, modernized social preview branding asset, and modularized homepage CSS.",
-        "link": "updates.html"
+        "link": "https://github.com/EG1DOTIN/eg1.in/pulls?q=is%3Apr+state%3Aclosed"
     },
     {
         "id": "update-2026-10-17-pyEGClamUI",
@@ -32,7 +44,7 @@
         "icon": "database",
         "badge": "New",
         "description": "Consolidated and structured platform assets into a unified assets hub (assets/css, assets/js, assets/img, assets/fonts) with vendor/core/modules separation, 301 permanent redirects, automated link auditing, and 100% UI/UX and SEO preservation.",
-        "link": "updates.html"
+        "link": "https://github.com/EG1DOTIN/eg1.in/pulls?q=is%3Apr+state%3Aclosed"
     },
     {
         "id": "update-2026-10-14-v3-5-0",
@@ -44,7 +56,7 @@
         "icon": "spark",
         "badge": "New",
         "description": "Integrated topbar GitHub quick action button, modernized navigation and dropdowns with iconography, streamlined header banner dimensions, and documented comprehensive Admin Panel technical specification and 4-tier security architecture.",
-        "link": "updates.html"
+        "link": "https://github.com/EG1DOTIN/eg1.in/pulls?q=is%3Apr+state%3Aclosed"
     },
     {
         "id": "update-2026-10-02-v3-4-0",
@@ -56,7 +68,7 @@
         "icon": "spark",
         "badge": "New",
         "description": "Structured repository with clean developer workspace separation, automated CI/CD quality assurance pipeline in GitHub Actions, and streamlined header notification dropdown to display the top 5 latest updates.",
-        "link": "updates.html"
+        "link": "https://github.com/EG1DOTIN/eg1.in/pulls?q=is%3Apr+state%3Aclosed"
     },
     {
         "id": "update-2026-09-04-v3-3-0",
@@ -68,7 +80,7 @@
         "icon": "spark",
         "badge": "New",
         "description": "Migrated applications to modular Markdown files (data/apps/*.md) with client YAML parsing, selective static app pages generator (apps/<slug>.html), clean semantic slug routing, header cache-refresh & hard-reload button, dual-theme carousel arrows, themed share button with toast fallback, and consolidated master quality audit runner.",
-        "link": "apps.html"
+        "link": "https://github.com/EG1DOTIN/eg1.in/pulls?q=is%3Apr+state%3Aclosed"
     },
     {
         "id": "update-2026-09-03-v3-2-0",
@@ -80,7 +92,7 @@
         "icon": "spark",
         "badge": "New",
         "description": "Introduced pre-rendered static blog articles with programming language slugs (C++ to cpp), unified Web Share API with modal fallback, fluid clamp typography, centralized content-driven SEO metadata, and space-optimized 3D WebP social banner.",
-        "link": "blog.html"
+        "link": "https://github.com/EG1DOTIN/eg1.in/pulls?q=is%3Apr+state%3Aclosed"
     },
     {
         "id": "update-2026-08-31-v3-1-3",
@@ -92,7 +104,7 @@
         "icon": "spark",
         "badge": "New",
         "description": "Introduced standalone TableToolkit with natural alphanumeric/date sorting and universal pagination, App Users management workspace, 16-field visitor telemetry inspection, and Admin Dual-Theme (Light & Dark Gray) support.",
-        "link": "updates.html"
+        "link": "https://github.com/EG1DOTIN/eg1.in/pulls?q=is%3Apr+state%3Aclosed"
     },
     {
         "id": "update-2026-08-31-v3-1-2",
@@ -104,7 +116,7 @@
         "icon": "spark",
         "badge": "New",
         "description": "Migrated blog engine to direct Markdown (.md) fetching with client YAML parser, marked.js & highlight.js code copy, 4-sided table outlines, and renamed catalog to apps.json.",
-        "link": "blog.html"
+        "link": "https://github.com/EG1DOTIN/eg1.in/pulls?q=is%3Apr+state%3Aclosed"
     },
     {
         "id": "update-2026-08-30-v3-1-1",
@@ -112,11 +124,11 @@
         "version": "3.1.1",
         "title": "Notification Read Tracking, Layout Stability & Safety Fixes",
         "date": "Aug 30, 2026",
-        "category": "BUGFIXES",
+        "category": "BUG-FIX",
         "icon": "repair",
         "badge": "Bugfix",
         "description": "Fixed individual notification read status persistence, restored filter count badges, resolved initial grid layout reflow on blogs, and added defensive runtime safeguards.",
-        "link": "updates.html"
+        "link": "https://github.com/EG1DOTIN/eg1.in/pulls?q=is%3Apr+state%3Aclosed"
     },
     {
         "id": "update-2026-08-30-v3-1-0",
@@ -128,7 +140,7 @@
         "icon": "spark",
         "badge": "New",
         "description": "Zero-read static dataset architecture, dynamic dual-action card buttons with custom icons, automated GitHub version resolution, and responsive fluid blog typography.",
-        "link": "apps.html"
+        "link": "https://github.com/EG1DOTIN/eg1.in/pulls?q=is%3Apr+state%3Aclosed"
     },
     {
         "id": "update-2026-08-29-v3-0-0",
@@ -140,7 +152,7 @@
         "icon": "spark",
         "badge": "New",
         "description": "Introduced dynamic Light Gray & Dark Gray themes with high-contrast navigation, zero-flicker loading, and the new Website Updates notification bell system.",
-        "link": "index.html"
+        "link": "https://github.com/EG1DOTIN/eg1.in/pulls?q=is%3Apr+state%3Aclosed"
     },
     {
         "id": "update-2026-08-27-mchess",

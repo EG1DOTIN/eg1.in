@@ -24,6 +24,16 @@
                 return p.active === "1" || p.active === true || p.active === 1 || !p.hasOwnProperty('active');
             });
 
+            // Sort applications in chronological order (latest app on top in list)
+            activeProducts.sort(function (a, b) {
+                var timeA = new Date(a.createdAt || a.updatedAt || a.date || 0).getTime();
+                var timeB = new Date(b.createdAt || b.updatedAt || b.date || 0).getTime();
+                if (!isNaN(timeA) && !isNaN(timeB) && timeA !== timeB) {
+                    return timeB - timeA;
+                }
+                return String(b.id || '').localeCompare(String(a.id || ''));
+            });
+
             if (activeProducts.length === 0) {
                 $("#productContainer").html(
                     '<div class="alert alert-warning" style="margin:20px;">No active applications found.</div>'
