@@ -1,4 +1,5 @@
 # ─── Gitignore Managed Directory ─────────────────────────
+gitignore
 gitignore/
 
 # ─── Old/unused files ─────────────────────────────────
@@ -34,7 +35,9 @@ firebase_credentials*.json
 
 # ─── Node & Python Virtual Environments & Cache ─────────
 node_modules/
+.venv
 .venv/
+venv
 venv/
 ENV/
 env/
@@ -45,4 +48,5 @@ __pycache__/
 .pytest_cache/
 
 # ─── ai agents ─────────────────────────────────
+.agents
 .agents/
