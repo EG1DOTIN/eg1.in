@@ -1,3 +1,2 @@
-# Build & static compilation dependencies for EG1 CI/CD automation pipeline
-pyyaml>=6.0
-markdown>=3.4
+# EG1 Portal Automation Dependencies
+# Standard library is prioritized for maximum portability and zero-install execution.

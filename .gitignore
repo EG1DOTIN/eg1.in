@@ -1,52 +1,29 @@
-# ─── Gitignore Managed Directory ─────────────────────────
+# Dependencies & Build Outputs
+node_modules
+node_modules/
+dist/
+dist-site/
+*.tsbuildinfo
+
+# Parent Workspace Symlinks (NO trailing slashes!)
+.venv
+.agents
 gitignore
-gitignore/
 
-# ─── Old/unused files ─────────────────────────────────
-*_previous.*
-*.bak
+# Environment & Local secrets
+.env
+.env.local
+.env.*.local
+*.local
 
-# ─── IDE & Editor Configurations ─────────────────────────
-.vscode/
-.idea/
-*.swp
-*.swo
-pyrefly.toml
-
-# ─── OS Specific Files ───────────────────────────────────
-.DS_Store
-Thumbs.db
-desktop.ini
-
-# ─── Firebase CLI Artifacts ──────────────────────────────
+# Firebase Cache & Logs
 .firebase/
 firebase-debug.log*
 firestore-debug.log*
-ui-debug.log*
+*.log
 
-# ─── Environment & Secrets ───────────────────────────────
-.env
-.env.*
-*.env
-*.pem
-*serviceAccount*.json
-*service_account*.json
-firebase_credentials*.json
-
-# ─── Node & Python Virtual Environments & Cache ─────────
-node_modules/
-.venv
-.venv/
-venv
-venv/
-ENV/
-env/
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-.pytest_cache/
-
-# ─── ai agents ─────────────────────────────────
-.agents
-.agents/
+# OS & Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
