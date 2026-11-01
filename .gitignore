@@ -48,4 +48,5 @@ __pycache__/
 .pytest_cache/
 
 # ─── ai agents ─────────────────────────────────
+.agents
 .agents/
