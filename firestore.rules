@@ -1,0 +1,87 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Function to check if the user is an admin
+    function isAdmin() {
+      return request.auth != null && exists(/databases/$(database)/documents/admin_security/$(request.auth.uid));
+    }
+    
+    
+    // -----------------------------------------------------
+    // VISITOR ANALYTICS (Batched Bucket Pattern)
+    // -----------------------------------------------------
+    match /visitor_analytics/meta {
+      // Allow reading and updating the counter/page metadata (needed for transactions)
+      allow read, create, update: if true;
+      allow delete: if isAdmin();
+    }
+    
+    match /visitor_analytics/{document} {
+      // Allow visitors to append their visit to the bucket page without reading others' logs
+      allow create, update: if document.matches('^page_[0-9]+$');
+      // Only authenticated admins can read analytics history or delete logs
+      allow read, delete: if isAdmin();
+    }
+    
+    // -----------------------------------------------------
+    // LEGACY ANALYTICS (For Backwards Compatibility)
+    // -----------------------------------------------------
+    match /analytics/{document=**} {
+      allow read, write: if isAdmin();
+    }
+    
+    // -----------------------------------------------------
+    // CONTACT FORM MESSAGES (WITH SERVER-SIDE ANTI-SPAM)
+    // -----------------------------------------------------
+    match /messages/{messageId} {
+      // SERVER-SIDE ANTI-SPAM: 
+      // 1. Must only contain the exact expected fields (no hidden honeypot fields from bots)
+      // 2. Fields must be of type string and within reasonable length limits
+      // 3. Email must loosely match an email format
+      // 4. createdAt must be the server timestamp
+      allow create: if 
+        request.resource.data.keys().hasAll(['name', 'email', 'contact', 'message', 'createdAt']) &&
+        request.resource.data.keys().hasOnly(['name', 'email', 'contact', 'message', 'createdAt']) &&
+        request.resource.data.name is string && request.resource.data.name.size() > 0 && request.resource.data.name.size() <= 100 &&
+        request.resource.data.email is string && request.resource.data.email.size() > 5 && request.resource.data.email.size() <= 100 && request.resource.data.email.matches('.*@.*') &&
+        request.resource.data.contact is string && request.resource.data.contact.size() <= 20 &&
+        request.resource.data.message is string && request.resource.data.message.size() > 0 && request.resource.data.message.size() <= 2000 &&
+        request.resource.data.createdAt == request.time;
+        
+      allow read, update, delete: if isAdmin();
+    }
+    
+    // -----------------------------------------------------
+    // ADMIN SECURITY
+    // -----------------------------------------------------
+    match /admin_security/{userId} {
+      // 1. Allow READ only if the user is logged into Firebase AND their UID matches the document ID
+      allow read: if request.auth != null && request.auth.uid == userId;
+      
+      // 2. Block ALL WRITES from the website. The PIN hash can only be changed manually in the Firebase Console.
+      allow write: if false; 
+    }
+
+    // -----------------------------------------------------
+    // ADMIN LOGIN ATTEMPT LOGS (Paginated, 18 per doc)
+    // -----------------------------------------------------
+    match /admin_login_log/{document} {
+      // Anyone can write log entries (needed since login failures happen before auth)
+      allow create, update: if true;
+      // Only authenticated admins can read or delete log history
+      allow read, delete: if isAdmin();
+    }
+
+    // -----------------------------------------------------
+    // ADMIN IP LOCKOUT RECORDS
+    // -----------------------------------------------------
+    match /admin_lockout/{document} {
+      // Client reads and writes lockout records to enforce attempt blocking
+      allow read, create, update: if true;
+      // Only admin can permanently delete lockout entries (to unblock an IP)
+      allow delete: if isAdmin();
+    }
+  }
+}
+

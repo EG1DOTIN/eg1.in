@@ -2,113 +2,77 @@
 """
 audit_doc_links.py
 ------------------
-Recursively scans all markdown files in docs/ and verifies that all relative links
-resolve to existing files on disk.
+Audits all markdown documentation files in eg1.in/ (docs/*.md and README.md)
+to verify that all relative file links resolve to valid existing files and headings.
 """
 
-import os
-import re
 import sys
-from urllib.parse import unquote
+import re
+from pathlib import Path
 
-DOCS_DIR = os.path.abspath(os.path.join(
-    os.path.dirname(__file__), "..", "..", "docs"))
-WORKSPACE_ROOT = os.path.abspath(os.path.join(
-    os.path.dirname(__file__), "..", ".."))
+ROOT_DIR = Path(__file__).resolve().parent.parent.parent
+
+LINK_PATTERN = re.compile(r'\[([^\]]+)\]\(([^)]+)\)')
 
 
-def audit_markdown_file(file_path):
-    broken_links = []
-    file_dir = os.path.dirname(file_path)
+def get_slug(heading: str) -> str:
+    slug = heading.strip().lower()
+    slug = re.sub(r'[^\w\s-]', '', slug)
+    slug = re.sub(r'[\s_]+', '-', slug)
+    return slug
 
-    with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
-        content = f.read()
 
-    # Find standard markdown links: [text](link)
-    links = re.findall(r'\[([^\]]+)\]\(([^)]+)\)', content)
+def audit_markdown_file(file_path: Path) -> list:
+    errors = []
+    content = file_path.read_text(encoding="utf-8")
 
-    for text, link in links:
-        # Ignore external http/https/mailto links, anchors, and mermaid text
-        if link.startswith(("http://", "https://", "mailto:", "#", "javascript:")):
+    headings = {get_slug(line.lstrip('#').strip()) for line in content.splitlines() if line.startswith('#')}
+
+    for match in LINK_PATTERN.finditer(content):
+        _, target = match.groups()
+        target = target.strip()
+
+        if target.startswith(('http://', 'https://', 'mailto:', 'tel:', '#')):
+            if target.startswith('#'):
+                anchor = target[1:].lower()
+                if anchor and anchor not in headings:
+                    errors.append(f"{file_path.name}: Broken local anchor '#{anchor}'")
             continue
 
-        # Remove fragment/anchor part
-        clean_link = link.split("#")[0].split("?")[0]
-        if not clean_link:
-            continue
+        parts = target.split('#', 1)
+        rel_path = parts[0]
+        anchor = parts[1].lower() if len(parts) > 1 else None
 
-        clean_link = unquote(clean_link)
+        resolved_file = (file_path.parent / rel_path).resolve()
 
-        target_path = os.path.normpath(os.path.join(file_dir, clean_link))
+        if not resolved_file.exists():
+            errors.append(f"{file_path.name}: Broken link '{target}' -> file not found at {rel_path}")
+        elif anchor and resolved_file.suffix.lower() == '.md':
+            target_content = resolved_file.read_text(encoding="utf-8", errors="replace")
+            target_headings = {get_slug(line.lstrip('#').strip()) for line in target_content.splitlines() if line.startswith('#')}
+            if anchor not in target_headings:
+                errors.append(f"{file_path.name}: Broken heading anchor '#{anchor}' in {rel_path}")
 
-        if not os.path.exists(target_path):
-            # Check if link points to legacy root asset locations mapped into assets/
-            resolved = None
-            try:
-                rel = os.path.relpath(target_path, WORKSPACE_ROOT).replace("\\", "/")
-            except ValueError:
-                rel = ""
-
-            candidates = []
-            if rel.startswith("img/"):
-                candidates.append(os.path.join(WORKSPACE_ROOT, "assets", rel))
-            elif rel.startswith("fonts/"):
-                candidates.append(os.path.join(WORKSPACE_ROOT, "assets", rel))
-            elif rel.startswith("css/"):
-                rest = rel[4:]
-                candidates.append(os.path.join(WORKSPACE_ROOT, "assets", "css", rest))
-                candidates.append(os.path.join(WORKSPACE_ROOT, "assets", "css", "core", rest))
-                candidates.append(os.path.join(WORKSPACE_ROOT, "assets", "css", "vendor", rest))
-                candidates.append(os.path.join(WORKSPACE_ROOT, "assets", "css", "pages", rest))
-            elif rel.startswith("js/"):
-                rest = rel[3:]
-                candidates.append(os.path.join(WORKSPACE_ROOT, "assets", "js", rest))
-                candidates.append(os.path.join(WORKSPACE_ROOT, "assets", "js", "core", rest))
-                candidates.append(os.path.join(WORKSPACE_ROOT, "assets", "js", "vendor", rest))
-                candidates.append(os.path.join(WORKSPACE_ROOT, "assets", "js", "modules", rest))
-
-            for c in candidates:
-                if os.path.exists(c):
-                    resolved = c
-                    break
-
-            if not resolved:
-                broken_links.append((link, target_path))
-
-    return broken_links
+    return errors
 
 
-def fix_common_relative_paths():
-    """Audits markdown links across docs/"""
-    target_dirs = [DOCS_DIR]
+def main() -> int:
+    md_files = list(ROOT_DIR.glob("*.md")) + list((ROOT_DIR / "docs").glob("*.md"))
+    all_errors = []
 
-    total_broken = 0
+    for md_file in md_files:
+        errs = audit_markdown_file(md_file)
+        all_errors.extend(errs)
 
-    for d in target_dirs:
-        rel_target = os.path.relpath(d, WORKSPACE_ROOT)
-        print(f"Auditing and verifying all markdown links in {rel_target}...\n")
-        for root, _, files in os.walk(d):
-            for f in sorted(files):
-                if f.endswith(".md"):
-                    file_path = os.path.join(root, f)
-                    rel_doc = os.path.relpath(file_path, WORKSPACE_ROOT)
-                    broken = audit_markdown_file(file_path)
-                    if broken:
-                        print(f"[BROKEN LINKS] in {rel_doc}:")
-                        for orig, resolved in broken:
-                            print(f"   - '{orig}' -> target not found: {resolved}")
-                            total_broken += 1
-                    else:
-                        print(f"[OK] {rel_doc}")
-
-    print("\n" + "=" * 50)
-    if total_broken == 0:
-        print("[SUCCESS] All documentation links resolve perfectly!")
-        return 0
-    else:
-        print(f"[ACTION REQUIRED] Found {total_broken} broken relative links.")
+    if all_errors:
+        print(f"❌ Found {len(all_errors)} broken markdown link(s) across {len(md_files)} files:")
+        for err in all_errors:
+            print(f"   • {err}")
         return 1
+
+    print(f"✅ Documentation link audit passed cleanly ({len(md_files)} documentation files scanned).")
+    return 0
 
 
 if __name__ == "__main__":
-    sys.exit(fix_common_relative_paths())
+    sys.exit(main())

@@ -1,51 +1,57 @@
-# EG1 Platform - Technical Documentation Hub (`docs/`)
+# EG1 Portal Documentation Hub
 
-Welcome to the technical documentation for the **EG1** web platform ([eg1.in](https://www.eg1.in)).
-
----
-
-## 📂 Documentation Directory Structure
-
-```
-docs/
-├── README.md                          # Master public documentation index (this file)
-└── pages/                             # Granular specifications for active public pages
-    ├── details-home.md                # Home page (index.html) architecture
-    ├── details-apps.md                # Applications catalog & detail view (apps.html)
-    ├── details-blog.md                # Technical blog engine (blog.html)
-    ├── details-about.md               # About page (about.html)
-    ├── details-contact.md             # Contact form & anti-spam CAPTCHA (contact.html)
-    ├── details-updates.md             # Updates & release log timeline (updates.html)
-    ├── details-download.md            # Software download portal (download.html)
-    ├── details-privacy.md             # Privacy policy & consent controls (privacypolicy.html)
-    └── details-admin-panel.md         # Admin console & multi-tier security model (AdminPanel/index.html)
-```
+Welcome to the technical documentation for **EG1 Portal** ([`eg1.in`](../)). This portal is built with React 18, TypeScript, and Vite, consuming the generic component framework [`eg-web-core`](https://github.com/EG1DOTIN/eg-web-core).
 
 ---
 
-## 🧭 Public Pages Documentation
+## 📚 Documentation Index
 
-- 🏠 **[Home Page (index.html)](pages/details-home.md)**: Dynamic announcement banner, carousel slider, 1-hour TTL LocalStorage caching.
-- 📦 **[Applications Showcase (apps.html)](pages/details-apps.md)**: Product catalog, dynamic dual-action buttons, and 3-tier versioning.
-- 📝 **[Technical Blog (blog.html)](pages/details-blog.md)**: Pure Markdown reader, fluid typography, Highlight.js syntax highlighting, and static SEO routing.
-- ℹ️ **[About Page (about.html)](pages/details-about.md)**: Platform mission, open-source approach, and dynamic content resolution.
-- 📬 **[Contact Portal (contact.html)](pages/details-contact.md)**: Rate-limiting sliding window and arithmetic anti-spam CAPTCHA challenge.
-- 🔔 **[Updates Timeline (updates.html)](pages/details-updates.md)**: Version 3.0.0 release log, JSON data schema, and notification bell popover synchronization.
-- 📥 **[Downloads Portal (download.html)](pages/details-download.md)**: Installer download resolution and dynamic back-button routing.
-- 🔒 **[Privacy Policy (privacypolicy.html)](pages/details-privacy.md)**: Telemetry opt-out consent banner controls and anonymous telemetry policies.
-- 🛡️ **[Admin Panel & Security (AdminPanel/index.html)](pages/details-admin-panel.md)**: Multi-tier defense-in-depth model, Google OAuth, 16-digit PIN verification, 24-hour IP lockout, and TableToolkit analytics grid.
+| Document | Focus & Scope | Key Topics Covered |
+| :--- | :--- | :--- |
+| **[Architecture & Data Flow](./architecture.md)** | System architecture, data flow, telemetry & caching | `DataCache` pattern, Batched Bucket telemetry, routing normalizer, theme tokens |
+| **[Pages & Feature Guide](./pages-and-features.md)** | Detailed implementation breakdown of all 8 pages | Home, Apps Catalog, Technical Blog, Updates, About, Contact, Privacy, Admin Suite |
+| **[EG-Web-Core Library Docs](https://github.com/EG1DOTIN/eg-web-core/blob/main/docs/README.md)** | Shared component specifications | UI Primitives, Layouts, Hooks, Services, Admin Suite |
 
 ---
 
-## 🛠️ Build & Quality Verification
+## 🧭 System Overview
 
-All quality audits, link checkers, and static page compilers live in [`automation-scripts/`](../automation-scripts/README.md):
+```mermaid
+graph LR
+    subgraph Client["Consumer Portal (eg1.in)"]
+        UI["Pages & Views (8 Pages)"]
+        Brand["Eg1Logo & Custom Styling"]
+        Router["App.tsx Routing Engine"]
+    end
 
-```bash
-# Run all pre-deploy audits and page generators in a single command:
-# Linux / macOS:
-.venv/bin/python automation-scripts/run_all_checks.py
+    subgraph Core["Shared Library (eg-web-core)"]
+        Primitives["Header, Footer, MarkdownViewer, ImageSlider"]
+        Services["DataCache, VisitorTracker, AdminAuthService"]
+        Tokens["Design System & Theme Engine"]
+    end
 
-# Windows:
-.venv/Scripts/python.exe automation-scripts/run_all_checks.py
+    subgraph Data["Data Stores"]
+        StaticData["Public JSON & Markdown (data/)"]
+        Firebase["Firebase Auth & Firestore (Admin / Telemetry)"]
+    end
+
+    UI --> Router
+    Router --> Primitives
+    UI --> Services
+    Services --> StaticData
+    Services --> Firebase
+    Brand --> UI
 ```
+
+---
+
+## 🛡️ Guidelines & Rules Compliance
+
+1. **Modernized Consumer Architecture (Critical Rule 1)**:
+   - This project is an independent, modernized React 18 + Vite + TypeScript application consuming `eg-web-core` as a modular dependency (`github:EG1DOTIN/eg-web-core`).
+   - All generic, reusable components, styling, logic, hooks, and helpers are maintained in `eg-web-core`, while site-specific branding, customized wrappers, and domain pages reside strictly within this repository.
+2. **Generic Core Library (Critical Rule 5)**:
+   - All site branding (`Eg1Logo`, domain names, allowed admin emails) resides strictly inside this consumer project.
+   - Core library components receive configuration via props and presets.
+3. **Cross-Consumer Stability (Critical Rule 6)**:
+   - Zero-regression builds confirmed with sibling projects `mchess.eg1.in` and `av.eg1.in`.

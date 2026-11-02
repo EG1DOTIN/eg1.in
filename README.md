@@ -1,243 +1,161 @@
-# EG1 - Official Website & Digital Platform
+# EG1 Web Portal (`eg1.in`)
 
-[![Website](https://img.shields.io/badge/Website-eg1.in-0284c7?style=flat-square&logo=google-chrome&logoColor=white)](https://www.eg1.in)
-[![Version](https://img.shields.io/badge/Version-3.8.0-10b981?style=flat-square)](data/updates.json)
-[![License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
-
-**EG1** ([eg1.in](https://www.eg1.in)) is a hobby platform for open source and creative digital projects, presenting practical software/tools, interactive web applications for real-world use and technical articles/blog posts.
+Modern, high-performance web portal and application catalog for [EG1](https://eg1.in), built with **React 18**, **TypeScript**, and **Vite**, powered by the generic and website-agnostic [`eg-web-core`](https://github.com/EG1DOTIN/eg-web-core) library.
 
 ---
 
-## 🚀 Latest Highlights
-
-| Feature | Description |
-| :--- | :--- |
-| **🔔 Updates & Notifications Standardization** | Standardized category taxonomy (`BUG-FIX`, `ENHANCEMENT`, `OPTIMIZATION`, `FEATURE`, `APP`, `OTHER`) with fixed Lucide vector icons and dedicated theme colors, context-aware action buttons ('Release Notes' for websites vs 'Open Application' for apps), chronological application catalog sorting, standard button typography preservation, and uniform header banner height. |
-| **✨ Homepage Dynamic Hero & Version Interpolation** | Dynamic `{version}` badge interpolation reading active release from `data/updates.json`, natural casing, and dynamic accent color tokens. |
-| **🖼️ About Showcase Banner & Editorial Layout** | High-definition brand showcase banner (`assets/img/eg1-social-preview.webp`) with justified, centered typography and increased readability. |
-| **🤝 Streamlined Community Journey** | Refined vertical spacing, streamlined single-action GitHub repository link, and modularized homepage CSS (`assets/css/pages/homepage.css`). |
-| **🛡️ pyEGClamUI Desktop App** | Added open-source cross-platform desktop GUI for ClamAV antivirus engine, built with Python and PySide6 (Qt). |
-| **⚡ Automated App Discovery & Slug Sync** | Automated Markdown application discovery, slug synchronization into `assets/js/core/app.js`, and browser cache-key bumping. |
-| **📁 Unified Static Assets Architecture** | Consolidated platform static assets into a modular `assets/{css,js,img,fonts}/` hub with vendor/core separation, 301 redirects, automated link auditing, and 100% UI/UX preservation. |
-| **🧭 Modern Navigation & Quick Actions** | Topbar GitHub quick action button, menu iconography across all navigation links, compact header banner, and comprehensive Admin Panel technical specification. |
-| **📦 Pure Markdown Apps Engine** | Applications authored as individual files in `data/apps/*.md` with parallel client-side YAML parsing, LocalStorage caching, and zero JSON dependency. |
-| **🌐 Dynamic App Details** | Instant in-place detail views (`apps.html?title=<slug>`) rendered directly from `data/apps/*.md` with responsive layouts and Web Share integration. |
-| **🔄 Header Cache-Refresh & Reload** | One-click header refresh button with 360° spin micro-interaction that flushes all client caches and triggers a fresh hard reload. |
-| **🎯 Themed Actions & Share Button** | Theme-token styled buttons (`var(--btn-primary-bg)`), native Web Share API (`assets/js/modules/share-app.js`), and animated toast feedback. |
-| **⚡ Consolidated Quality Suite** | Master automation runner (`run_all_checks.py`) executing all repository audits and compilers in a single ~1.2s command. |
-| **🌐 Static Blog SEO & Slugs** | Pre-rendered static articles (`blog/<slug>.html`) with programming language terms (`C++` &rarr; `cpp`), Open Graph, Twitter cards, and JSON-LD schemas. |
-| **📝 Pure Markdown Blog Engine** | Direct client-side Markdown (.md) rendering with zero Firestore reads, YAML frontmatter parser, and 1-click code copying. |
-| **🛠️ Admin TableToolkit Engine** | Standalone modular table engine with natural alphanumeric (`Intl.Collator`), datetime, numeric sorting, and universal pagination. |
-| **👥 App Users Workspace** | Interactive management grid with multi-app filtering, status toggling, search, and 16-field visitor telemetry inspection. |
-| **🎨 Dual Theme System** | High-contrast Light Gray and Dark Gray themes with instant zero-flicker loading across website, carousels, and Admin Panel. |
-| **🔔 Changelog & Notification Center** | Real-time updates dropdown with unread badge tracking, animated alerts, and category filtering. |
-
----
-
-## 🗺️ Website Navigation & Visitor Flow
+## 🏗️ Architecture & Component Flow
 
 ```mermaid
 flowchart TD
-    Visitor(["Visitor Enters eg1.in"]) --> Home["Home Page (index.html)"]
-
-    subgraph GlobalShell["Shared Website Shell"]
-        Header["Header & Theme Switcher (Light / Dark)"]
-        NotificationCenter["Notification Bell & Updates Dropdown"]
-        Footer["Footer & Social Channels"]
+    subgraph Browser["Client Browser & Routing Engine"]
+        Router["App.tsx (SPA Path Normalizer)"]
+        History["PopState & pushState Listener"]
+        Router <--> History
     end
 
-    Home --> GlobalShell
+    subgraph Pages["Portal Page Modules (src/pages/)"]
+        Home["HomePage.tsx (Hero Slider, Catalog & Updates)"]
+        Apps["AppsPage.tsx (Apps Catalog & Specs)"]
+        Blog["BlogPage.tsx (47 Technical Markdown Articles)"]
+        Updates["UpdatesPage.tsx (Release History & Taxonomy)"]
+        About["AboutPage.tsx (Journey Timeline & Mission)"]
+        Contact["ContactPage.tsx (Math CAPTCHA Inquiry Form)"]
+        Privacy["PrivacyPolicyPage.tsx (GDPR Opt-Out & Policy)"]
+        Admin["AdminPage.tsx (2FA Protected Admin Suite)"]
+    end
 
-    Header --> NavHome["Home Page"]
-    Header --> NavApps["Applications Catalog"]
-    Header --> NavUpdates["Changelog & Releases"]
-    Header --> NavBlog["Technical Blog"]
-    Header --> NavAbout["About Platform"]
-    Header --> NavContact["Contact Portal"]
+    subgraph CoreLib["Shared Library Integration (eg-web-core)"]
+        HeaderComp["Header (preset='eg1')"]
+        FooterComp["Footer (preset='eg1')"]
+        MarkdownComp["MarkdownViewer & DOMPurify Sanitizer"]
+        ImageSliderComp["ImageSlider (Crystal Gradient)"]
+        AdminSuiteComp["AdminAuthGuard, AdminLayout, DataGrid, Views"]
+        TelemetryComp["useVisitorTracker (Batched Bucket Pattern)"]
+        CacheComp["DataCache (Zero Firestore Reads Pattern)"]
+        ThemeComp["ThemeProvider (Light Gray, Dark, Crystal)"]
+    end
 
-    NavApps -->|"Explore Tools"| AppCatalog["Software & Web Apps Showcase"]
-    NavUpdates -->|"Filter Updates"| UpdateTimeline["Categorized Platform Releases"]
-    NavBlog -->|"Search & Read"| BlogArticles["Categorized Tutorials & Code Guides"]
-    NavContact -->|"Send Message"| ContactForm["Interactive Visitor Message Form"]
-    Footer --> PrivacyPage["Privacy Policy (privacypolicy.html)"]
+    Router --> Home
+    Router --> Apps
+    Router --> Blog
+    Router --> Updates
+    Router --> About
+    Router --> Contact
+    Router --> Privacy
+    Router --> Admin
+
+    Home & Apps & Updates --> CacheComp
+    Blog --> MarkdownComp
+    Home --> ImageSliderComp
+    Admin --> AdminSuiteComp
+    Router --> HeaderComp & FooterComp
+    Router --> TelemetryComp & ThemeComp
 ```
 
 ---
 
-## 🎨 Website Pages UI Wireframes
+## 🚀 Key Architectural Highlights
 
-### 1. Home Page (`index.html`)
-```text
-+-------------------------------------------------------------------------+
-| [EG1 Logo]        [Home] [Apps] [Explore v] [About] [Contact] (Bell)[🌓]|
-+-------------------------------------------------------------------------+
-| [=================== Image Slider Header Banner =====================]  |
-| "WELCOME TO EG1 - Solutions, Coding, Innovations & Creative Tools"      |
-+-------------------------------------------------------------------------+
-| ANNOUNCEMENTS / NEWS CONTAINER (#newsContainer)                         |
-| "A platform for solutions, coding, programming, innovations..."        |
-+-------------------------------------------------------------------------+
-| FEATURED APPLICATIONS (Slick Carousel Slider .regular)                  |
-| +-------------------+  +-------------------+  +-------------------+     |
-| | [App Icon]        |  | [App Icon]        |  | [App Icon]        |     |
-| | Product Title     |  | Product Title     |  | Product Title     |     |
-| | Version 3.1.0     |  | Version 3.1.0     |  | Version 3.1.0     |     |
-| | Short Description |  | Short Description |  | Short Description |     |
-| | [View] [Download] |  | [View] [Download] |  | [View] [Download] |     |
-| +-------------------+  +-------------------+  +-------------------+     |
-+-------------------------------------------------------------------------+
-| FOOTER (Logo Badge, About Snippet, Social Links, Contact CTA, Copyright)|
-+-------------------------------------------------------------------------+
-```
-
-### 2. Applications Showcase (`apps.html`)
-```text
-+-------------------------------------------------------------------------+
-| HEADER & NAVIGATION                                                     |
-+-------------------------------------------------------------------------+
-| Page Banner: "APPLICATIONS"                                             |
-+-------------------------------------------------------------------------+
-| MODE 1: FULL CATALOGUE MODE (no URL parameters)                         |
-| +---------------------------------------------------------------------+ |
-| | [App Icon]  Application Title                                       | |
-| |             Version 3.1.0 | Desktop App / Utility                   | |
-| |             Short description, platform, features.                  | |
-| |             [ VIEW DETAILS ]   [ DOWNLOAD ]                         | |
-| +---------------------------------------------------------------------+ |
-|                                                                         |
-| MODE 2: SINGLE PRODUCT DETAIL MODE (?id=...)                            |
-| +------------------------------------+--------------------------------+ |
-| | MAIN PRODUCT DETAILS               | OTHER APPLICATIONS             | |
-| | [App Icon] Title (v3.1.0)          | - Application #2               | |
-| | Full markdown/HTML description     | - Application #3               | |
-| | System Requirements                | - Application #4               | |
-| | [ DOWNLOAD NOW ] [ VIEW GITHUB ]   |                                | |
-| +------------------------------------+--------------------------------+ |
-+-------------------------------------------------------------------------+
-| FOOTER                                                                  |
-+-------------------------------------------------------------------------+
-```
-
-### 3. Changelog & Releases (`updates.html`)
-```text
-+-------------------------------------------------------------------------+
-| HEADER & NAVIGATION                                                     |
-+-------------------------------------------------------------------------+
-| Page Banner: "UPDATES & RELEASES - Release changelogs & software updates"|
-+-------------------------------------------------------------------------+
-| FILTER TABS:  [ All (3) ]  [ Website (2) ]  [ Apps (1) ]                |
-+-------------------------------------------------------------------------+
-| TIMELINE CARDS CONTAINER (#updatesPageListContainer)                   |
-|                                                                         |
-| +---------------------------------------------------------------------+ |
-| | [Spark Icon]  EG1 Website v3.1.0               [Aug 30, 2026] [v3.1]| |
-| | Static Data Engine, Dynamic Buttons & Fluid Typography...           | |
-| | [View Details ->]                                                   | |
-| +---------------------------------------------------------------------+ |
-|                                                                         |
-| +---------------------------------------------------------------------+ |
-| | [Globe Icon]  EG1 Website v3.0.0               [Aug 29, 2026] [v3.0]| |
-| | Light & Dark Theme and Updates System...                            | |
-| | [View Details ->]                                                   | |
-| +---------------------------------------------------------------------+ |
-+-------------------------------------------------------------------------+
-| FOOTER                                                                  |
-+-------------------------------------------------------------------------+
-```
-
-### 4. Technical Blog Engine (`blog.html`)
-```text
-+-------------------------------------------------------------------------+
-| HEADER & NAVIGATION                                                     |
-+-------------------------------------------------------------------------+
-| Page Banner: "BLOG"                                                     |
-+------------------------------------------+------------------------------+
-| MAIN CONTENT AREA (col-md-8)             | SIDEBAR (col-md-4)           |
-|                                          | [ Search blog...    ] [Go]   |
-| [Detail / Latest Mode]                   |                              |
-| - Hero Banner Image                      | CATEGORIES                   |
-| - Title & Metadata (Category, Date)      | - Programming                |
-| - Fluid Body Text & Formatted Paragraphs | - Security & Logic           |
-| - Copyable Code Blocks (Highlight.js)    | - Web Utilities              |
-|                                          |                              |
-| [Grid Mode: ?cat= or ?search=]           | PREVIOUS TOPICS              |
-| - 3-Column Card Grid (18 items/page)     | - Topic Post Link #1         |
-| - Pagination: [Prev] 1 2 3 [Next]        | - Topic Post Link #2         |
-+------------------------------------------+------------------------------+
-| FOOTER                                                                  |
-+-------------------------------------------------------------------------+
-```
-
-### 5. About Platform (`about.html`)
-```text
-+-------------------------------------------------------------------------+
-| HEADER & NAVIGATION                                                     |
-+-------------------------------------------------------------------------+
-| Header Banner: "ABOUT EG1"                                              |
-+-------------------------------------------------------------------------+
-| ABOUT CONTENT BOX (#aboutTitleText & #aboutContentText)                 |
-| - Overview of the EG1 open-source platform                              |
-| - Platform vision, mission, and technical research                      |
-| - Developer profile, tools highlights, and community links              |
-| - Fallback static HTML copy displayed if offline                        |
-+-------------------------------------------------------------------------+
-| FOOTER                                                                  |
-+-------------------------------------------------------------------------+
-```
-
-### 6. Contact Portal (`contact.html`)
-```text
-+-------------------------------------------------------------------------+
-| HEADER & NAVIGATION                                                     |
-+-------------------------------------------------------------------------+
-| Header Banner: "CONTACT US"                                             |
-+------------------------------------------+------------------------------+
-| INQUIRY FORM (col-md-6)                  | DIRECT CHANNELS (col-md-6)   |
-| "Any message?"                           | Email: eg1dotin@gmail.com    |
-| [ Your Name                          ]   |                              |
-| [ Email Address                      ]   | Social Platforms:            |
-| [ Phone Number                       ]   | - GitHub: @EG1DOTIN          |
-| [ Anti-Spam Check: 5 + 3 = [    ]    ]   | - Facebook: @eg1dotin        |
-| [ Message Textarea                   ]   | - Instagram: @eg1dotin       |
-| [ Send Enquiry ⮠                      ]   | - X / Twitter: @eg1dotin     |
-+------------------------------------------+------------------------------+
-| FOOTER                                                                  |
-+-------------------------------------------------------------------------+
-```
-
-### 7. Privacy Policy (`privacypolicy.html`)
-```text
-+-------------------------------------------------------------------------+
-| HEADER & NAVIGATION                                                     |
-+-------------------------------------------------------------------------+
-| Header Banner: "PRIVACY POLICY"                                         |
-| Last updated: 2026                                                      |
-| <hr />                                                                  |
-| 1. Information Collection and Use (IP, Device, City Telemetry)          |
-| 2. No Sale of Data Guarantee                                            |
-| 3. Analytics Preferences & Consent Control                              |
-|    [ ⚙️ Open Analytics Preferences Banner ]                             |
-+-------------------------------------------------------------------------+
-| FOOTER                                                                  |
-+-------------------------------------------------------------------------+
-```
+1. **Powered by EG-Web-Core Library**:
+   - Consumes standardized, fully-customizable components from [`eg-web-core`](https://github.com/EG1DOTIN/eg-web-core).
+   - Zero hardcoded branding in core primitives; visual identity configured cleanly via `Eg1Logo` and `preset="eg1"`.
+2. **Zero-Firestore Reads Pattern (`DataCache`)**:
+   - Product catalog (`data/apps.json`), update logs (`data/updates.json`), and website content are loaded from static, cacheable JSON.
+   - Eliminates unnecessary cloud database reads, drastically reducing latency and cloud infrastructure costs.
+3. **High-Security Two-Factor Admin Console (`/admin`)**:
+   - Three-tier defense: Google OAuth email whitelisting (`eg1dotin@gmail.com`), 16-digit salted SHA-256 PIN challenge via standard browser Web Crypto API, and automated 24-hour IP lockout defense.
+   - Dedicated management views: Live Visitor Telemetry, Contact Inquiries Inbox, and Split-Screen Markdown Article Studio.
+4. **47 Technical Markdown Articles**:
+   - Full migration of legacy blog posts into structured Markdown files rendered securely with [`MarkdownViewer`](https://github.com/EG1DOTIN/eg-web-core/blob/main/docs/domain-modules.md) and DOMPurify sanitization.
+5. **GDPR-Compliant Anonymous Telemetry**:
+   - Anonymous visitor sessions grouped in 50-record bucket documents via [`useVisitorTracker`](https://github.com/EG1DOTIN/eg-web-core/blob/main/docs/hooks-and-services.md).
+   - Fully respect user opt-out preferences and consent controls.
 
 ---
 
-## 📄 Website Pages Directory
+## 🗺️ Application Pages & Routes
 
-| Page | File | Description & Key Features |
+All routes support clean URLs and static hosting via SPA rewrites:
+
+| Route / Path | Page Component | Features & Modules |
 | :--- | :--- | :--- |
-| **Home** | [`index.html`] | Main landing page featuring an animated slideshow banner, quick access to featured software. |
-| **Apps** | [`apps.html`] | Showcase of open-source digital projects/Software/applications. |
-| **Updates** | [`updates.html`] | Interactive changelog timeline with categorized release filters and update badges. |
-| **Blog** | [`blog.html`] | Multi-mode technical blog with keyword search, category filtering, code syntax highlighting, and article reader. |
-| **About** | [`about.html`] | Overview of the EG1 platform, vision, mission, and open-source research background. |
-| **Contact** | [`contact.html`] | Visitor communication portal featuring an interactive contact form with math-based anti-spam verification. |
-| **Privacy Policy** | [`privacypolicy.html`] | Comprehensive privacy terms, cookies information, data protection guidelines, and user rights. |
+| **`/`**, **`index.html`** | [`HomePage`](./src/pages/HomePage.tsx) | Hero image slider, featured applications grid, latest update alerts, dynamic about excerpt |
+| **`apps.html`** | [`AppsPage`](./src/pages/AppsPage.tsx) | Software catalog, category filtering, detailed app specifications, Markdown descriptions |
+| **`blog.html`** | [`BlogPage`](./src/pages/BlogPage.tsx) | 47 technical programming & security articles, category taxonomy, instant search, reading time |
+| **`updates.html`** | [`UpdatesPage`](./src/pages/UpdatesPage.tsx) | Filterable changelog, version tags, timestamp badges, feature announcements |
+| **`about.html`** | [`AboutPage`](./src/pages/AboutPage.tsx) | Founder journey timeline, mission statement, technology stack showcase |
+| **`contact.html`** | [`ContactPage`](./src/pages/ContactPage.tsx) | Anti-spam math CAPTCHA, real-time input validation, Firestore inquiry submission |
+| **`privacypolicy.html`** | [`PrivacyPolicyPage`](./src/pages/PrivacyPolicyPage.tsx) | GDPR/CCPA privacy disclosures, telemetry transparency, cookie consent controls |
+| **`/admin`**, **`admin.html`** | [`AdminPage`](./src/pages/AdminPage.tsx) | 3-Tier 2FA authentication, visitor analytics grid, messages inbox, Markdown article editor |
 
 ---
 
-## 📜 License & Legal Notice
+## 📦 Project Structure
 
-This project is licensed under the terms of the **MIT License**. See the [LICENSE](LICENSE) file for complete details.
+```
+eg1.in/
+├── index.html                   # Main HTML5 entry point
+├── package.json                 # Project dependencies & build scripts
+├── tsconfig.json                # TypeScript strict configuration
+├── vite.config.ts               # Vite configuration with eg-web-core linking
+├── firebase.json                # Firebase Hosting rewrites & security headers
+├── docs/                        # Comprehensive documentation portal
+│   ├── README.md                # Documentation index
+│   ├── architecture.md          # Data flow & caching architecture
+│   └── pages-and-features.md    # Deep page-by-page feature breakdown
+├── public/                      # Static assets & dynamic data
+│   ├── assets/                  # Logos, icons, banners, screenshots
+│   └── data/                    # JSON data stores & Markdown blog articles
+└── src/
+    ├── App.tsx                  # Master routing shell & provider setup
+    ├── main.tsx                 # React DOM mount point & theme provider
+    ├── components/              # Portal-specific branding & widgets
+    │   ├── Eg1Logo.tsx          # Responsive cursive SVG/CSS branding
+    │   └── Eg1Logo.css          # Great Vibes cursive typography styles
+    └── pages/                   # Application view components (8 pages)
+        ├── HomePage.tsx
+        ├── AppsPage.tsx
+        ├── BlogPage.tsx
+        ├── UpdatesPage.tsx
+        ├── AboutPage.tsx
+        ├── ContactPage.tsx
+        ├── PrivacyPolicyPage.tsx
+        └── AdminPage.tsx
+```
+
+---
+
+## 🛠️ Development & Build Commands
+
+### 1. Install Dependencies
+```bash
+npm install
+```
+
+### 2. Start Local Development Server
+```bash
+npm run dev
+```
+Launches the Vite dev server with hot module replacement (HMR) at `http://localhost:5174/`.
+
+### 3. Build for Production
+```bash
+npm run build
+```
+Compiles TypeScript, bundles assets with Vite, and outputs production-ready files to `dist/`.
+
+### 4. Preview Production Build
+```bash
+npm run preview
+```
+Runs a local web server serving the `dist/` production bundle for validation.
+
+---
+
+## 🔒 Security & Compliance Standards
+
+- **XSS Prevention**: All user-generated content and dynamic Markdown pass through `sanitizeHtml()` from `eg-web-core` before rendering.
+- **Protocol Safety**: Dynamic URLs are validated with `sanitizeUrl()` to block `javascript:` and unsafe data schemes.
+- **Link Hardening**: All external anchor tags enforce `rel="noopener noreferrer"`.
+- **Admin Defense**: Multi-tier authentication with rate limiting and automated IP lockout defense.

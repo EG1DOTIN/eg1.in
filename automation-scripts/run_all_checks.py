@@ -2,18 +2,12 @@
 """
 run_all_checks.py
 -----------------
-Consolidated master automation runner for the EG1 repository.
-Executes all code quality, theme system, doc link, SEO, page generation,
-and JavaScript syntax audits in a single command.
-
-Preserves all individual scripts in automation-scripts/ while providing a unified
-CI/CD and pre-commit verification dashboard.
+Consolidated master automation runner for eg1.in.
+Executes dataset validation, markdown documentation link audits,
+code quality standards, source project protection, and production build.
 
 Usage:
-    # Linux / macOS:
-    .venv/bin/python automation-scripts/run_all_checks.py
-    # Windows:
-    .venv/Scripts/python.exe automation-scripts/run_all_checks.py
+    python automation-scripts/run_all_checks.py
 """
 
 import sys
@@ -22,7 +16,8 @@ import subprocess
 from pathlib import Path
 from typing import List
 
-# Ensure UTF-8 output encoding across environments
+ROOT_DIR = Path(__file__).resolve().parent.parent
+
 for stream in (sys.stdout, sys.stderr):
     reconfig = getattr(stream, "reconfigure", None)
     if callable(reconfig):
@@ -30,8 +25,6 @@ for stream in (sys.stdout, sys.stderr):
             reconfig(encoding="utf-8", errors="replace")
         except Exception:
             pass
-
-WORKSPACE_ROOT = Path(__file__).resolve().parent.parent
 
 
 class CheckTask:
@@ -56,11 +49,12 @@ class CheckTask:
         try:
             res = subprocess.run(
                 cmd,
-                cwd=str(WORKSPACE_ROOT),
+                cwd=str(ROOT_DIR),
                 capture_output=True,
                 text=True,
                 encoding="utf-8",
-                errors="replace"
+                errors="replace",
+                shell=(sys.platform == "win32" and cmd[0] in ("npm", "npx"))
             )
             self.duration = time.time() - start_time
             self.output = res.stdout.strip()
@@ -76,9 +70,9 @@ class CheckTask:
 
 def print_banner():
     print("\n" + "=" * 76)
-    print(" 🚀  EG1 CONSOLIDATED AUTOMATION & QUALITY AUDIT SUITE")
+    print(" 🚀  EG1 PORTAL CONSOLIDATED AUTOMATION & QUALITY AUDIT SUITE")
     print("=" * 76)
-    print(f" Workspace Root: {WORKSPACE_ROOT}")
+    print(f" Root Directory: {ROOT_DIR}")
     print(f" Interpreter:    {sys.executable}")
     print("=" * 76 + "\n")
 
@@ -116,61 +110,28 @@ def print_summary_table(tasks: List[CheckTask], total_duration: float):
 
 def main():
     print_banner()
-
     python_exe = sys.executable
 
     tasks = [
         CheckTask(
-            name="1. Code Standards & Structural Hygiene",
-            command=[
-                "{PYTHON}", "automation-scripts/audits/audit_code_standards.py"],
-            description="Audits CSS/JS separation, semantic tags, and production hygiene"
+            name="1. Dynamic Datasets & 47 Blog Articles Audit",
+            command=["{PYTHON}", "automation-scripts/audits/validate_datasets.py"],
+            description="Validates apps.json, updates.json, website_content.json, and blog posts"
         ),
         CheckTask(
-            name="2. Theme System & Token Integrity",
-            command=[
-                "{PYTHON}", "automation-scripts/audits/validate_theme_assets.py"],
-            description="Validates CSS brace balance, theme tokens, and header/preloader hooks"
+            name="2. Documentation Links & Anchors Audit",
+            command=["{PYTHON}", "automation-scripts/audits/audit_doc_links.py"],
+            description="Verifies all relative links and anchors in docs/ and README.md resolve"
         ),
         CheckTask(
-            name="3. Markdown Documentation Link Audit",
-            command=[
-                "{PYTHON}", "automation-scripts/audits/audit_doc_links.py"],
-            description="Verifies all internal markdown document links resolve without broken paths"
+            name="3. Code Standards & Security Hygiene Audit",
+            command=["{PYTHON}", "automation-scripts/audits/audit_code_standards.py"],
+            description="Validates rel='noopener noreferrer', index.html meta tags, and secrets"
         ),
         CheckTask(
-            name="4. Static Blog Pages Generator",
-            command=[
-                "{PYTHON}", "automation-scripts/generators/generate_blog_pages.py"],
-            description="Generates standalone SEO-optimized blog articles into blog/<slug>.html"
-        ),
-        CheckTask(
-            name="5. Static App Pages & Slug Sync",
-            command=[
-                "{PYTHON}", "automation-scripts/generators/generate_app_pages.py"],
-            description="Synchronizes app slugs in app.js and generates static SEO detail pages"
-        ),
-        CheckTask(
-            name="6. Static SEO Meta Tags Sync Verification",
-            command=[
-                "{PYTHON}", "automation-scripts/generators/sync_seo_tags.py", "--check"],
-            description="Verifies static HTML titles and meta descriptions match website_content.json"
-        ),
-        CheckTask(
-            name="7. JavaScript Syntax & Parsing Audit",
-            command=[
-                "node", "-c",
-                "assets/js/core/app.js",
-                "assets/js/modules/apps.js",
-                "assets/js/modules/share-app.js",
-                "assets/js/modules/index.js",
-                "assets/js/modules/blog-page.js",
-                "assets/js/modules/updates.js",
-                "assets/js/core/include-components.js",
-                "assets/js/modules/contact.js",
-                "AdminPanel/js/auth.js"
-            ],
-            description="Verifies clean node parse syntax across all primary frontend scripts"
+            name="4. TypeScript & Vite Production Bundle",
+            command=["npm", "run", "build"],
+            description="Validates clean compilation (tsc && vite build) with zero errors"
         ),
     ]
 

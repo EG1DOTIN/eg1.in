@@ -1,0 +1,145 @@
+import React, { useState, useEffect, useCallback } from 'react';
+import {
+  ConsentBanner,
+  SmartScrollButton,
+  useProducts,
+  useNews,
+  useVisitorTracker,
+  DataCache,
+} from 'eg-web-core';
+import { EG1_FIREBASE_CONFIG } from './config/firebase';
+
+// Register site-specific application catalog slugs and blog post IDs for Markdown fallback lookups
+DataCache.registerAppSlugs(['marwadi-chess', 'pyegclamui']);
+DataCache.registerBlogIds([
+  '6', '7', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20',
+  '21', '35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45', '46',
+  '47', '48', '49', '50', '51', '53', '54', '55', '56', '57', '58', '59', '60',
+  '61', '62', '63', '64', '67', '68', '69', '70'
+]);
+
+import { HomePage } from './pages/HomePage';
+import { AppsPage } from './pages/AppsPage';
+import { AboutPage } from './pages/AboutPage';
+import { BlogPage } from './pages/BlogPage';
+import { UpdatesPage } from './pages/UpdatesPage';
+import { ContactPage } from './pages/ContactPage';
+import { PrivacyPolicyPage } from './pages/PrivacyPolicyPage';
+import { AdminPage } from './pages/AdminPage';
+import { Eg1Header } from './components/Eg1Header';
+import { Eg1Footer } from './components/Eg1Footer';
+
+const normalizePath = (path: string): string => {
+  const clean = path.replace(/^\/+/, '').split('?')[0].split('#')[0];
+  if (!clean || clean === 'index.html') return 'index.html';
+  const lower = clean.toLowerCase();
+  if (
+    lower === 'admin' ||
+    lower === 'admin.html' ||
+    lower.startsWith('admin/') ||
+    lower === 'adminpanel' ||
+    lower === 'adminpanel.html' ||
+    lower.startsWith('adminpanel/')
+  ) {
+    return 'admin.html';
+  }
+  return clean;
+};
+
+export const App: React.FC = () => {
+  const [currentPath, setCurrentPath] = useState<string>(() => {
+    if (typeof window === 'undefined') return 'index.html';
+    return normalizePath(window.location.pathname);
+  });
+
+  const { products } = useProducts('data/apps.json');
+  const { news } = useNews('data/website_content.json');
+
+  // Activate anonymous non-invasive telemetry
+  useVisitorTracker({
+    appName: 'eg1.in',
+    firebaseConfig: EG1_FIREBASE_CONFIG,
+    firestoreCollection: 'visitor_analytics',
+    onLogReady: (log) => {
+      console.log('[Telemetry Session]', log.id, log.city, log.country, log.os);
+    },
+  });
+
+  const handleNavigate = useCallback((href: string) => {
+    if (href.startsWith('http://') || href.startsWith('https://')) {
+      window.open(href, '_blank', 'noopener,noreferrer');
+      return;
+    }
+
+    const norm = normalizePath(href);
+    setCurrentPath(norm);
+    if (typeof window !== 'undefined' && window.history.pushState) {
+      window.history.pushState({}, '', href.startsWith('/') ? href : `/${href}`);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, []);
+
+  useEffect(() => {
+    const onPopState = () => {
+      setCurrentPath(normalizePath(window.location.pathname));
+    };
+    window.addEventListener('popstate', onPopState);
+    return () => window.removeEventListener('popstate', onPopState);
+  }, []);
+
+  const renderCurrentPage = () => {
+    switch (currentPath) {
+      case 'apps.html':
+        return <AppsPage products={products} onNavigate={handleNavigate} />;
+      case 'about.html':
+        return <AboutPage onNavigate={handleNavigate} />;
+      case 'blog.html':
+        return <BlogPage onNavigate={handleNavigate} />;
+      case 'updates.html':
+        return <UpdatesPage onNavigate={handleNavigate} />;
+      case 'contact.html':
+        return <ContactPage onNavigate={handleNavigate} />;
+      case 'privacypolicy.html':
+        return <PrivacyPolicyPage onNavigate={handleNavigate} />;
+      case 'admin.html':
+        return <AdminPage onNavigate={handleNavigate} />;
+      case 'index.html':
+      default:
+        return (
+          <HomePage
+            products={products}
+            news={news}
+            onNavigate={handleNavigate}
+          />
+        );
+    }
+  };
+
+  if (currentPath === 'admin.html') {
+    return <AdminPage onNavigate={handleNavigate} />;
+  }
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+      {/* Universal EG1 Header */}
+      <Eg1Header
+        currentPath={currentPath}
+        onNavigate={handleNavigate}
+      />
+
+      {/* Main Body Content */}
+      <main style={{ flex: 1, paddingBottom: '40px' }}>
+        {renderCurrentPage()}
+      </main>
+
+      {/* Floating GDPR Consent Banner */}
+      <ConsentBanner privacyPolicyUrl="privacypolicy.html" />
+
+      {/* Floating Bidirectional Smart Scroll Assistant */}
+      <SmartScrollButton variant="primary" />
+
+      {/* Universal EG1 Footer */}
+      <Eg1Footer onNavigate={handleNavigate} />
+    </div>
+  );
+};

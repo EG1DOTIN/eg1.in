@@ -1,0 +1,211 @@
+/**
+ * Authentic EG1 Brand Badge Logo Styles
+ * Directly ported 1:1 from eg1.in/assets/css/core/common.css (lines 1475-1634)
+ * and eg1.in/assets/css/core/theme.css (lines 240-280).
+ */
+
+.eg1-logo-link {
+    display: inline-block;
+    text-decoration: none !important;
+    outline: none;
+}
+
+.eg1-logo-badge {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    /* Very dim circle background matching dark aesthetic */
+    background: rgba(30, 30, 35, 0.35);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    overflow: hidden;
+    box-sizing: border-box;
+    flex-shrink: 0;
+}
+
+/* Dim double-ring outline inside the badge */
+.eg1-logo-badge::before {
+    content: '';
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    right: 5px;
+    bottom: 5px;
+    border: 1.5px solid rgba(255, 255, 255, 0.12);
+    border-radius: 50%;
+    pointer-events: none;
+    box-sizing: border-box;
+    transition: border-color 0.25s ease;
+}
+
+.eg1-logo-badge:hover {
+    background: rgba(45, 45, 52, 0.55);
+}
+
+.eg1-logo-badge:hover::before {
+    border-color: rgba(255, 255, 255, 0.25);
+}
+
+.eg1-logo-content {
+    position: relative;
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    margin-top: -6px;
+    z-index: 2;
+}
+
+/* Main logo script text 'EG1' in Great Vibes font */
+.eg1-logo-script {
+    font-family: 'Great Vibes', 'Great-Vibes', cursive !important;
+    color: #ffffff;
+    font-size: 2.6rem;
+    line-height: 1;
+    font-weight: 300 !important;
+    white-space: nowrap;
+    letter-spacing: -0.5px;
+    padding-left: 0 !important;
+    text-shadow: none !important;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Sub-domain text '.in' - Very very dim by default, reveals softly on hover */
+.eg1-logo-domain {
+    font-family: 'Open Sans', 'PT Sans', sans-serif !important;
+    font-size: 0.8rem;
+    font-weight: 300 !important;
+    color: rgba(255, 255, 255, 0.05) !important;
+    padding-left: 0 !important;
+    margin-left: 2px;
+    position: relative;
+    top: -3px;
+    transition: color 0.3s ease;
+}
+
+.eg1-logo-badge:hover .eg1-logo-domain {
+    color: rgba(255, 255, 255, 0.45) !important;
+}
+
+/* Extremely dim logo byline - stays very dim even on hover */
+.eg1-logo-byline {
+    position: absolute;
+    bottom: 12px;
+    font-family: 'Open Sans', 'PT Sans', sans-serif !important;
+    font-size: 0.38rem;
+    font-weight: 300 !important;
+    font-style: italic;
+    color: rgba(255, 255, 255, 0.025) !important;
+    letter-spacing: 0.3px;
+    pointer-events: none;
+    white-space: nowrap;
+    z-index: 2;
+    transition: color 0.3s ease;
+}
+
+.eg1-logo-badge:hover .eg1-logo-byline {
+    color: rgba(255, 255, 255, 0.07) !important;
+}
+
+/* Light Theme Variant */
+.eg1-logo-badge.theme-light {
+    background: rgba(0, 0, 0, 0.03) !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04) !important;
+}
+
+.eg1-logo-badge.theme-light::before {
+    border: 1.5px solid rgba(0, 0, 0, 0.06) !important;
+}
+
+.eg1-logo-badge.theme-light:hover {
+    background: rgba(0, 0, 0, 0.06) !important;
+}
+
+.eg1-logo-badge.theme-light:hover::before {
+    border-color: rgba(0, 0, 0, 0.12) !important;
+}
+
+.eg1-logo-badge.theme-light .eg1-logo-script {
+    color: #000000 !important;
+    font-weight: 300 !important;
+    text-shadow: none !important;
+    -webkit-font-smoothing: antialiased;
+}
+
+.eg1-logo-badge.theme-light .eg1-logo-domain {
+    color: rgba(0, 0, 0, 0.05) !important;
+}
+
+.eg1-logo-badge.theme-light:hover .eg1-logo-domain {
+    color: rgba(0, 0, 0, 0.4) !important;
+}
+
+.eg1-logo-badge.theme-light .eg1-logo-byline {
+    color: rgba(0, 0, 0, 0.02) !important;
+}
+
+.eg1-logo-badge.theme-light:hover .eg1-logo-byline {
+    color: rgba(0, 0, 0, 0.06) !important;
+}
+
+/* Dark Theme Adaptations */
+html[data-theme="dark-gray"] .eg1-logo-badge,
+html[data-theme="dark"] .eg1-logo-badge,
+.eg1-logo-badge.theme-dark {
+    background: rgba(255, 255, 255, 0.05) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+}
+
+html[data-theme="dark-gray"] .eg1-logo-badge::before,
+html[data-theme="dark"] .eg1-logo-badge::before,
+.eg1-logo-badge.theme-dark::before {
+    border-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+html[data-theme="dark-gray"] .eg1-logo-badge:hover,
+html[data-theme="dark"] .eg1-logo-badge:hover,
+.eg1-logo-badge.theme-dark:hover {
+    background: rgba(255, 255, 255, 0.08) !important;
+}
+
+html[data-theme="dark-gray"] .eg1-logo-badge:hover::before,
+html[data-theme="dark"] .eg1-logo-badge:hover::before,
+.eg1-logo-badge.theme-dark:hover::before {
+    border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+html[data-theme="dark-gray"] .eg1-logo-script,
+html[data-theme="dark"] .eg1-logo-script,
+.eg1-logo-badge.theme-dark .eg1-logo-script {
+    color: #ffffff !important;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.25) !important;
+}
+
+html[data-theme="dark-gray"] .eg1-logo-domain,
+html[data-theme="dark"] .eg1-logo-domain,
+.eg1-logo-badge.theme-dark .eg1-logo-domain {
+    color: rgba(255, 255, 255, 0.18) !important;
+}
+
+html[data-theme="dark-gray"] .eg1-logo-badge:hover .eg1-logo-domain,
+html[data-theme="dark"] .eg1-logo-badge:hover .eg1-logo-domain,
+.eg1-logo-badge.theme-dark:hover .eg1-logo-domain {
+    color: rgba(255, 255, 255, 0.75) !important;
+}
+
+html[data-theme="dark-gray"] .eg1-logo-byline,
+html[data-theme="dark"] .eg1-logo-byline,
+.eg1-logo-badge.theme-dark .eg1-logo-byline {
+    color: rgba(255, 255, 255, 0.025) !important;
+}
+
+html[data-theme="dark-gray"] .eg1-logo-badge:hover .eg1-logo-byline,
+html[data-theme="dark"] .eg1-logo-badge:hover .eg1-logo-byline,
+.eg1-logo-badge.theme-dark:hover .eg1-logo-byline {
+    color: rgba(255, 255, 255, 0.07) !important;
+}
