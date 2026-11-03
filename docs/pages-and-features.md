@@ -86,7 +86,7 @@ Complete privacy and data handling disclosures:
 ## 8. Admin Console (`AdminPage.tsx`)
 
 Hardened management suite isolated from public layout:
-- **Authentication**: Protected by [`AdminAuthGuard`](https://github.com/EG1DOTIN/eg-web-core/blob/main/docs/admin-suite.md) with Google OAuth whitelist (`eg1dotin@gmail.com`) and 16-digit salted SHA-256 PIN.
+- **Authentication**: Protected by [`AdminAuthGuard`](https://github.com/EG1DOTIN/eg-web-core/blob/main/docs/admin-suite.md) with Google OAuth whitelist (configured via `VITE_ADMIN_ALLOWED_EMAILS`) and 16-digit salted SHA-256 PIN.
 - **Branded Layout**: Responsive [`AdminLayout`](https://github.com/EG1DOTIN/eg-web-core/blob/main/docs/admin-suite.md) with collapsible sidebar, user avatar, and light/dark theme switcher.
 - **Integrated Views**:
   - **Visitor Analytics**: Multi-domain telemetry grid consuming 50-record bucket documents.
