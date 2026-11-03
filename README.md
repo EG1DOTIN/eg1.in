@@ -64,7 +64,7 @@ flowchart TD
    - Product catalog (`data/apps.json`), update logs (`data/updates.json`), and website content are loaded from static, cacheable JSON.
    - Eliminates unnecessary cloud database reads, drastically reducing latency and cloud infrastructure costs.
 3. **High-Security Two-Factor Admin Console (`/admin`)**:
-   - Three-tier defense: Google OAuth email whitelisting (`eg1dotin@gmail.com`), 16-digit salted SHA-256 PIN challenge via standard browser Web Crypto API, and automated 24-hour IP lockout defense.
+   - Three-tier defense: Google OAuth email whitelisting (configured via `VITE_ADMIN_ALLOWED_EMAILS`), 16-digit salted SHA-256 PIN challenge via standard browser Web Crypto API, and automated 24-hour IP lockout defense.
    - Dedicated management views: Live Visitor Telemetry, Contact Inquiries Inbox, and Split-Screen Markdown Article Studio.
 4. **47 Technical Markdown Articles**:
    - Full migration of legacy blog posts into structured Markdown files rendered securely with [`MarkdownViewer`](https://github.com/EG1DOTIN/eg-web-core/blob/main/docs/domain-modules.md) and DOMPurify sanitization.

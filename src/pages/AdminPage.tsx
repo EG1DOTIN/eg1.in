@@ -60,8 +60,8 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate }) => {
     <AdminAuthGuard
       authConfig={{
         allowedEmails: import.meta.env.VITE_ADMIN_ALLOWED_EMAILS
-          ? (import.meta.env.VITE_ADMIN_ALLOWED_EMAILS as string).split(',').map((e) => e.trim())
-          : ['eg1dotin@gmail.com'],
+          ? (import.meta.env.VITE_ADMIN_ALLOWED_EMAILS as string).split(',').map((e) => e.trim()).filter(Boolean)
+          : undefined,
         pinSalt: (import.meta.env.VITE_ADMIN_PIN_SALT as string) || 'EG1_ADMIN_SECURE_SALT_2026',
         firebaseConfig: EG1_FIREBASE_CONFIG,
         lockoutCollection: 'admin_lockout',

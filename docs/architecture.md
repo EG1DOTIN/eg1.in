@@ -129,7 +129,7 @@ sequenceDiagram
         alt Email Not in Whitelist
             Guard->>Google: Sign Out
             Guard-->>Admin: Show Unauthorized Error
-        else Email Allowed (eg1dotin@gmail.com)
+        else Email Allowed (Admin Whitelist)
             Guard-->>Admin: Prompt for 16-Digit PIN
             Admin->>Crypto: Submit 16-Digit PIN
             Crypto->>Crypto: Compute SHA-256(PIN + EG1_ADMIN_SECURE_SALT_2026)
