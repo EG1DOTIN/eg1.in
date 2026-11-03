@@ -7,6 +7,7 @@ import {
   BlogSidebar,
   BlogPostItem,
   useBlogs,
+  getBlogSlug,
 } from 'eg-web-core';
 
 export interface BlogPageProps {
@@ -21,11 +22,13 @@ export const BlogPage: React.FC<BlogPageProps> = () => {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [currentPage, setCurrentPage] = useState<number>(1);
 
-  // Sync state from URL query parameters (id, slug, cat, search, page)
+  // Sync state from URL query parameters (title, id, slug, cat, search, page)
   const syncFromUrl = useCallback(() => {
     if (typeof window === 'undefined') return;
     const params = new URLSearchParams(window.location.search);
-    const reqId = params.get('id') || params.get('title') || params.get('slug');
+    const reqTitle = params.get('title') || params.get('id?title');
+    const reqId = params.get('id') || params.get('slug');
+    const rawQuery = (reqTitle || reqId || '').trim();
     const reqCat = params.get('cat');
     const reqSearch = params.get('search');
     const reqPage = params.get('page');
@@ -40,20 +43,33 @@ export const BlogPage: React.FC<BlogPageProps> = () => {
       setCurrentPage(1);
     }
 
-    if (reqId && blogs.length > 0) {
-      const clean = reqId.trim().replace(/^id/i, '');
-      const found = blogs.find(
-        (p) =>
-          p.id === clean ||
-          p.id === reqId ||
-          p.slug === reqId ||
-          p.slug === `post-${clean}` ||
-          (p.title && p.title.toLowerCase() === reqId.toLowerCase())
-      );
+    if (rawQuery && blogs.length > 0) {
+      const cleanId = rawQuery.replace(/^id/i, '');
+      const querySlug = rawQuery.toLowerCase().replace(/[\s_]+/g, '-');
+      const found = blogs.find((p) => {
+        const pSlug = getBlogSlug(p).toLowerCase();
+        const pTitleSlug = (p.title || '')
+          .toLowerCase()
+          .replace(/[^a-z0-9\s-]/g, '')
+          .replace(/[\s_]+/g, '-');
+        const pTitleLower = (p.title || '').toLowerCase();
+        const pHeadingLower = (p.heading || '').toLowerCase();
+        const rawLower = rawQuery.toLowerCase();
+
+        return (
+          p.id === cleanId ||
+          p.id === rawQuery ||
+          p.slug === rawQuery ||
+          pSlug === querySlug ||
+          pTitleSlug === querySlug ||
+          pTitleLower === rawLower ||
+          pHeadingLower === rawLower
+        );
+      });
       if (found) {
         setSelectedPost(found);
       }
-    } else if (!reqId) {
+    } else if (!rawQuery) {
       setSelectedPost(null);
     }
   }, [blogs]);
@@ -66,6 +82,7 @@ export const BlogPage: React.FC<BlogPageProps> = () => {
 
   // Helper to push URL query updates
   const updateUrl = (updates: {
+    title?: string | null;
     id?: string | null;
     cat?: string | null;
     search?: string | null;
@@ -74,13 +91,25 @@ export const BlogPage: React.FC<BlogPageProps> = () => {
     if (typeof window === 'undefined') return;
     const params = new URLSearchParams(window.location.search);
 
-    if (updates.id !== undefined) {
-      if (updates.id) {
-        params.set('id', updates.id);
-      } else {
+    if (updates.title !== undefined) {
+      if (updates.title) {
+        params.set('title', updates.title);
         params.delete('id');
         params.delete('slug');
+      } else {
         params.delete('title');
+        params.delete('id');
+        params.delete('slug');
+      }
+    } else if (updates.id !== undefined) {
+      if (updates.id) {
+        params.set('title', updates.id);
+        params.delete('id');
+        params.delete('slug');
+      } else {
+        params.delete('title');
+        params.delete('id');
+        params.delete('slug');
       }
     }
 
@@ -108,32 +137,100 @@ export const BlogPage: React.FC<BlogPageProps> = () => {
       }
     }
 
+    const isHtml = window.location.pathname.endsWith('.html');
+    const basePath = isHtml ? '/blog.html' : '/blog';
     const query = params.toString();
-    const newUrl = query ? `/blog?${query}` : '/blog';
+    const newUrl = query ? `${basePath}?${query}` : basePath;
     window.history.pushState({}, '', newUrl);
   };
 
-  // Synchronize SEO Title & Meta Description
+  // Synchronize SEO Title, Open Graph & Twitter Card Meta Tags
   useEffect(() => {
     if (typeof document === 'undefined') return;
 
+    const setMeta = (selector: string, attr: string, value: string) => {
+      let el = document.querySelector(selector);
+      if (!el) {
+        el = document.createElement('meta');
+        const isProp = selector.includes('property=');
+        const match = selector.match(/["'](.*?)["']/);
+        if (match) {
+          el.setAttribute(isProp ? 'property' : 'name', match[1]);
+          document.head.appendChild(el);
+        }
+      }
+      el.setAttribute(attr, value);
+    };
+
+    const origin = typeof window !== 'undefined' ? window.location.origin : 'https://www.eg1.in';
+    const isHtml = typeof window !== 'undefined' && window.location.pathname.endsWith('.html');
+
     if (selectedPost) {
-      document.title = `${selectedPost.title} - EG1 Blog`;
-      const metaDesc = document.querySelector('meta[name="description"]');
-      if (metaDesc) {
-        metaDesc.setAttribute(
-          'content',
-          selectedPost.short_description || selectedPost.description || selectedPost.title
-        );
+      const pageTitle = `${selectedPost.title} - EG1 Blog`;
+      const desc =
+        selectedPost.short_description ||
+        selectedPost.description ||
+        `Learn about ${selectedPost.title} on EG1 Blog.`;
+      const postSlug = getBlogSlug(selectedPost);
+      const canonicalUrl = `${origin}${isHtml ? '/blog.html' : '/blog'}?title=${postSlug}`;
+
+      // Construct absolute image URL for crawler thumbnail rendering
+      const rawImg =
+        selectedPost.output_image ||
+        selectedPost.imageUrl ||
+        `assets/img/blog/id${selectedPost.id}.webp`;
+      const absImgUrl =
+        rawImg.startsWith('http://') || rawImg.startsWith('https://')
+          ? rawImg
+          : `${origin}/${rawImg.replace(/^\//, '')}`;
+
+      document.title = pageTitle;
+      setMeta('meta[name="title"]', 'content', pageTitle);
+      setMeta('meta[name="description"]', 'content', desc);
+
+      // Open Graph / Facebook / WhatsApp / LinkedIn
+      setMeta('meta[property="og:title"]', 'content', selectedPost.title);
+      setMeta('meta[property="og:description"]', 'content', desc);
+      setMeta('meta[property="og:url"]', 'content', canonicalUrl);
+      setMeta('meta[property="og:image"]', 'content', absImgUrl);
+      setMeta('meta[property="og:type"]', 'content', 'article');
+
+      // Twitter / X
+      setMeta('meta[name="twitter:title"]', 'content', selectedPost.title);
+      setMeta('meta[name="twitter:description"]', 'content', desc);
+      setMeta('meta[name="twitter:image"]', 'content', absImgUrl);
+      setMeta('meta[name="twitter:url"]', 'content', canonicalUrl);
+
+      // Canonical link tag
+      const canonicalLink = document.querySelector('link[rel="canonical"]');
+      if (canonicalLink) {
+        canonicalLink.setAttribute('href', canonicalUrl);
       }
     } else {
-      document.title = 'EG1 Blog - Technical Articles, Tutorials & Code';
-      const metaDesc = document.querySelector('meta[name="description"]');
-      if (metaDesc) {
-        metaDesc.setAttribute(
-          'content',
-          'Technical articles, tutorials, source code, algorithms, and practical programming write-ups across various topics.'
-        );
+      const defaultTitle = 'EG1 Blog - Technical Articles, Tutorials & Code';
+      const defaultDesc =
+        'Technical articles, tutorials, source code, algorithms, and practical programming write-ups across various topics.';
+      const defaultUrl = `${origin}${isHtml ? '/blog.html' : '/blog'}`;
+      const defaultImg = `${origin}/assets/img/eg1-social-preview.webp`;
+
+      document.title = defaultTitle;
+      setMeta('meta[name="title"]', 'content', defaultTitle);
+      setMeta('meta[name="description"]', 'content', defaultDesc);
+
+      setMeta('meta[property="og:title"]', 'content', 'EG1 - Technical Blog & Tutorials');
+      setMeta('meta[property="og:description"]', 'content', defaultDesc);
+      setMeta('meta[property="og:url"]', 'content', defaultUrl);
+      setMeta('meta[property="og:image"]', 'content', defaultImg);
+      setMeta('meta[property="og:type"]', 'content', 'website');
+
+      setMeta('meta[name="twitter:title"]', 'content', 'EG1 - Technical Blog & Tutorials');
+      setMeta('meta[name="twitter:description"]', 'content', defaultDesc);
+      setMeta('meta[name="twitter:image"]', 'content', defaultImg);
+      setMeta('meta[name="twitter:url"]', 'content', defaultUrl);
+
+      const canonicalLink = document.querySelector('link[rel="canonical"]');
+      if (canonicalLink) {
+        canonicalLink.setAttribute('href', defaultUrl);
       }
     }
   }, [selectedPost]);
@@ -190,7 +287,8 @@ export const BlogPage: React.FC<BlogPageProps> = () => {
 
   const handleSelectPost = (post: BlogPostItem) => {
     setSelectedPost(post);
-    updateUrl({ id: post.id });
+    const postSlug = getBlogSlug(post);
+    updateUrl({ title: postSlug });
     if (typeof window !== 'undefined') {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -198,7 +296,7 @@ export const BlogPage: React.FC<BlogPageProps> = () => {
 
   const handleBackToBlog = () => {
     setSelectedPost(null);
-    updateUrl({ id: null });
+    updateUrl({ title: null });
     if (typeof window !== 'undefined') {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -210,7 +308,7 @@ export const BlogPage: React.FC<BlogPageProps> = () => {
     // If viewing single post, return to catalog view
     if (selectedPost) {
       setSelectedPost(null);
-      updateUrl({ id: null, cat, page: 1 });
+      updateUrl({ title: null, cat, page: 1 });
     } else {
       updateUrl({ cat, page: 1 });
     }
@@ -222,7 +320,7 @@ export const BlogPage: React.FC<BlogPageProps> = () => {
     // If viewing single post, return to catalog view
     if (selectedPost) {
       setSelectedPost(null);
-      updateUrl({ id: null, search: q || null, page: 1 });
+      updateUrl({ title: null, search: q || null, page: 1 });
     } else {
       updateUrl({ search: q || null, page: 1 });
     }
@@ -296,7 +394,11 @@ export const BlogPage: React.FC<BlogPageProps> = () => {
         {/* Main Column */}
         <div className="eg-blog-main-col">
           {selectedPost ? (
-            <BlogPostView post={selectedPost} onBack={handleBackToBlog} />
+            <BlogPostView
+              post={selectedPost}
+              onBack={handleBackToBlog}
+              shareUrl={`${typeof window !== 'undefined' ? window.location.origin : 'https://www.eg1.in'}${typeof window !== 'undefined' && window.location.pathname.endsWith('.html') ? '/blog.html' : '/blog'}?title=${getBlogSlug(selectedPost)}`}
+            />
           ) : (
             <div>
               {/* Active Filter Indicators */}

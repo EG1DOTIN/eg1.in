@@ -8,8 +8,8 @@
         "category": "BUG-FIX",
         "icon": "shield-check",
         "badge": "Patch",
-        "description": "Resolved clean URL routing behavior ensuring extensionless paths (/contact, /apps, /blog, /about, /updates) resolve directly without fallback to index, integrated extension-agnostic active route indicators across header navigation, and introduced a complete hierarchical developer guide and sub-directory documentation suite across all workspaces.",
-        "link": "https://github.com/EG1DOTIN/eg1.in"
+        "description": "Resolved clean URL routing behavior ensuring extensionless paths (/contact, /apps, /blog, /about, /updates) resolve directly without fallback to index, hardened blog share link routing to use semantic title slugs (?title=<slug>) with rich image thumbnail previews and live Open Graph / Twitter Card metadata hydration, and introduced a complete hierarchical developer guide and sub-directory documentation suite across all workspaces.",
+        "link": "https://github.com/EG1DOTIN/eg1.in/pulls?q=is%3Apr+state%3Aclosed"
     },
     {
         "id": "update-2026-11-01-v4-0-0",
@@ -21,7 +21,7 @@
         "icon": "rocket",
         "badge": "Major",
         "description": "Complete architectural transformation of EG1 Portal to modern React 18 + Vite SPA, powered by the open-source eg-web-core component library, zero-cost client cache, reactive dark/light theme, and automated CI/CD pipeline.",
-        "link": "https://github.com/EG1DOTIN/eg1.in"
+        "link": "https://github.com/EG1DOTIN/eg1.in/pulls?q=is%3Apr+state%3Aclosed"
     },
     {
         "id": "update-2026-10-18-v3-8-0",
