@@ -204,3 +204,78 @@ npm run preview
 firebase deploy --only hosting
 ```
 
+---
+
+## 🏷️ 6. How to Bump & Release a New Website Version
+
+`eg1.in` follows [Semantic Versioning (SemVer)](https://semver.org/): `MAJOR.MINOR.PATCH` (e.g. `4.0.0` → `4.0.1`).
+
+```mermaid
+flowchart TD
+    ChangeType{"Type of Website Change"}
+    ChangeType -- "Bug fix, clean URL patch, routing tweak, asset fix" --> Patch["Increment PATCH: 4.0.0 → 4.0.1"]
+    ChangeType -- "New page, new catalog feature, new filter/tool" --> Minor["Increment MINOR: 4.0.1 → 4.1.0"]
+    ChangeType -- "Full redesign or framework overhaul" --> Major["Increment MAJOR: 4.0.1 → 5.0.0"]
+
+    Patch --> Step1["1. Update package.json 'version'"]
+    Minor --> Step1
+    Major --> Step1
+
+    Step1 --> Step2["2. Add Top Entry to public/data/updates.json"]
+    Step2 --> Step3["3. Rebuild Application: npm run build"]
+    Step3 --> Step4["4. Run Master CI Checks: python3 ../../HELP-DOCS/run_all_workspace_checks.py"]
+    Step4 --> Step5["5. Commit, Push Branch & Create PR"]
+```
+
+### Step-by-Step Procedure:
+
+1. **Update `package.json`**:
+   Open [`package.json`](../package.json) and bump the `"version"` field:
+   ```json
+   {
+     "name": "eg1-in",
+     "version": "4.0.1",
+     ...
+   }
+   ```
+
+2. **Add Changelog Entry to `public/data/updates.json`**:
+   Open [`public/data/updates.json`](../public/data/updates.json) and prepend a new entry at the very top of the JSON array:
+   ```json
+   [
+       {
+           "id": "update-2026-11-03-v4-0-1",
+           "type": "website",
+           "version": "4.0.1",
+           "title": "Clean Extension-Agnostic URL Routing & Comprehensive Developer Documentation Suite",
+           "date": "Nov 03, 2026",
+           "category": "BUG-FIX",
+           "icon": "shield-check",
+           "badge": "Patch",
+           "description": "Resolved clean URL routing behavior ensuring extensionless paths resolve directly without fallback to index.",
+           "link": "https://github.com/EG1DOTIN/eg1.in"
+       },
+       ...
+   ]
+   ```
+   *Available Category values*: `BUG-FIX`, `ENHANCEMENT`, `OPTIMIZATION`, `FEATURE`, `APP`, `OTHER`.
+
+3. **Verify Build & Type Safety**:
+   ```bash
+   npm run build
+   ```
+
+4. **Run Master Workspace Verification**:
+   ```bash
+   python3 ../../HELP-DOCS/run_all_workspace_checks.py
+   ```
+
+5. **Commit & Deploy**:
+   ```bash
+   git add package.json public/data/updates.json
+   git commit -m "chore(release): bump eg1.in to 4.0.1"
+   # To deploy to production:
+   firebase deploy --only hosting
+   ```
+
+

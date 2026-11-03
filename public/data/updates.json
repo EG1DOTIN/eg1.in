@@ -1,5 +1,17 @@
 [
     {
+        "id": "update-2026-11-03-v4-0-1",
+        "type": "website",
+        "version": "4.0.1",
+        "title": "Clean Extension-Agnostic URL Routing & Comprehensive Developer Documentation Suite",
+        "date": "Nov 03, 2026",
+        "category": "BUG-FIX",
+        "icon": "shield-check",
+        "badge": "Patch",
+        "description": "Resolved clean URL routing behavior ensuring extensionless paths (/contact, /apps, /blog, /about, /updates) resolve directly without fallback to index, integrated extension-agnostic active route indicators across header navigation, and introduced a complete hierarchical developer guide and sub-directory documentation suite across all workspaces.",
+        "link": "https://github.com/EG1DOTIN/eg1.in"
+    },
+    {
         "id": "update-2026-11-01-v4-0-0",
         "type": "website",
         "version": "4.0.0",
