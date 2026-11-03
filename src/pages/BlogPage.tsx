@@ -109,7 +109,7 @@ export const BlogPage: React.FC<BlogPageProps> = () => {
     }
 
     const query = params.toString();
-    const newUrl = query ? `blog.html?${query}` : 'blog.html';
+    const newUrl = query ? `/blog?${query}` : '/blog';
     window.history.pushState({}, '', newUrl);
   };
 

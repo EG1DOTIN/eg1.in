@@ -351,7 +351,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
           >
             <button
               type="button"
-              onClick={() => onNavigate('apps.html')}
+              onClick={() => onNavigate('apps')}
               style={{
                 padding: '11px 24px',
                 borderRadius: '8px',
@@ -370,7 +370,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
 
             <button
               type="button"
-              onClick={() => onNavigate('blog.html')}
+              onClick={() => onNavigate('blog')}
               style={{
                 padding: '11px 22px',
                 borderRadius: '8px',
@@ -388,7 +388,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
 
             <button
               type="button"
-              onClick={() => onNavigate('contact.html')}
+              onClick={() => onNavigate('contact')}
               style={{
                 padding: '11px 20px',
                 borderRadius: '8px',

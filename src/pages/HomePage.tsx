@@ -159,8 +159,8 @@ export const HomePage: React.FC<HomePageProps> = ({ products, news, onNavigate }
           >
             {/* Primary CTA: Explore Projects */}
             <a
-              href="apps.html"
-              onClick={(e) => handleActionClick(e, 'apps.html')}
+              href="apps"
+              onClick={(e) => handleActionClick(e, 'apps')}
               className="eg1-hero-btn eg1-hero-btn-primary"
               title="Explore EG1 Applications & Projects"
               style={{
@@ -201,8 +201,8 @@ export const HomePage: React.FC<HomePageProps> = ({ products, news, onNavigate }
 
             {/* Secondary CTA: What's New */}
             <a
-              href="updates.html"
-              onClick={(e) => handleActionClick(e, 'updates.html')}
+              href="updates"
+              onClick={(e) => handleActionClick(e, 'updates')}
               className="eg1-hero-btn eg1-hero-btn-secondary"
               title="View Latest Updates & Changelog"
               style={{
@@ -244,8 +244,8 @@ export const HomePage: React.FC<HomePageProps> = ({ products, news, onNavigate }
 
             {/* Ghost CTA: Read Blogs */}
             <a
-              href="blog.html"
-              onClick={(e) => handleActionClick(e, 'blog.html')}
+              href="blog"
+              onClick={(e) => handleActionClick(e, 'blog')}
               className="eg1-hero-btn eg1-hero-btn-ghost"
               title="Read Technical Blog Tutorials"
               style={{
@@ -434,8 +434,8 @@ export const HomePage: React.FC<HomePageProps> = ({ products, news, onNavigate }
                 </h2>
               </div>
               <a
-                href="apps.html"
-                onClick={(e) => handleActionClick(e, 'apps.html')}
+                href="apps"
+                onClick={(e) => handleActionClick(e, 'apps')}
                 className="eg1-featured-view-all-btn"
                 style={{
                   display: 'inline-flex',
@@ -469,7 +469,7 @@ export const HomePage: React.FC<HomePageProps> = ({ products, news, onNavigate }
 
             <ProductGrid
               products={featuredProducts}
-              onSelect={(p) => onNavigate(`apps.html?id=${p.id}`)}
+              onSelect={(p) => onNavigate(`apps?id=${p.id}`)}
             />
           </Container>
         </Section>

@@ -87,9 +87,9 @@ export const AppsPage: React.FC<AppsPageProps> = ({ products, onNavigate }) => {
       const slug = getAppSlug(product);
       setSelectedSlug(slug);
       if (onNavigate) {
-        onNavigate(`apps.html?title=${slug}`);
+        onNavigate(`apps?title=${slug}`);
       } else if (typeof window !== 'undefined' && window.history.pushState) {
-        window.history.pushState({}, '', `apps.html?title=${slug}`);
+        window.history.pushState({}, '', `/apps?title=${slug}`);
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     },
@@ -100,9 +100,9 @@ export const AppsPage: React.FC<AppsPageProps> = ({ products, onNavigate }) => {
   const handleBackToCatalog = useCallback(() => {
     setSelectedSlug(null);
     if (onNavigate) {
-      onNavigate('apps.html');
+      onNavigate('apps');
     } else if (typeof window !== 'undefined' && window.history.pushState) {
-      window.history.pushState({}, '', 'apps.html');
+      window.history.pushState({}, '', '/apps');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }, [onNavigate]);

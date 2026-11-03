@@ -31,24 +31,25 @@ import { Eg1Footer } from './components/Eg1Footer';
 
 const normalizePath = (path: string): string => {
   const clean = path.replace(/^\/+/, '').split('?')[0].split('#')[0];
-  if (!clean || clean === 'index.html') return 'index.html';
-  const lower = clean.toLowerCase();
+  if (!clean || clean === 'index.html' || clean === 'index') return 'index';
+  const lower = clean.toLowerCase().replace(/\.html$/, '');
   if (
     lower === 'admin' ||
-    lower === 'admin.html' ||
     lower.startsWith('admin/') ||
     lower === 'adminpanel' ||
-    lower === 'adminpanel.html' ||
     lower.startsWith('adminpanel/')
   ) {
-    return 'admin.html';
+    return 'admin';
   }
-  return clean;
+  if (lower === 'privacy-policy' || lower === 'privacypolicy') {
+    return 'privacypolicy';
+  }
+  return lower;
 };
 
 export const App: React.FC = () => {
   const [currentPath, setCurrentPath] = useState<string>(() => {
-    if (typeof window === 'undefined') return 'index.html';
+    if (typeof window === 'undefined') return 'index';
     return normalizePath(window.location.pathname);
   });
 
@@ -74,7 +75,9 @@ export const App: React.FC = () => {
     const norm = normalizePath(href);
     setCurrentPath(norm);
     if (typeof window !== 'undefined' && window.history.pushState) {
-      window.history.pushState({}, '', href.startsWith('/') ? href : `/${href}`);
+      const targetPath = norm === 'index' ? '/' : `/${norm}`;
+      const queryPart = href.includes('?') ? `?${href.split('?')[1]}` : '';
+      window.history.pushState({}, '', `${targetPath}${queryPart}`);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }, []);
@@ -89,20 +92,30 @@ export const App: React.FC = () => {
 
   const renderCurrentPage = () => {
     switch (currentPath) {
+      case 'apps':
       case 'apps.html':
         return <AppsPage products={products} onNavigate={handleNavigate} />;
+      case 'about':
       case 'about.html':
         return <AboutPage onNavigate={handleNavigate} />;
+      case 'blog':
       case 'blog.html':
         return <BlogPage onNavigate={handleNavigate} />;
+      case 'updates':
       case 'updates.html':
         return <UpdatesPage onNavigate={handleNavigate} />;
+      case 'contact':
       case 'contact.html':
         return <ContactPage onNavigate={handleNavigate} />;
+      case 'privacypolicy':
+      case 'privacy-policy':
       case 'privacypolicy.html':
+      case 'privacy-policy.html':
         return <PrivacyPolicyPage onNavigate={handleNavigate} />;
+      case 'admin':
       case 'admin.html':
         return <AdminPage onNavigate={handleNavigate} />;
+      case 'index':
       case 'index.html':
       default:
         return (
@@ -115,7 +128,7 @@ export const App: React.FC = () => {
     }
   };
 
-  if (currentPath === 'admin.html') {
+  if (currentPath === 'admin' || currentPath === 'admin.html') {
     return <AdminPage onNavigate={handleNavigate} />;
   }
 
@@ -133,7 +146,7 @@ export const App: React.FC = () => {
       </main>
 
       {/* Floating GDPR Consent Banner */}
-      <ConsentBanner privacyPolicyUrl="privacypolicy.html" />
+      <ConsentBanner privacyPolicyUrl="privacypolicy" />
 
       {/* Floating Bidirectional Smart Scroll Assistant */}
       <SmartScrollButton variant="primary" />
