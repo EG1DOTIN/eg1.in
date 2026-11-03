@@ -119,17 +119,22 @@ def main():
             description="Validates apps.json, updates.json, website_content.json, and blog posts"
         ),
         CheckTask(
-            name="2. Documentation Links & Anchors Audit",
+            name="2. Application Versions & Static Metadata Audit",
+            command=["{PYTHON}", "automation-scripts/audits/audit_app_versions.py"],
+            description="Validates static app versions in apps.json and disables runtime GitHub queries"
+        ),
+        CheckTask(
+            name="3. Documentation Links & Anchors Audit",
             command=["{PYTHON}", "automation-scripts/audits/audit_doc_links.py"],
             description="Verifies all relative links and anchors in docs/ and README.md resolve"
         ),
         CheckTask(
-            name="3. Code Standards & Security Hygiene Audit",
+            name="4. Code Standards & Security Hygiene Audit",
             command=["{PYTHON}", "automation-scripts/audits/audit_code_standards.py"],
             description="Validates rel='noopener noreferrer', index.html meta tags, and secrets"
         ),
         CheckTask(
-            name="4. TypeScript & Vite Production Bundle",
+            name="5. TypeScript & Vite Production Bundle",
             command=["npm", "run", "build"],
             description="Validates clean compilation (tsc && vite build) with zero errors"
         ),

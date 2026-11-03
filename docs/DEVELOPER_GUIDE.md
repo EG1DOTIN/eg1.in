@@ -129,6 +129,24 @@ Append a new object to the array in `public/data/apps.json`:
 }
 ```
 
+### A2. How to Synchronize External App Releases (e.g. pyEGClamUI or Marwadi Chess):
+When an external project (such as `pyEGClamUI` or `Marwadi Chess`) publishes a new release on GitHub, synchronize its version into `apps.json` and `public/data/apps/*.md` with a single command:
+
+```bash
+python3 automation-scripts/sync_app_versions_from_github.py
+```
+
+This script:
+1. Queries GitHub for the latest release tags of mapped applications.
+2. Updates `public/data/apps.json` with the latest version and timestamps.
+3. Updates `public/data/apps/{slug}.md` frontmatter (`version-string`) and sets `fetch-github: "false"`.
+4. Eliminates client-side runtime calls to `api.github.com`, preventing 403 rate-limiting and ensuring instant 0ms loads.
+
+Verify the synchronization using the audit suite:
+```bash
+python3 automation-scripts/audits/audit_app_versions.py
+```
+
 ### B. How to Add a Blog Post in `public/data/website_content.json`:
 Add to the `"blog_posts"` array:
 ```json
