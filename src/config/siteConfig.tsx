@@ -13,8 +13,8 @@ export const EG1_SITE_CONFIG = {
   forkRibbonUrl: 'https://github.com/EG1DOTIN/eg1.in',
   aboutText:
     'A hobby website showcasing engineering applications, technical blogs, and creative software tools developed by EG1.',
-  privacyPolicyUrl: 'privacypolicy.html',
-  contactUrl: 'contact.html',
+  privacyPolicyUrl: 'privacypolicy',
+  contactUrl: 'contact',
 };
 
 /**
@@ -23,7 +23,7 @@ export const EG1_SITE_CONFIG = {
 export const EG1_NAV_LINKS: NavLinkItem[] = [
   {
     label: 'HOME',
-    href: 'index.html',
+    href: 'index',
     icon: (
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
@@ -33,7 +33,7 @@ export const EG1_NAV_LINKS: NavLinkItem[] = [
   },
   {
     label: 'APPS',
-    href: 'apps.html',
+    href: 'apps',
     icon: (
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
         <rect x="3" y="3" width="7" height="7" />
@@ -55,7 +55,7 @@ export const EG1_NAV_LINKS: NavLinkItem[] = [
     children: [
       {
         label: 'UPDATES',
-        href: 'updates.html',
+        href: 'updates',
         icon: (
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
@@ -65,7 +65,7 @@ export const EG1_NAV_LINKS: NavLinkItem[] = [
       },
       {
         label: 'BLOG',
-        href: 'blog.html',
+        href: 'blog',
         icon: (
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
@@ -89,7 +89,7 @@ export const EG1_NAV_LINKS: NavLinkItem[] = [
   },
   {
     label: 'ABOUT',
-    href: 'about.html',
+    href: 'about',
     icon: (
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
         <circle cx="12" cy="12" r="10" />
@@ -100,7 +100,7 @@ export const EG1_NAV_LINKS: NavLinkItem[] = [
   },
   {
     label: 'CONTACT',
-    href: 'contact.html',
+    href: 'contact',
     icon: (
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />

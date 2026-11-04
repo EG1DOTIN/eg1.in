@@ -34,7 +34,7 @@ export const PrivacyPolicyPage: React.FC<PrivacyPolicyPageProps> = ({ onNavigate
         canonical.setAttribute('rel', 'canonical');
         document.head.appendChild(canonical);
       }
-      canonical.setAttribute('href', 'https://www.eg1.in/privacypolicy.html');
+      canonical.setAttribute('href', 'https://www.eg1.in/privacypolicy');
     }
   }, []);
 
@@ -473,8 +473,8 @@ export const PrivacyPolicyPage: React.FC<PrivacyPolicyPageProps> = ({ onNavigate
         <p style={{ marginBottom: 0 }}>
           If you have any questions about this privacy policy, please contact us via our{' '}
           <a
-            href="contact.html"
-            onClick={(e) => handleLinkClick(e, 'contact.html')}
+            href="contact"
+            onClick={(e) => handleLinkClick(e, 'contact')}
             style={{
               color: 'var(--eg-color-primary, #10b981)',
               textDecoration: 'underline',

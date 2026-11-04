@@ -13,14 +13,14 @@ export interface Eg1HeaderProps extends Partial<HeaderProps> {
  * Injects EG1 typography, logo badge, and navigation structure into the generic Header.
  */
 export const Eg1Header: React.FC<Eg1HeaderProps> = ({
-  currentPath = 'index.html',
+  currentPath = 'index',
   onNavigate,
   ...props
 }) => {
   return (
     <Header
       logoComponent={<Eg1Logo size={110} theme="auto" />}
-      brandUrl="index.html"
+      brandUrl="index"
       navLinks={EG1_NAV_LINKS}
       currentPath={currentPath}
       onNavigate={onNavigate}

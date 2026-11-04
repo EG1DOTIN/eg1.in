@@ -82,11 +82,11 @@ export const UpdatesPage: React.FC<UpdatesPageProps> = ({ onNavigate }) => {
               }}
             >
               <a
-                href="index.html"
+                href="index"
                 onClick={(e) => {
                   if (onNavigate) {
                     e.preventDefault();
-                    onNavigate('index.html');
+                    onNavigate('index');
                   }
                 }}
                 style={{

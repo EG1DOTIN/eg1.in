@@ -88,7 +88,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate }) => {
             onNavigate ? (
               <button
                 type="button"
-                onClick={() => onNavigate('index.html')}
+                onClick={() => onNavigate('index')}
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
