@@ -9,11 +9,23 @@ import {
 } from 'eg-web-core';
 import { EG1_FIREBASE_CONFIG } from '../config/firebase';
 import { Eg1Logo } from '../components/Eg1Logo';
+import './AdminPage.css';
 
 export interface AdminPageProps {
   onNavigate?: (href: string) => void;
 }
 
+/**
+ * Administrative suite page with 2FA protection, analytics, message inquiries, and blog authoring.
+ *
+ * @param props - AdminPageProps configuration
+ * @returns AdminPage view component
+ *
+ * @example
+ * ```tsx
+ * <AdminPage onNavigate={navigate} />
+ * ```
+ */
 export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate }) => {
   useEffect(() => {
     document.title = 'Admin Panel - EG1';
@@ -89,19 +101,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate }) => {
               <button
                 type="button"
                 onClick={() => onNavigate('index')}
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                  padding: '6px 12px',
-                  background: 'var(--eg-bg-tertiary, #1f2937)',
-                  border: '1px solid var(--eg-border, rgba(255, 255, 255, 0.12))',
-                  borderRadius: 'var(--eg-radius-md, 8px)',
-                  color: 'var(--eg-text-primary, #f9fafb)',
-                  fontSize: '0.8125rem',
-                  fontWeight: 500,
-                  cursor: 'pointer',
-                }}
+                className="eg1-admin-page__exit-btn"
               >
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />

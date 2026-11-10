@@ -1,0 +1,12 @@
+/**
+ * Eg1Header.css
+ * Branded Header companion styles for eg1.in portal
+ */
+
+.eg1-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  width: 100%;
+}
+

@@ -2,6 +2,7 @@ import React from 'react';
 import { Header, HeaderProps } from 'eg-web-core';
 import { Eg1Logo } from './Eg1Logo';
 import { EG1_NAV_LINKS, EG1_SITE_CONFIG } from '../config/siteConfig';
+import './Eg1Header.css';
 
 export interface Eg1HeaderProps extends Partial<HeaderProps> {
   currentPath?: string;
@@ -11,6 +12,14 @@ export interface Eg1HeaderProps extends Partial<HeaderProps> {
 /**
  * Branded Header component for eg1.in portal.
  * Injects EG1 typography, logo badge, and navigation structure into the generic Header.
+ *
+ * @param props - Eg1HeaderProps configuration
+ * @returns Fully styled header with EG1 brand identity
+ *
+ * @example
+ * ```tsx
+ * <Eg1Header currentPath="/apps" onNavigate={(path) => navigate(path)} />
+ * ```
  */
 export const Eg1Header: React.FC<Eg1HeaderProps> = ({
   currentPath = 'index',

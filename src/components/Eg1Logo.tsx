@@ -18,8 +18,16 @@ export interface Eg1LogoProps {
  * - 110px x 110px circular badge with concentric inner ring (5px inset)
  * - Great Vibes cursive script ("EG1") with 2.6rem sizing, weight 300
  * - Subdomain suffix (".in") in Open Sans/PT Sans, 0.8rem, revealing on hover
- * - Micro-byline ("by Gautam Jangid") dynamically decoded from data-info="YnkgR2F1dGFtIEphbmdpZA=="
+ * - Micro-byline dynamically decoded from data-info attribute
  * - Complete parity with light and dark gray theme variations
+ *
+ * @param props - Eg1LogoProps configuration
+ * @returns Stylized circular brand logo element
+ *
+ * @example
+ * ```tsx
+ * <Eg1Logo size={110} theme="auto" />
+ * ```
  */
 export const Eg1Logo: React.FC<Eg1LogoProps> = ({
   size = 110,

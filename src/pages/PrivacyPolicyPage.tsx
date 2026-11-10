@@ -4,11 +4,23 @@ import {
   PageHeader,
   ConsentControl,
 } from 'eg-web-core';
+import './PrivacyPolicyPage.css';
 
 export interface PrivacyPolicyPageProps {
   onNavigate?: (href: string) => void;
 }
 
+/**
+ * Privacy policy view providing detailed disclosures and interactive cookie consent controls.
+ *
+ * @param props - PrivacyPolicyPageProps configuration
+ * @returns PrivacyPolicyPage view component
+ *
+ * @example
+ * ```tsx
+ * <PrivacyPolicyPage onNavigate={navigate} />
+ * ```
+ */
 export const PrivacyPolicyPage: React.FC<PrivacyPolicyPageProps> = ({ onNavigate }) => {
   // Update document title and metadata for SEO on mount
   useEffect(() => {
@@ -53,20 +65,7 @@ export const PrivacyPolicyPage: React.FC<PrivacyPolicyPageProps> = ({ onNavigate
         subtitle="Our policies regarding the collection, use, and disclosure of personal and telemetry data."
       />
 
-      <article
-        style={{
-          background: 'var(--eg-bg-surface, #ffffff)',
-          border: '1px solid var(--eg-border-default, rgba(0, 0, 0, 0.1))',
-          borderRadius: 'var(--eg-radius-lg, 12px)',
-          padding: '36px',
-          boxShadow: 'var(--eg-shadow-sm, 0 1px 3px rgba(0, 0, 0, 0.08))',
-          lineHeight: 1.8,
-          color: 'var(--eg-text-secondary, #334155)',
-          marginBottom: '48px',
-          textAlign: 'justify',
-          textJustify: 'inter-word',
-        }}
-      >
+      <article className="eg1-privacy-policy-article">
         <p style={{ marginTop: 0 }}>
           EG1 (&quot;we&quot;, &quot;our&quot; or &quot;us&quot;) operates the{' '}
           <a

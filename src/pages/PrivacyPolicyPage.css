@@ -1,0 +1,52 @@
+/**
+ * PrivacyPolicyPage.css
+ * Privacy Policy article and legal disclosures styling
+ */
+
+.eg1-privacy-policy-article {
+  background: var(--eg-bg-surface, #ffffff);
+  border: 1px solid var(--eg-border-default, rgba(0, 0, 0, 0.1));
+  border-radius: var(--eg-radius-lg, 12px);
+  padding: 36px;
+  box-shadow: var(--eg-shadow-sm, 0 1px 3px rgba(0, 0, 0, 0.08));
+  line-height: 1.8;
+  color: var(--eg-text-secondary, #334155);
+  margin-bottom: 48px;
+  text-align: justify;
+  text-justify: inter-word;
+}
+
+.eg1-privacy-policy-article h2 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--eg-text-primary, #0f172a);
+  margin-top: 32px;
+  margin-bottom: 12px;
+}
+
+.eg1-privacy-policy-article h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--eg-text-primary, #0f172a);
+  margin-top: 24px;
+  margin-bottom: 8px;
+}
+
+.eg1-privacy-policy-article h4 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--eg-text-primary, #0f172a);
+  margin-top: 20px;
+  margin-bottom: 6px;
+}
+
+.eg1-privacy-policy-article a {
+  color: var(--eg-color-primary, #10b981);
+  text-decoration: underline;
+}
+
+.eg1-privacy-policy-article ul {
+  padding-left: 24px;
+  margin: 8px 0 16px;
+}
+

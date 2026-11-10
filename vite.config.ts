@@ -13,6 +13,15 @@ export default defineConfig({
   optimizeDeps: {
     exclude: ['eg-web-core'],
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom'],
+        },
+      },
+    },
+  },
   server: {
     host: '0.0.0.0',
     port: 5174,

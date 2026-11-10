@@ -8,6 +8,7 @@ import {
   DataCache,
   getAppSlug,
 } from 'eg-web-core';
+import './AppsPage.css';
 
 export interface AppsPageProps {
   products: ProductItem[];
@@ -16,6 +17,17 @@ export interface AppsPageProps {
   onNavigate?: (href: string) => void;
 }
 
+/**
+ * Applications catalog view with searchable product grid and detail modal.
+ *
+ * @param props - AppsPageProps configuration
+ * @returns AppsPage view component
+ *
+ * @example
+ * ```tsx
+ * <AppsPage products={products} onNavigate={navigate} />
+ * ```
+ */
 export const AppsPage: React.FC<AppsPageProps> = ({
   products,
   loading = false,
