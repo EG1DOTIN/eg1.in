@@ -61,7 +61,7 @@ flowchart TD
    - Consumes standardized, fully-customizable components from [`eg-web-core`](https://github.com/EG1DOTIN/eg-web-core).
    - Zero hardcoded branding in core primitives; visual identity configured cleanly via `Eg1Logo` and `preset="eg1"`.
 2. **Zero-Firestore Reads Pattern (`DataCache`)**:
-   - Product catalog (`data/apps.json`), update logs (`data/updates.json`), and website content are loaded from static, cacheable JSON.
+   - Product catalog (`data/apps/*.md`), update logs (`data/updates.json`), and website content are loaded from static, cacheable files.
    - Eliminates unnecessary cloud database reads, drastically reducing latency and cloud infrastructure costs.
 3. **High-Security Two-Factor Admin Console (`/admin`)**:
    - Three-tier defense: Google OAuth email whitelisting (configured via `VITE_ADMIN_ALLOWED_EMAILS`), 16-digit salted SHA-256 PIN challenge via standard browser Web Crypto API, and automated 24-hour IP lockout defense.

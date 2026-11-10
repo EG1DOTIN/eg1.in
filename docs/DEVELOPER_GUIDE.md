@@ -33,8 +33,8 @@ flowchart TD
     end
 
     subgraph Data["Data Stores (public/data/)"]
-        AppsJson["apps.json (Application Catalog)"] --> AppsPage
-        AppsJson --> HomePage
+        AppsMd["apps/*.md (Application Catalog)"] --> AppsPage
+        AppsMd --> HomePage
         ContentJson["website_content.json (Blogs & News)"] --> BlogPage
         ContentJson --> HomePage
         UpdatesJson["updates.json (Release Notes)"] --> UpdatesPage
@@ -102,35 +102,52 @@ flowchart TD
 
 ## 📦 3. Procedure: Content Management (Apps, Blogs & Updates)
 
-All website content is managed via JSON files in `public/data/`:
+All website content is managed via modular files in `public/data/`:
 
 ```mermaid
 flowchart LR
-    Apps["Apps Catalog<br/>public/data/apps.json"] --> WebApp["Catalog Grid & App Detail Pages"]
+    Apps["Apps Catalog<br/>public/data/apps/*.md"] --> WebApp["Catalog Grid & App Detail Pages"]
     Blogs["Blogs & Announcements<br/>public/data/website_content.json"] --> BlogReader["Technical Markdown Reader"]
     Updates["Changelogs<br/>public/data/updates.json"] --> UpdatesFeed["Updates & Release Timeline"]
 ```
 
-### A. How to Add an App in `public/data/apps.json`:
-Append a new object to the array in `public/data/apps.json`:
-```json
-{
-  "id": "my-tool",
-  "name": "My New Tool",
-  "category": "Productivity",
-  "description": "Short 1-2 sentence description for catalog cards.",
-  "status": "Production",
-  "version": "1.0.0",
-  "tags": ["Desktop", "Open Source", "Utility"],
-  "product_type": "DesktopApp",
-  "webapp_link": "",
-  "attach_upload_file_1": "https://github.com/EG1DOTIN/my-tool/releases",
-  "markdownBody": "### Overview\nDetailed Markdown description...\n\n### Features\n- Feature 1\n- Feature 2"
-}
+### A. How to Add an App in `public/data/apps/`:
+Create a new markdown file `public/data/apps/<app-slug>.md` with YAML frontmatter:
+```yaml
+---
+id: "my-tool"
+name: "My New Tool"
+slug: "my-tool"
+category: "Productivity"
+product_type: "Desktop App"
+version:
+  version-string: "1.0.0"
+  fetch-github: "false"
+active: "1"
+createdAt: "2026-11-01T00:00:00+05:30"
+updatedAt: "2026-11-10T18:00:00+05:30"
+icon: "./assets/img/apps/my-tool.webp"
+short_description: "Short 1-2 sentence description for catalog cards."
+button1:
+  WEBSITE: "https://my-tool.eg1.in/"
+  sameTab: "false"
+  icon: "icon-external-link"
+button2:
+  SOURCE: "https://github.com/EG1DOTIN/my-tool"
+  sameTab: "false"
+  icon: "icon-github"
+---
+
+### Overview
+Detailed Markdown description...
+
+### Features
+- Feature 1
+- Feature 2
 ```
 
 ### A2. How to Synchronize External App Releases (e.g. pyEGClamUI or Marwadi Chess):
-When an external project (such as `pyEGClamUI` or `Marwadi Chess`) publishes a new release on GitHub, synchronize its version into `apps.json` and `public/data/apps/*.md` with a single command:
+When an external project (such as `pyEGClamUI` or `Marwadi Chess`) publishes a new release on GitHub, synchronize its version into `public/data/apps/*.md` with a single command:
 
 ```bash
 python3 automation-scripts/sync_app_versions_from_github.py
@@ -138,9 +155,8 @@ python3 automation-scripts/sync_app_versions_from_github.py
 
 This script:
 1. Queries GitHub for the latest release tags of mapped applications.
-2. Updates `public/data/apps.json` with the latest version and timestamps.
-3. Updates `public/data/apps/{slug}.md` frontmatter (`version-string`) and sets `fetch-github: "false"`.
-4. Eliminates client-side runtime calls to `api.github.com`, preventing 403 rate-limiting and ensuring instant 0ms loads.
+2. Updates `public/data/apps/{slug}.md` frontmatter (`version-string`) and sets `fetch-github: "false"`.
+3. Eliminates client-side runtime calls to `api.github.com`, preventing 403 rate-limiting and ensuring instant 0ms loads.
 
 Verify the synchronization using the audit suite:
 ```bash

@@ -22,7 +22,7 @@ flowchart TD
     end
 
     subgraph StaticAssets["Static Public Data (data/)"]
-        AppsJSON["apps.json (Catalog)"]
+        AppsMD["apps/*.md (Catalog)"]
         UpdatesJSON["updates.json (Changelog)"]
         ContentJSON["website_content.json (About Excerpts)"]
         BlogMD["blog/id*.md (47 Markdown Articles)"]
