@@ -5,7 +5,7 @@ slug: "eg-web-core"
 category: "Libraries/Web"
 product_type: "React Library"
 version:
-  version-string: "1.0.1"
+  version-string: "1.1.0"
   fetch-github: "false"
 active: "1"
 createdAt: "2026-11-01T00:00:00+05:30"
