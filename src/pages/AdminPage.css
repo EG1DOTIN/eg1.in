@@ -1,0 +1,24 @@
+/**
+ * AdminPage.css
+ * EG1 Admin Portal page styles
+ */
+
+.eg1-admin-page__exit-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: var(--eg-bg-tertiary, #1f2937);
+  border: 1px solid var(--eg-border, rgba(255, 255, 255, 0.12));
+  border-radius: var(--eg-radius-md, 8px);
+  color: var(--eg-text-primary, #f9fafb);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--eg-transition-fast, 150ms);
+}
+
+.eg1-admin-page__exit-btn:hover {
+  background: var(--eg-bg-secondary, #111827);
+  border-color: var(--eg-border-hover, rgba(255, 255, 255, 0.2));
+}

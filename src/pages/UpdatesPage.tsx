@@ -6,11 +6,23 @@ import {
   FilterTabOption,
   UpdateItem,
 } from 'eg-web-core';
+import './UpdatesPage.css';
 
 export interface UpdatesPageProps {
   onNavigate?: (href: string) => void;
 }
 
+/**
+ * Updates timeline and release notes page reading from updates.json.
+ *
+ * @param props - UpdatesPageProps configuration
+ * @returns UpdatesPage view component
+ *
+ * @example
+ * ```tsx
+ * <UpdatesPage onNavigate={navigate} />
+ * ```
+ */
 export const UpdatesPage: React.FC<UpdatesPageProps> = ({ onNavigate }) => {
   // 1. Fetch platform updates from static JSON feed
   const { updates, loading, error, refresh } = useUpdates('data/updates.json');
@@ -54,33 +66,13 @@ export const UpdatesPage: React.FC<UpdatesPageProps> = ({ onNavigate }) => {
   );
 
   return (
-    <div>
+    <div className="eg1-updates-page">
       {/* Header Banner Section matching EG1 Image Slider style */}
-      <section
-        style={{
-          background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(56, 189, 248, 0.06) 100%)',
-          borderBottom: '1px solid var(--eg-border-default, rgba(0, 0, 0, 0.08))',
-          padding: '48px 20px',
-          textAlign: 'center',
-          marginBottom: '40px',
-          position: 'relative',
-        }}
-      >
+      <section className="eg1-updates-page__hero">
         <Container>
-          <div style={{ maxWidth: '820px', margin: '0 auto' }}>
+          <div className="eg1-updates-page__hero-content">
             {/* Breadcrumb Navigation */}
-            <nav
-              aria-label="Breadcrumb"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '8px',
-                fontSize: '13px',
-                color: 'var(--eg-text-muted, #94a3b8)',
-                marginBottom: '16px',
-                fontWeight: 600,
-              }}
-            >
+            <nav aria-label="Breadcrumb" className="eg1-updates-page__breadcrumb">
               <a
                 href="index"
                 onClick={(e) => {
@@ -89,41 +81,19 @@ export const UpdatesPage: React.FC<UpdatesPageProps> = ({ onNavigate }) => {
                     onNavigate('index');
                   }
                 }}
-                style={{
-                  color: 'var(--eg-text-secondary, #475569)',
-                  textDecoration: 'none',
-                  transition: 'color 0.15s ease',
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--eg-color-primary, #10b981)')}
-                onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--eg-text-secondary, #475569)')}
+                className="eg1-updates-page__breadcrumb-link"
               >
                 Home
               </a>
               <span>/</span>
-              <span style={{ color: 'var(--eg-color-primary, #10b981)' }}>Updates</span>
+              <span className="eg1-updates-page__breadcrumb-current">Updates</span>
             </nav>
 
-            <h1
-              style={{
-                fontSize: 'clamp(1.8rem, 1.4rem + 2vw, 2.8rem)',
-                fontWeight: 800,
-                color: 'var(--eg-text-primary, #0f172a)',
-                margin: '0 0 12px',
-                letterSpacing: '-0.5px',
-                lineHeight: 1.2,
-              }}
-            >
+            <h1 className="eg1-updates-page__title">
               UPDATES &amp; RELEASES
             </h1>
 
-            <p
-              style={{
-                fontSize: 'clamp(1rem, 0.95rem + 0.3vw, 1.15rem)',
-                color: 'var(--eg-text-secondary, #475569)',
-                lineHeight: 1.6,
-                margin: 0,
-              }}
-            >
+            <p className="eg1-updates-page__subtitle">
               Changelog, release history, and continuous development updates for EG1 apps, tools, and website features.
             </p>
           </div>
@@ -133,63 +103,21 @@ export const UpdatesPage: React.FC<UpdatesPageProps> = ({ onNavigate }) => {
       {/* Main Updates Content Container */}
       <Container>
         {loading && (
-          <div
-            style={{
-              textAlign: 'center',
-              padding: '80px 20px',
-              color: 'var(--eg-text-muted, #94a3b8)',
-            }}
-          >
-            <div
-              style={{
-                width: '40px',
-                height: '40px',
-                border: '3px solid var(--eg-border-default, rgba(0, 0, 0, 0.1))',
-                borderTopColor: 'var(--eg-color-primary, #10b981)',
-                borderRadius: '50%',
-                margin: '0 auto 16px',
-                animation: 'spin 0.8s linear infinite',
-              }}
-            />
-            <p style={{ margin: 0, fontSize: '15px', fontWeight: 600 }}>Loading latest updates...</p>
-            <style>
-              {`
-                @keyframes spin {
-                  to { transform: rotate(360deg); }
-                }
-              `}
-            </style>
+          <div className="eg1-updates-page__loading">
+            <div className="eg1-updates-page__spinner" />
+            <p className="eg1-updates-page__loading-text">Loading latest updates...</p>
           </div>
         )}
 
         {error && (
-          <div
-            style={{
-              textAlign: 'center',
-              padding: '60px 20px',
-              background: 'var(--eg-bg-surface, #ffffff)',
-              borderRadius: '16px',
-              border: '1px solid var(--eg-color-crimson, #ef4444)',
-              color: 'var(--eg-text-primary, #0f172a)',
-              maxWidth: '600px',
-              margin: '0 auto',
-            }}
-          >
-            <p style={{ margin: '0 0 16px', fontSize: '15px' }}>
+          <div className="eg1-updates-page__error">
+            <p className="eg1-updates-page__error-text">
               Unable to load updates at this time. Please check your network connection.
             </p>
             <button
               type="button"
               onClick={() => refresh()}
-              style={{
-                padding: '8px 20px',
-                borderRadius: '8px',
-                background: 'var(--eg-color-primary, #10b981)',
-                color: '#ffffff',
-                border: 'none',
-                fontWeight: 600,
-                cursor: 'pointer',
-              }}
+              className="eg1-updates-page__retry-btn"
             >
               Retry
             </button>

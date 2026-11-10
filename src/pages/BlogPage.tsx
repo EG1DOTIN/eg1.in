@@ -9,11 +9,23 @@ import {
   useBlogs,
   getBlogSlug,
 } from 'eg-web-core';
+import './BlogPage.css';
 
 export interface BlogPageProps {
   onNavigate?: (href: string) => void;
 }
 
+/**
+ * Blog index and article reading view with categories, search, and Markdown rendering.
+ *
+ * @param props - BlogPageProps configuration
+ * @returns BlogPage view component
+ *
+ * @example
+ * ```tsx
+ * <BlogPage onNavigate={navigate} />
+ * ```
+ */
 export const BlogPage: React.FC<BlogPageProps> = () => {
   const { blogs, loading } = useBlogs('data/blog-index.json', 'data/blog/');
 
@@ -336,8 +348,8 @@ export const BlogPage: React.FC<BlogPageProps> = () => {
 
   if (loading && blogs.length === 0) {
     return (
-      <Container style={{ paddingTop: '28px' }}>
-        <div style={{ textAlign: 'center', padding: '100px 0', color: 'var(--eg-text-muted, #94a3b8)' }}>
+      <Container className="eg1-blog-page__loading-wrapper">
+        <div className="eg1-blog-page__loading-text">
           <p style={{ fontSize: '16px', fontWeight: 600 }}>Loading technical engineering articles...</p>
         </div>
       </Container>
@@ -346,37 +358,6 @@ export const BlogPage: React.FC<BlogPageProps> = () => {
 
   return (
     <Container>
-      <style>{`
-        .eg-blog-layout {
-          display: grid;
-          grid-template-columns: minmax(0, 1fr) 300px;
-          gap: 32px;
-          align-items: start;
-        }
-        .eg-blog-layout.has-selected-post {
-          margin-top: 28px;
-        }
-        .eg-blog-main-col {
-          min-width: 0;
-          max-width: 100%;
-        }
-        .eg-blog-sidebar-col {
-          min-width: 0;
-          max-width: 100%;
-        }
-        @media (max-width: 900px) {
-          .eg-blog-layout {
-            grid-template-columns: 1fr;
-            gap: 28px;
-          }
-        }
-        @media (max-width: 600px) {
-          .eg-blog-layout {
-            gap: 20px;
-          }
-        }
-      `}</style>
-
       {!selectedPost && (
         <PageHeader
           title="Technical Articles & Tutorials"
@@ -403,34 +384,20 @@ export const BlogPage: React.FC<BlogPageProps> = () => {
             <div>
               {/* Active Filter Indicators */}
               {(selectedCategory || searchQuery.trim()) && (
-                <div
-                  style={{
-                    display: 'flex',
-                    flexWrap: 'wrap',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    gap: '12px',
-                    marginBottom: '24px',
-                    padding: '12px 18px',
-                    background: 'var(--eg-bg-surface, #ffffff)',
-                    border: '1px solid var(--eg-border-default, rgba(0, 0, 0, 0.1))',
-                    borderRadius: '8px',
-                    boxShadow: 'var(--eg-shadow-sm, 0 1px 3px rgba(0,0,0,0.04))',
-                  }}
-                >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                <div className="eg1-blog-page__filter-bar">
+                  <div className="eg1-blog-page__filter-tags">
                     {selectedCategory && (
-                      <span style={{ fontSize: '13.5px', color: 'var(--eg-text-primary, #0f172a)' }}>
+                      <span className="eg1-blog-page__filter-label">
                         Category: <strong>{selectedCategory}</strong>
                       </span>
                     )}
                     {selectedCategory && searchQuery.trim() && <span>•</span>}
                     {searchQuery.trim() && (
-                      <span style={{ fontSize: '13.5px', color: 'var(--eg-text-primary, #0f172a)' }}>
+                      <span className="eg1-blog-page__filter-label">
                         Search: <strong>"{searchQuery}"</strong>
                       </span>
                     )}
-                    <span style={{ fontSize: '12.5px', color: 'var(--eg-text-muted, #94a3b8)' }}>
+                    <span className="eg1-blog-page__filter-count">
                       ({filteredPosts.length} article{filteredPosts.length === 1 ? '' : 's'})
                     </span>
                   </div>
@@ -443,15 +410,7 @@ export const BlogPage: React.FC<BlogPageProps> = () => {
                       setCurrentPage(1);
                       updateUrl({ cat: null, search: null, page: 1 });
                     }}
-                    style={{
-                      background: 'none',
-                      border: 'none',
-                      color: 'var(--eg-color-primary, #b8860b)',
-                      fontSize: '13px',
-                      fontWeight: 600,
-                      cursor: 'pointer',
-                      padding: 0,
-                    }}
+                    className="eg1-blog-page__clear-btn"
                   >
                     Clear filters &times;
                   </button>

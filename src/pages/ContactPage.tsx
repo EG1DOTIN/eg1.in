@@ -6,11 +6,23 @@ import {
   DataCache,
 } from 'eg-web-core';
 import { EG1_FIREBASE_CONFIG } from '../config/firebase';
+import './ContactPage.css';
 
 export interface ContactPageProps {
   onNavigate?: (href: string) => void;
 }
 
+/**
+ * Contact inquiries page featuring math captcha, rate limiting, and direct Firestore ingestion.
+ *
+ * @param props - ContactPageProps configuration
+ * @returns ContactPage view component
+ *
+ * @example
+ * ```tsx
+ * <ContactPage onNavigate={navigate} />
+ * ```
+ */
 export const ContactPage: React.FC<ContactPageProps> = () => {
   const [subtitle, setSubtitle] = useState<string>(
     'To maintain a high-quality community, please avoid posting spam or irrelevant content. Your feedback and suggestions are welcome.'
@@ -41,7 +53,7 @@ export const ContactPage: React.FC<ContactPageProps> = () => {
   }, []);
 
   return (
-    <Container narrow>
+    <Container narrow className="eg1-contact-page">
       {/* 
         Clean, non-repetitive page header:
         - Navbar shows "CONTACT"
@@ -52,7 +64,7 @@ export const ContactPage: React.FC<ContactPageProps> = () => {
         subtitle={subtitle}
       />
 
-      <div style={{ marginBottom: '64px' }}>
+      <div className="eg1-contact-page__form-container">
         <ContactForm
           title="Any message?"
           submitButtonText="Send ⮠"
@@ -66,7 +78,7 @@ export const ContactPage: React.FC<ContactPageProps> = () => {
           appName="eg1.in"
           successTitle="Thank You for Contacting Us!"
           successMessage="Your message has been received. We will get back to you shortly."
-          style={{ maxWidth: '620px', margin: '0 auto' }}
+          className="eg1-contact-page__form"
         />
       </div>
     </Container>

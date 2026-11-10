@@ -1,0 +1,14 @@
+/**
+ * ContactPage.css
+ * Feedback & Inquiries page styles
+ */
+
+.eg1-contact-page__form-container {
+  margin-bottom: 64px;
+}
+
+.eg1-contact-page__form {
+  max-width: 620px;
+  margin: 0 auto;
+}
+

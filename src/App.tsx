@@ -19,13 +19,13 @@ DataCache.registerBlogIds([
 ]);
 
 import { HomePage } from './pages/HomePage';
-import { AppsPage } from './pages/AppsPage';
-import { AboutPage } from './pages/AboutPage';
-import { BlogPage } from './pages/BlogPage';
-import { UpdatesPage } from './pages/UpdatesPage';
-import { ContactPage } from './pages/ContactPage';
-import { PrivacyPolicyPage } from './pages/PrivacyPolicyPage';
-import { AdminPage } from './pages/AdminPage';
+const AppsPage = React.lazy(() => import('./pages/AppsPage').then((m) => ({ default: m.AppsPage })));
+const AboutPage = React.lazy(() => import('./pages/AboutPage').then((m) => ({ default: m.AboutPage })));
+const BlogPage = React.lazy(() => import('./pages/BlogPage').then((m) => ({ default: m.BlogPage })));
+const UpdatesPage = React.lazy(() => import('./pages/UpdatesPage').then((m) => ({ default: m.UpdatesPage })));
+const ContactPage = React.lazy(() => import('./pages/ContactPage').then((m) => ({ default: m.ContactPage })));
+const PrivacyPolicyPage = React.lazy(() => import('./pages/PrivacyPolicyPage').then((m) => ({ default: m.PrivacyPolicyPage })));
+const AdminPage = React.lazy(() => import('./pages/AdminPage').then((m) => ({ default: m.AdminPage })));
 import { Eg1Header } from './components/Eg1Header';
 import { Eg1Footer } from './components/Eg1Footer';
 
@@ -145,7 +145,11 @@ export const App: React.FC = () => {
   };
 
   if (currentPath === 'admin' || currentPath === 'admin.html') {
-    return <AdminPage onNavigate={handleNavigate} />;
+    return (
+      <React.Suspense fallback={<div style={{ minHeight: '60vh' }} />}>
+        <AdminPage onNavigate={handleNavigate} />
+      </React.Suspense>
+    );
   }
 
   return (
@@ -158,7 +162,9 @@ export const App: React.FC = () => {
 
       {/* Main Body Content */}
       <main style={{ flex: 1, paddingBottom: '40px' }}>
-        {renderCurrentPage()}
+        <React.Suspense fallback={<div style={{ minHeight: '60vh' }} />}>
+          {renderCurrentPage()}
+        </React.Suspense>
       </main>
 
       {/* Floating GDPR Consent Banner */}

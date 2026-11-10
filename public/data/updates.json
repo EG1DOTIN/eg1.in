@@ -1,5 +1,17 @@
 [
     {
+        "id": "update-2026-11-10-v4-1-0",
+        "type": "website",
+        "version": "4.1.0",
+        "title": "Modular Companion CSS Architecture, Route Code-Splitting & Comprehensive Type Documentation",
+        "date": "Nov 10, 2026",
+        "category": "ENHANCEMENT",
+        "icon": "sparkles",
+        "badge": "Minor",
+        "description": "Architected clean companion CSS modularization across all pages and components with 100% visual parity, integrated route-level code-splitting with isolated page bundles, added Subresource Integrity (SRI) protection to external CDN assets, hardened TypeScript types, and introduced comprehensive JSDoc/TSDoc API documentation.",
+        "link": "https://github.com/EG1DOTIN/eg1.in/pulls?q=is%3Apr+state%3Aclosed"
+    },
+    {
         "id": "update-2026-11-10-eg-web-core",
         "type": "app",
         "title": "eg-web-core, Open-Source React 18 Component Library & Design Tokens",

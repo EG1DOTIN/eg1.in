@@ -1,0 +1,219 @@
+/**
+ * AboutPage.css
+ * About EG1 Portal & Mission page styles
+ */
+
+.eg1-about-page {
+  padding-bottom: 60px;
+}
+
+.eg1-about-page__hero {
+  padding: 40px 16px 20px;
+  text-align: center;
+}
+
+.eg1-about-page__mission-pill {
+  display: inline-block;
+  padding: 4px 14px;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  background: rgba(184, 134, 11, 0.12);
+  color: var(--eg-color-primary, #b8860b);
+  margin-bottom: 14px;
+}
+
+.eg1-about-hero-title h1 {
+  font-size: clamp(1.75rem, 3.5vw, 2.4rem);
+  font-weight: 800;
+  color: var(--eg-text-primary, #0f172a);
+  margin: 0 0 12px;
+  letter-spacing: -0.5px;
+}
+
+.eg1-about-hero-title p {
+  font-size: clamp(1.05rem, 2vw, 1.25rem);
+  color: var(--eg-text-secondary, #475569);
+  line-height: 1.6;
+  margin: 0 auto;
+  max-width: 680px;
+}
+
+.eg1-about-body-text p {
+  font-size: 1.15rem;
+  line-height: 1.85;
+  text-align: justify;
+  text-justify: inter-word;
+  color: var(--eg-text-primary, #0f172a);
+  margin-bottom: 20px;
+}
+
+.eg1-about-body-text p:last-child {
+  margin-bottom: 0;
+}
+
+@media (max-width: 640px) {
+  .eg1-about-body-text p {
+    text-align: left;
+    font-size: 1.05rem;
+    line-height: 1.7;
+  }
+}
+
+.eg1-about-page__media-card {
+  position: relative;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.18);
+  border: 1px solid var(--eg-border-default, rgba(0, 0, 0, 0.12));
+  background: var(--eg-bg-surface, #ffffff);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.eg1-about-page__media-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.25);
+}
+
+.eg1-about-page__media-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+.eg1-about-page__article {
+  background: var(--eg-bg-surface, #ffffff);
+  border: 1px solid var(--eg-border-default, rgba(0, 0, 0, 0.1));
+  border-radius: var(--eg-radius-lg, 14px);
+  padding: clamp(24px, 4vw, 44px);
+  box-shadow: var(--eg-shadow-sm, 0 1px 4px rgba(0, 0, 0, 0.06));
+  box-sizing: border-box;
+}
+
+.eg1-about-page__article-heading {
+  font-size: clamp(1.35rem, 2.5vw, 1.7rem);
+  font-weight: 700;
+  color: var(--eg-text-primary, #0f172a);
+  margin-top: 0;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.eg1-about-page__principles {
+  margin-top: 36px;
+  padding-top: 24px;
+  border-top: 1px solid var(--eg-border-subtle, rgba(0, 0, 0, 0.08));
+}
+
+.eg1-about-page__principles-title {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.9px;
+  color: var(--eg-text-muted, #64748b);
+  margin: 0 0 14px 0;
+  font-weight: 700;
+}
+
+.eg1-about-page__badges-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.eg1-about-page__pillars-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
+  gap: 20px;
+}
+
+.eg1-about-page__pillar-card {
+  background: var(--eg-bg-surface, #ffffff);
+  border: 1px solid var(--eg-border-default, rgba(0, 0, 0, 0.1));
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: var(--eg-shadow-sm, 0 1px 3px rgba(0, 0, 0, 0.05));
+}
+
+.eg1-about-page__pillar-icon {
+  font-size: 24px;
+  margin-bottom: 12px;
+}
+
+.eg1-about-page__pillar-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--eg-text-primary, #0f172a);
+  margin: 0 0 8px;
+}
+
+.eg1-about-page__pillar-desc {
+  font-size: 13.5px;
+  color: var(--eg-text-secondary, #475569);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.eg1-about-page__actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.eg1-about-page__btn-primary {
+  padding: 11px 24px;
+  border-radius: 8px;
+  background: var(--eg-color-primary, #b8860b);
+  color: #ffffff;
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(184, 134, 11, 0.35);
+  transition: all 0.2s ease;
+}
+
+.eg1-about-page__btn-secondary {
+  padding: 11px 22px;
+  border-radius: 8px;
+  background: var(--eg-bg-surface, #ffffff);
+  color: var(--eg-text-primary, #0f172a);
+  border: 1px solid var(--eg-border-default, rgba(0, 0, 0, 0.15));
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.eg1-about-page__btn-subtle {
+  padding: 11px 20px;
+  border-radius: 8px;
+  background: var(--eg-bg-subtle, rgba(0, 0, 0, 0.04));
+  color: var(--eg-text-primary, #0f172a);
+  border: 1px solid var(--eg-border-subtle, rgba(0, 0, 0, 0.1));
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.eg1-about-page__btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 11px 20px;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--eg-text-secondary, #475569);
+  border: 1px solid var(--eg-border-subtle, rgba(0, 0, 0, 0.12));
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}

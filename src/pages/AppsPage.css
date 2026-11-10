@@ -1,0 +1,25 @@
+.eg1-apps-page {
+  padding-bottom: 60px;
+  box-sizing: border-box;
+}
+
+.eg1-apps-header {
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+.eg1-apps-title {
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  font-weight: 800;
+  color: var(--eg-text-primary, #0f172a);
+  margin-bottom: 12px;
+}
+
+.eg1-apps-desc {
+  font-size: 1.05rem;
+  color: var(--eg-text-secondary, #64748b);
+  max-width: 680px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+

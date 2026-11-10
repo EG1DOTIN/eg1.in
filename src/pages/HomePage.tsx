@@ -12,6 +12,7 @@ import {
   sanitizeUrl,
 } from 'eg-web-core';
 import { EG1_SITE_CONFIG } from '../config/siteConfig';
+import './HomePage.css';
 
 export interface HomePageProps {
   products: ProductItem[];
@@ -19,6 +20,17 @@ export interface HomePageProps {
   onNavigate: (href: string) => void;
 }
 
+/**
+ * Primary home portal landing view with hero showcase, totem ticker, and app catalog.
+ *
+ * @param props - HomePageProps configuration
+ * @returns HomePage view component
+ *
+ * @example
+ * ```tsx
+ * <HomePage products={products} news={news} onNavigate={navigate} />
+ * ```
+ */
 export const HomePage: React.FC<HomePageProps> = ({ products, news, onNavigate }) => {
   const [heroTitleHtml, setHeroTitleHtml] = useState<string>(
     EG1_SITE_CONFIG.heroTitle || 'EG1 - An open-source hub for innovative and creative projects'
@@ -581,115 +593,6 @@ export const HomePage: React.FC<HomePageProps> = ({ products, news, onNavigate }
           </div>
         </Container>
       </section>
-
-      {/* ── Embedded Responsive Stylesheet ───────────────────────────────── */}
-      <style>{`
-        .eg1-hero-version {
-          text-transform: none !important;
-          font-size: 0.64em !important;
-          font-family: Georgia, 'Times New Roman', Times, serif !important;
-          font-style: normal !important;
-          font-weight: 400 !important;
-          vertical-align: super !important;
-          color: inherit !important;
-          display: inline !important;
-          line-height: 0 !important;
-        }
-
-        .eg1-principles-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-          gap: 22px;
-        }
-
-        .eg1-principle-card {
-          background-color: var(--eg-bg-surface, #ffffff);
-          border: 1px solid var(--eg-border-subtle, rgba(0, 0, 0, 0.08));
-          border-radius: 10px;
-          padding: 28px 22px;
-          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-          text-align: center;
-          transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
-        }
-
-        .eg1-principle-card:hover {
-          transform: translateY(-3px);
-          box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-          border-color: #b8860b;
-        }
-
-        .eg1-principle-icon-wrap {
-          width: 52px;
-          height: 52px;
-          border-radius: 12px;
-          background-color: rgba(184, 134, 11, 0.12);
-          color: #b8860b;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          margin: 0 auto 16px auto;
-          border: 1px solid rgba(184, 134, 11, 0.22);
-        }
-
-        [data-theme="dark"] .eg1-principle-icon-wrap,
-        [data-theme="clamui-dark"] .eg1-principle-icon-wrap,
-        [data-theme="crystal"] .eg1-principle-icon-wrap {
-          background-color: rgba(245, 158, 11, 0.15);
-          color: #f59e0b;
-          border-color: rgba(245, 158, 11, 0.3);
-        }
-
-        .eg1-principle-name {
-          font-size: 1.08rem;
-          font-weight: 700;
-          color: var(--eg-text-primary, #0f172a);
-          margin: 0 0 10px 0;
-          line-height: 1.4;
-        }
-
-        .eg1-principle-text {
-          font-size: 0.88rem;
-          color: var(--eg-text-secondary, #64748b);
-          line-height: 1.6;
-          margin: 0;
-        }
-
-        /* ── Mobile Responsive Overrides ───────────────────────────────── */
-        @media (max-width: 768px) {
-          .eg1-hero-actions {
-            flex-direction: column !important;
-            align-items: stretch !important;
-          }
-          .eg1-hero-btn {
-            width: 100% !important;
-            box-sizing: border-box !important;
-          }
-          .eg1-principles-grid {
-            grid-template-columns: 1fr !important;
-            gap: 16px !important;
-          }
-          .eg1-principle-card {
-            padding: 22px 18px !important;
-          }
-          .eg1-community-banner {
-            padding: 24px 16px !important;
-          }
-          .eg1-cta-btn {
-            width: 100% !important;
-            box-sizing: border-box !important;
-          }
-          .eg1-featured-header {
-            flex-direction: column !important;
-            align-items: stretch !important;
-            gap: 16px !important;
-          }
-          .eg1-featured-view-all-btn {
-            width: 100% !important;
-            justify-content: center !important;
-            box-sizing: border-box !important;
-          }
-        }
-      `}</style>
     </div>
   );
 };

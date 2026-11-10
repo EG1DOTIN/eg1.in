@@ -2,6 +2,7 @@ import React from 'react';
 import { Footer, FooterProps } from 'eg-web-core';
 import { Eg1Logo } from './Eg1Logo';
 import { EG1_SITE_CONFIG, EG1_SOCIAL_LINKS } from '../config/siteConfig';
+import './Eg1Footer.css';
 
 export interface Eg1FooterProps extends Partial<FooterProps> {
   onNavigate?: (href: string) => void;
@@ -10,6 +11,14 @@ export interface Eg1FooterProps extends Partial<FooterProps> {
 /**
  * Branded Footer component for eg1.in portal.
  * Injects EG1 branding, about text, social channels, and copyright attribution into the generic Footer.
+ *
+ * @param props - Eg1FooterProps configuration
+ * @returns Fully styled footer with EG1 brand identity
+ *
+ * @example
+ * ```tsx
+ * <Eg1Footer onNavigate={(path) => navigate(path)} />
+ * ```
  */
 export const Eg1Footer: React.FC<Eg1FooterProps> = ({ onNavigate, ...props }) => {
   return (
