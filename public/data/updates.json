@@ -1,5 +1,16 @@
 [
     {
+        "id": "update-2026-11-10-eg-web-core",
+        "type": "app",
+        "title": "eg-web-core, Open-Source React 18 Component Library & Design Tokens",
+        "date": "Nov 10, 2026",
+        "category": "APP",
+        "icon": "sparkles",
+        "badge": "Release",
+        "description": "Added eg-web-core to the official applications catalog. The foundational React 18 + TypeScript component library and design system powering all EG1 web applications is now available to explore at web-core.eg1.in with full open-source access.",
+        "link": "https://web-core.eg1.in/"
+    },
+    {
         "id": "update-2026-11-03-v4-0-1",
         "type": "website",
         "version": "4.0.1",

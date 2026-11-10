@@ -9,7 +9,7 @@ version:
   fetch-github: "false"
 active: "1"
 createdAt: "2026-10-01T00:00:00+05:30"
-updatedAt: "2026-11-03T22:04:16.459443+05:30"
+updatedAt: "2026-11-10T18:08:48.484802+05:30"
 icon: "./assets/img/apps/egav.png"
 short_description: "An open-source, cross-platform desktop GUI for ClamAV antivirus engine. Built with Python and PySide6 (Qt)."
 button1:

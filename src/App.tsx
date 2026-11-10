@@ -10,7 +10,7 @@ import {
 import { EG1_FIREBASE_CONFIG } from './config/firebase';
 
 // Register site-specific application catalog slugs and blog post IDs for Markdown fallback lookups
-DataCache.registerAppSlugs(['marwadi-chess', 'pyegclamui']);
+DataCache.registerAppSlugs(['marwadi-chess', 'pyegclamui', 'eg-web-core']);
 DataCache.registerBlogIds([
   '6', '7', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20',
   '21', '35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45', '46',
@@ -47,13 +47,20 @@ const normalizePath = (path: string): string => {
   return lower;
 };
 
+// Stable options for markdown apps catalog ingestion
+const PRODUCTS_OPTIONS = { mdDir: '/data/apps/' };
+
 export const App: React.FC = () => {
   const [currentPath, setCurrentPath] = useState<string>(() => {
     if (typeof window === 'undefined') return 'index';
     return normalizePath(window.location.pathname);
   });
+  const [currentSearch, setCurrentSearch] = useState<string>(() => {
+    if (typeof window === 'undefined') return '';
+    return window.location.search;
+  });
 
-  const { products } = useProducts('data/apps.json');
+  const { products, loading } = useProducts(PRODUCTS_OPTIONS);
   const { news } = useNews('data/website_content.json');
 
   // Activate anonymous non-invasive telemetry
@@ -73,10 +80,11 @@ export const App: React.FC = () => {
     }
 
     const norm = normalizePath(href);
+    const queryPart = href.includes('?') ? `?${href.split('?')[1]}` : '';
     setCurrentPath(norm);
+    setCurrentSearch(queryPart);
     if (typeof window !== 'undefined' && window.history.pushState) {
       const targetPath = norm === 'index' ? '/' : `/${norm}`;
-      const queryPart = href.includes('?') ? `?${href.split('?')[1]}` : '';
       window.history.pushState({}, '', `${targetPath}${queryPart}`);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -85,6 +93,7 @@ export const App: React.FC = () => {
   useEffect(() => {
     const onPopState = () => {
       setCurrentPath(normalizePath(window.location.pathname));
+      setCurrentSearch(window.location.search);
     };
     window.addEventListener('popstate', onPopState);
     return () => window.removeEventListener('popstate', onPopState);
@@ -94,7 +103,14 @@ export const App: React.FC = () => {
     switch (currentPath) {
       case 'apps':
       case 'apps.html':
-        return <AppsPage products={products} onNavigate={handleNavigate} />;
+        return (
+          <AppsPage
+            products={products}
+            loading={loading}
+            currentSearch={currentSearch}
+            onNavigate={handleNavigate}
+          />
+        );
       case 'about':
       case 'about.html':
         return <AboutPage onNavigate={handleNavigate} />;

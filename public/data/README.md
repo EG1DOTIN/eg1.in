@@ -4,24 +4,26 @@ This directory contains the primary static JSON databases feeding the `eg1.in` w
 
 ---
 
-## 🗄️ JSON Files & Schemas
+## 🗄️ Datasets & Schemas
 
-### 1. `apps.json` — Applications & Projects Catalog
-Contains an array of applications featured across the homepage and the `/apps` catalog.
-```json
-{
-  "id": "pyegclamui",
-  "name": "pyEGClamUI",
-  "category": "Security",
-  "description": "An open-source desktop GUI for the ClamAV antivirus engine built with Python and PySide6.",
-  "status": "Production",
-  "version": "3.2.0",
-  "tags": ["Security", "Desktop", "ClamAV", "PySide6"],
-  "product_type": "DesktopApp",
-  "webapp_link": "",
-  "attach_upload_file_1": "https://github.com/EG1DOTIN/pyEGClamUI/releases",
-  "markdownBody": "### Features\n- Real-time scanning..."
-}
+### 1. `apps/*.md` — Applications & Projects Catalog (Modular Markdown)
+Each application is defined as an individual Markdown file in `public/data/apps/<app-slug>.md` with YAML frontmatter.
+```yaml
+---
+id: "pyegclamui"
+name: "pyEGClamUI"
+slug: "pyegclamui"
+category: "Security/Tools"
+product_type: "Desktop App"
+version:
+  version-string: "3.2.0"
+  fetch-github: "false"
+active: "1"
+createdAt: "2026-10-01T00:00:00+05:30"
+updatedAt: "2026-11-10T17:09:50.021856+05:30"
+icon: "./assets/img/apps/egav.png"
+short_description: "An open-source, cross-platform desktop GUI for ClamAV antivirus engine. Built with Python and PySide6 (Qt)."
+---
 ```
 
 ### 2. `website_content.json` — Technical Blog & Announcements

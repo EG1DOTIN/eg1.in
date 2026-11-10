@@ -11,21 +11,35 @@ import {
 
 export interface AppsPageProps {
   products: ProductItem[];
+  loading?: boolean;
+  currentSearch?: string;
   onNavigate?: (href: string) => void;
 }
 
-export const AppsPage: React.FC<AppsPageProps> = ({ products, onNavigate }) => {
+export const AppsPage: React.FC<AppsPageProps> = ({
+  products,
+  loading = false,
+  currentSearch,
+  onNavigate,
+}) => {
   // Read query parameters for deep linking (?title=slug or ?id=id)
-  const getSlugFromUrl = (): string | null => {
-    if (typeof window === 'undefined' || !window.location.search) return null;
-    const params = new URLSearchParams(window.location.search);
+  const getSlugFromUrl = useCallback((): string | null => {
+    if (typeof window === 'undefined') return null;
+    const searchStr = currentSearch !== undefined ? currentSearch : window.location.search;
+    if (!searchStr) return null;
+    const params = new URLSearchParams(searchStr);
     const title = params.get('title') || params.get('id');
     return title ? title.trim().toLowerCase().replace(/_/g, '-') : null;
-  };
+  }, [currentSearch]);
 
   const [selectedSlug, setSelectedSlug] = useState<string | null>(getSlugFromUrl);
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [search, setSearch] = useState<string>('');
+
+  // Synchronize when currentSearch updates via SPA navigation
+  useEffect(() => {
+    setSelectedSlug(getSlugFromUrl());
+  }, [getSlugFromUrl]);
 
   // Handle browser back / forward navigation
   useEffect(() => {
@@ -34,7 +48,7 @@ export const AppsPage: React.FC<AppsPageProps> = ({ products, onNavigate }) => {
     };
     window.addEventListener('popstate', onPopState);
     return () => window.removeEventListener('popstate', onPopState);
-  }, []);
+  }, [getSlugFromUrl]);
 
   // Find the selected product from passed products or from DataCache memory
   const selectedProduct = useMemo(() => {
@@ -125,6 +139,8 @@ export const AppsPage: React.FC<AppsPageProps> = ({ products, onNavigate }) => {
         query === '' ||
         (p.title && p.title.toLowerCase().includes(query)) ||
         (p.name && p.name.toLowerCase().includes(query)) ||
+        (p.slug && p.slug.toLowerCase().includes(query)) ||
+        (p.product_type && p.product_type.toLowerCase().includes(query)) ||
         (p.description && p.description.toLowerCase().includes(query)) ||
         (p.short_description && p.short_description.toLowerCase().includes(query)) ||
         (p.category && p.category.toLowerCase().includes(query));
@@ -137,7 +153,21 @@ export const AppsPage: React.FC<AppsPageProps> = ({ products, onNavigate }) => {
     <Container style={{ paddingTop: '24px' }}>
       {/* ── Mode 1: Deep-Linked Detail View ── */}
       {selectedSlug ? (
-        selectedProduct ? (
+        loading && !selectedProduct ? (
+          <div
+            style={{
+              padding: '60px 24px',
+              textAlign: 'center',
+              background: 'var(--eg-bg-surface, #ffffff)',
+              borderRadius: '12px',
+              border: '1px solid var(--eg-border-default, rgba(0, 0, 0, 0.12))',
+            }}
+          >
+            <p style={{ color: 'var(--eg-text-muted, #64748b)', margin: 0, fontSize: '15px' }}>
+              Loading application details...
+            </p>
+          </div>
+        ) : selectedProduct ? (
           <div>
             <div style={{ marginBottom: '18px' }}>
               <button
@@ -275,7 +305,17 @@ export const AppsPage: React.FC<AppsPageProps> = ({ products, onNavigate }) => {
           </div>
 
           {/* Product Grid or Empty State */}
-          {filteredProducts.length === 0 ? (
+          {loading && products.length === 0 ? (
+            <div
+              style={{
+                textAlign: 'center',
+                padding: '60px 0',
+                color: 'var(--eg-text-muted, #94a3b8)',
+              }}
+            >
+              <p style={{ fontSize: '15px' }}>Loading application catalog...</p>
+            </div>
+          ) : filteredProducts.length === 0 ? (
             <div
               style={{
                 textAlign: 'center',

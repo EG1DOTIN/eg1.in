@@ -7,6 +7,7 @@ import {
   NewsItem,
   TotemTicker,
   DataCache,
+  getAppSlug,
   sanitizeHtml,
   sanitizeUrl,
 } from 'eg-web-core';
@@ -78,23 +79,16 @@ export const HomePage: React.FC<HomePageProps> = ({ products, news, onNavigate }
     onNavigate(href);
   };
 
-  // Top 2 featured projects in chronological order (latest first: 1st pyEGClamUI, 2nd Marwadi Chess)
+  // Top 2 latest applications in chronological order (createdAt descending)
   const featuredProducts = [...(products || [])]
     .filter((p) => p.active !== false && (p as any).active !== '0' && (p as any).active !== 0)
     .sort((a, b) => {
-      // 1. Explicit priority requested: pyegclamui first, then marwadi-chess
-      if (a.id === 'pyegclamui' || a.slug === 'pyegclamui') return -1;
-      if (b.id === 'pyegclamui' || b.slug === 'pyegclamui') return 1;
-      if (a.id === 'marwadi-chess' || a.slug === 'marwadi-chess') return -1;
-      if (b.id === 'marwadi-chess' || b.slug === 'marwadi-chess') return 1;
-
-      // 2. Chronological fallback (latest date first)
-      const dateA = new Date((a.updatedAt || a.createdAt || 0) as string).getTime();
-      const dateB = new Date((b.updatedAt || b.createdAt || 0) as string).getTime();
-      if (!isNaN(dateA) && !isNaN(dateB)) {
+      const dateA = new Date((a.createdAt || a.updatedAt || 0) as string).getTime();
+      const dateB = new Date((b.createdAt || b.updatedAt || 0) as string).getTime();
+      if (!isNaN(dateA) && !isNaN(dateB) && dateA !== dateB) {
         return dateB - dateA;
       }
-      return 0;
+      return String(b.id || '').localeCompare(String(a.id || ''));
     })
     .slice(0, 2);
 
@@ -469,7 +463,7 @@ export const HomePage: React.FC<HomePageProps> = ({ products, news, onNavigate }
 
             <ProductGrid
               products={featuredProducts}
-              onSelect={(p) => onNavigate(`apps?id=${p.id}`)}
+              onSelect={(p) => onNavigate(`apps?title=${getAppSlug(p)}`)}
             />
           </Container>
         </Section>

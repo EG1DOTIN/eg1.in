@@ -3,19 +3,17 @@
 audit_app_versions.py
 ---------------------
 Audits and validates that all application versions in eg1.in:
-1. Are populated with valid semantic version strings in public/data/apps.json.
-2. Match their corresponding markdown frontmatter in public/data/apps/*.md.
-3. Have 'fetch-github' disabled ("false") so clients do not make runtime API calls.
+1. Are populated with valid semantic version strings in public/data/apps/*.md frontmatter.
+2. Have 'fetch-github' disabled ("false") so clients do not make runtime API calls.
+3. Contain required metadata fields (id, name, category, product_type, icon, createdAt).
 """
 
 import sys
-import json
 import re
 from pathlib import Path
 
 ROOT_DIR = Path(__file__).resolve().parent.parent.parent
 DATA_DIR = ROOT_DIR / "public" / "data"
-APPS_JSON = DATA_DIR / "apps.json"
 APPS_MD_DIR = DATA_DIR / "apps"
 
 SEMVER_REGEX = re.compile(r"^\d+\.\d+(\.\d+)?(-[a-zA-Z0-9_.-]+)?$")
@@ -25,58 +23,46 @@ def audit_app_versions() -> int:
     errors = []
     warnings = []
 
-    if not APPS_JSON.exists():
-        print(f"❌ Error: {APPS_JSON} is missing.")
+    if not APPS_MD_DIR.exists():
+        print(f"❌ Error: {APPS_MD_DIR} directory is missing.")
         return 1
 
-    try:
-        apps = json.loads(APPS_JSON.read_text(encoding="utf-8"))
-    except Exception as e:
-        print(f"❌ Error parsing {APPS_JSON}: {e}")
+    md_files = sorted(APPS_MD_DIR.glob("*.md"))
+    if not md_files:
+        print(f"❌ Error: {APPS_MD_DIR} must contain at least one application markdown file.")
         return 1
 
-    if not isinstance(apps, list) or len(apps) == 0:
-        print(f"❌ Error: {APPS_JSON} must contain a non-empty list of applications.")
-        return 1
+    for md_file in md_files:
+        md_content = md_file.read_text(encoding="utf-8")
+        app_name = md_file.stem
 
-    for app in apps:
-        app_id = app.get("slug") or app.get("id")
-        app_name = app.get("name") or app.get("title") or app_id
-        version = app.get("version", "").strip()
+        name_match = re.search(r'name:\s*"([^"]*)"', md_content)
+        if name_match:
+            app_name = name_match.group(1)
 
-        # 1. Validate version string
-        if not version:
-            errors.append(f"App '{app_name}' ({app_id}) has empty or missing version in apps.json")
-        elif not SEMVER_REGEX.match(version):
-            warnings.append(f"App '{app_name}' ({app_id}) has non-standard version format: '{version}'")
-
-        # 2. Validate markdown frontmatter
-        md_file = APPS_MD_DIR / f"{app_id}.md"
-        if not md_file.exists():
-            errors.append(f"Missing markdown frontmatter file for app '{app_name}': {md_file.name}")
+        # 1. Check version-string in markdown
+        v_match = re.search(r'version-string:\s*"([^"]*)"', md_content)
+        if not v_match:
+            errors.append(f"{md_file.name}: Missing 'version-string' in frontmatter")
         else:
-            md_content = md_file.read_text(encoding="utf-8")
+            version = v_match.group(1).strip()
+            if not version:
+                errors.append(f"{md_file.name}: Empty 'version-string' in frontmatter")
+            elif not SEMVER_REGEX.match(version):
+                warnings.append(f"{md_file.name}: Non-standard version format '{version}'")
 
-            # Check version-string in markdown
-            v_match = re.search(r'version-string:\s*"([^"]*)"', md_content)
-            if not v_match:
-                errors.append(f"{md_file.name}: Missing 'version-string' in frontmatter")
-            else:
-                md_version = v_match.group(1).strip()
-                if md_version != version:
-                    errors.append(
-                        f"Version mismatch for '{app_name}': apps.json has '{version}', "
-                        f"but {md_file.name} has '{md_version}'. "
-                        f"Run 'python3 automation-scripts/sync_app_versions_from_github.py' to synchronize."
-                    )
+        # 2. Check fetch-github is false
+        fg_match = re.search(r'fetch-github:\s*"([^"]*)"', md_content)
+        if fg_match and fg_match.group(1).lower() == "true":
+            errors.append(
+                f"{md_file.name}: 'fetch-github' is set to 'true'. "
+                f"It must be 'false' to prevent client-side runtime GitHub API calls."
+            )
 
-            # Check fetch-github is false
-            fg_match = re.search(r'fetch-github:\s*"([^"]*)"', md_content)
-            if fg_match and fg_match.group(1).lower() == "true":
-                errors.append(
-                    f"{md_file.name}: 'fetch-github' is set to 'true'. "
-                    f"It must be 'false' to prevent client-side runtime GitHub API calls."
-                )
+        # 3. Check required fields
+        for field in ("category", "product_type", "icon", "createdAt"):
+            if not re.search(rf'{field}:\s*"([^"]*)"', md_content):
+                errors.append(f"{md_file.name}: Missing required field '{field}' in frontmatter")
 
     if warnings:
         print(f"⚠️ App version audit found {len(warnings)} warning(s):")
@@ -89,10 +75,9 @@ def audit_app_versions() -> int:
             print(f"   • {err}")
         return 1
 
-    print(f"✅ App version audit passed: All {len(apps)} applications have synchronized static versions.")
+    print(f"✅ App version audit passed: All {len(md_files)} markdown applications have valid static versions.")
     return 0
 
 
 if __name__ == "__main__":
     sys.exit(audit_app_versions())
-

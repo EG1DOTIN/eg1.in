@@ -116,12 +116,12 @@ def main():
         CheckTask(
             name="1. Dynamic Datasets & 47 Blog Articles Audit",
             command=["{PYTHON}", "automation-scripts/audits/validate_datasets.py"],
-            description="Validates apps.json, updates.json, website_content.json, and blog posts"
+            description="Validates apps/*.md, updates.json, website_content.json, and blog posts"
         ),
         CheckTask(
             name="2. Application Versions & Static Metadata Audit",
             command=["{PYTHON}", "automation-scripts/audits/audit_app_versions.py"],
-            description="Validates static app versions in apps.json and disables runtime GitHub queries"
+            description="Validates static app versions in apps/*.md and disables runtime GitHub queries"
         ),
         CheckTask(
             name="3. Documentation Links & Anchors Audit",

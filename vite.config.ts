@@ -3,7 +3,16 @@ import react from '@vitejs/plugin-react';
 import path from 'path';
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react({
+      babel: {
+        compact: false,
+      },
+    }),
+  ],
+  optimizeDeps: {
+    exclude: ['eg-web-core'],
+  },
   server: {
     host: '0.0.0.0',
     port: 5174,

@@ -12,6 +12,7 @@ Validates all dynamic JSON datasets and Markdown blog posts for eg1.in:
 
 import sys
 import json
+import re
 from pathlib import Path
 
 ROOT_DIR = Path(__file__).resolve().parent.parent.parent
@@ -21,26 +22,22 @@ DATA_DIR = ROOT_DIR / "public" / "data"
 def validate_datasets() -> int:
     errors = []
 
-    # 1. Validate apps.json
-    apps_file = DATA_DIR / "apps.json"
-    if not apps_file.exists():
-        errors.append(f"Missing {apps_file}")
+    # 1. Validate public/data/apps/*.md catalog
+    apps_dir = DATA_DIR / "apps"
+    if not apps_dir.exists() or not any(apps_dir.glob("*.md")):
+        errors.append(f"Missing application markdown files in {apps_dir}")
     else:
-        try:
-            apps = json.loads(apps_file.read_text(encoding="utf-8"))
-            if not isinstance(apps, list) or len(apps) == 0:
-                errors.append("apps.json must be a non-empty list of applications")
+        seen_ids = set()
+        for md_file in apps_dir.glob("*.md"):
+            content = md_file.read_text(encoding="utf-8")
+            id_match = re.search(r'id:\s*"([^"]*)"', content)
+            if not id_match or not id_match.group(1):
+                errors.append(f"Application markdown '{md_file.name}' missing 'id'")
             else:
-                seen_ids = set()
-                for app in apps:
-                    app_id = app.get("id")
-                    if not app_id:
-                        errors.append(f"Application missing 'id': {app.get('name')}")
-                    elif app_id in seen_ids:
-                        errors.append(f"Duplicate application ID '{app_id}'")
-                    seen_ids.add(app_id)
-        except Exception as e:
-            errors.append(f"apps.json parsing error: {e}")
+                app_id = id_match.group(1)
+                if app_id in seen_ids:
+                    errors.append(f"Duplicate application ID '{app_id}' in {md_file.name}")
+                seen_ids.add(app_id)
 
     # 2. Validate updates.json
     updates_file = DATA_DIR / "updates.json"

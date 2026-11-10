@@ -23,7 +23,7 @@ Comprehensive guide to each application page and view implemented in [`eg1.in`](
 
 The landing page provides an immediate interactive introduction to the EG1 ecosystem:
 - **Hero Image Slider**: Utilizes [`ImageSlider`](https://github.com/EG1DOTIN/eg-web-core/blob/main/docs/layout-components.md) with crystal glassmorphism styling, automated slide rotation, dot indicators, and direct CTA actions.
-- **Featured Applications Showcase**: Displays top applications loaded via `useProducts('data/apps.json')` with platform badges and launch buttons.
+- **Featured Applications Showcase**: Displays top applications loaded via `useProducts({ mdDir: 'data/apps/' })` with platform badges and launch buttons.
 - **Latest Updates & News**: Presents recent highlights loaded via `useNews('data/website_content.json')`.
 - **Dynamic About Excerpt**: Pulls company summary excerpt with `Read more →` navigation to `about.html`.
 
