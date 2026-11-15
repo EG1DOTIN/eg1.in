@@ -26,34 +26,53 @@ short_description: "An open-source, cross-platform desktop GUI for ClamAV antivi
 ---
 ```
 
-### 2. `website_content.json` — Technical Blog & Announcements
-Stores the 47+ technical blog posts and announcements.
-```json
-{
-  "announcements": [
-    {
-      "id": "1",
-      "title": "Welcome to EG1 v4",
-      "date": "October 2026",
-      "content": "Announcement summary..."
-    }
-  ],
-  "blog_posts": [
-    {
-      "id": "70",
-      "title": "Dual-Tier Adaptive Architecture in Python",
-      "date": "October 2026",
-      "category": "Architecture",
-      "author": "EG1",
-      "summary": "Building resilient GUIs across modern and legacy hardware.",
-      "readTime": "6 min read",
-      "markdown": "## Guide Body\n\nFull markdown content..."
-    }
-  ]
-}
+### 2. `blog/id*.md` — Technical Blog Articles (Modular Markdown)
+Each technical blog post is stored as an individual Markdown article in `public/data/blog/id<id>.md` (e.g. `id70.md`) with YAML frontmatter:
+```yaml
+---
+id: "70"
+title: "Getting Started with Python AsyncIO"
+heading: "Getting Started with Python AsyncIO"
+category: "Python"
+tags: ["Python", "AsyncIO", "Tutorials"]
+author: "EG1"
+createdAt: "2026-08-30"
+release_date: "2026-08-30"
+updatedAt: "2026-08-30T12:00:00.000Z"
+output_image: "assets/img/blog/id70.webp"
+short_description: "Learn how to use async/await in Python to build high-concurrency applications."
+end_description: ""
+metaKeyword: "NA"
+metaDescription: "Learn how to use async/await in Python to build high-concurrency applications."
+active: "1"
+---
+
+# Introduction to AsyncIO
+...
 ```
 
-### 3. `updates.json` — Product Changelog & Releases
+### 3. `blog-index.json` — Pre-Indexed Blog Dataset (0 Firestore Reads)
+Pre-indexes all 47+ articles for instant page rendering, tag filtering, and pagination without individual network queries:
+```json
+[
+  {
+    "id": "70",
+    "slug": "getting-started-with-python-asyncio",
+    "title": "Getting Started with Python AsyncIO",
+    "description": "Learn how to use async/await in Python to build high-concurrency applications.",
+    "content": "# Introduction to AsyncIO\n...",
+    "date": "2026-08-30",
+    "author": "EG1",
+    "tags": ["Python", "AsyncIO", "Tutorials"],
+    "readingTime": "1 min read"
+  }
+]
+```
+
+### 4. `website_content.json` — Static Page Snippets & SEO Metadata
+Stores static page content templates (such as `pages.homepage`, `pages.about`, `pages.contact`) and default SEO metadata.
+
+### 5. `updates.json` — Product Changelog & Releases
 Feeds the `/updates` release timeline and the header notification bell.
 ```json
 {
@@ -66,3 +85,8 @@ Feeds the `/updates` release timeline and the header notification bell.
   "link": "updates#v4-0-0"
 }
 ```
+
+---
+
+## 📖 Step-by-Step Guides
+For complete step-by-step procedures to add applications, blog articles, and release updates, refer to the [Developer Guide](../../docs/DEVELOPER_GUIDE.md#3-procedure-content-management-apps-blogs--updates).

@@ -1,5 +1,16 @@
 [
     {
+        "id": "update-2026-11-16-debian-dev-suite-v1-0-0",
+        "type": "app",
+        "title": "Debian Dev Suite v1.0.0",
+        "date": "Nov 15, 2026",
+        "category": "APP",
+        "icon": "app",
+        "badge": "New",
+        "description": "Published debian-dev-suite, an open-source desktop developer toolkit of various useful setups for Debian, MX Linux, antiX, Ubuntu, Linux Mint, Devuan, and all Debian-derived distributions.",
+        "link": "https://github.com/EG1DOTIN/Debian-Dev-Suite"
+    },
+    {
         "id": "update-2026-11-10-v4-1-0",
         "type": "website",
         "version": "4.1.0",

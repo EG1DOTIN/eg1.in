@@ -24,6 +24,7 @@ APPS_MD_DIR = DATA_DIR / "apps"
 
 # Explicit mapping of application slugs to their upstream GitHub repositories
 APP_REPO_MAPPING = {
+    "debian-dev-suite": "EG1DOTIN/debian-dev-suite",
     "eg-web-core": "EG1DOTIN/eg-web-core",
     "pyegclamui": "EG1DOTIN/pyEGClamUI",
     "marwadi-chess": "EG1DOTIN/mchess.eg1.in",

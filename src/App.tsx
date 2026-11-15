@@ -10,7 +10,7 @@ import {
 import { EG1_FIREBASE_CONFIG } from './config/firebase';
 
 // Register site-specific application catalog slugs and blog post IDs for Markdown fallback lookups
-DataCache.registerAppSlugs(['marwadi-chess', 'pyegclamui', 'eg-web-core']);
+DataCache.registerAppSlugs(['marwadi-chess', 'pyegclamui', 'eg-web-core', 'debian-dev-suite']);
 DataCache.registerBlogIds([
   '6', '7', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20',
   '21', '35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45', '46',
