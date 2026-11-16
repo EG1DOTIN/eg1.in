@@ -65,6 +65,18 @@ export const UpdatesPage: React.FC<UpdatesPageProps> = ({ onNavigate }) => {
     []
   );
 
+  // 5. Ensure 'Latest Release' badge and card highlight apply strictly to 'Core Website' updates
+  const processedUpdates = useMemo(() => {
+    if (!updates || updates.length === 0) return [];
+    const latestWebsiteIdx = updates.findIndex(
+      (u: UpdateItem) => (u.type || '').toLowerCase() === 'website'
+    );
+    return updates.map((u: UpdateItem, idx: number) => ({
+      ...u,
+      isLatest: latestWebsiteIdx !== -1 && idx === latestWebsiteIdx,
+    }));
+  }, [updates]);
+
   return (
     <div className="eg1-updates-page">
       {/* Header Banner Section matching EG1 Image Slider style */}
@@ -126,7 +138,7 @@ export const UpdatesPage: React.FC<UpdatesPageProps> = ({ onNavigate }) => {
 
         {!loading && !error && (
           <UpdatesTimeline
-            updates={updates}
+            updates={processedUpdates}
             filterTabs={customTabs}
             defaultFilter={defaultFilter}
             showFilterCounts={true}
