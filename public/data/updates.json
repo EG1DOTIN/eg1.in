@@ -1,5 +1,16 @@
 [
     {
+        "id": "update-2026-11-21-ulwai-v2-0-0",
+        "type": "app",
+        "title": "ULWAI v2.0.0",
+        "date": "Nov 21, 2026",
+        "category": "APP",
+        "icon": "sparkles",
+        "badge": "New",
+        "description": "Published ULWAI, a high-performance native C++20 desktop and terminal AI agent operating strictly under 100 MB RAM with multi-engine support (Pollinations, DuckDuckGo, Ollama, OpenAI, Grok, OpenRouter) and zero runtime bloat.",
+        "link": "apps?title=ulwai"
+    },
+    {
         "id": "update-2026-11-16-debian-dev-suite-v1-0-0",
         "type": "app",
         "title": "Debian Dev Suite v1.0.0",

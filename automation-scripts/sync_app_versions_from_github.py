@@ -28,6 +28,7 @@ APP_REPO_MAPPING = {
     "eg-web-core": "EG1DOTIN/eg-web-core",
     "pyegclamui": "EG1DOTIN/pyEGClamUI",
     "marwadi-chess": "EG1DOTIN/mchess.eg1.in",
+    "ulwai": "EG1DOTIN/ulwai",
 }
 
 
